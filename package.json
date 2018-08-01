@@ -21,9 +21,12 @@
     "metalist"
   ],
   "author": "T0TProduction#0001",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/T0TProduction/BLAPI/issues"
   },
-  "homepage": "https://github.com/T0TProduction/BLAPI#readme"
+  "homepage": "https://github.com/T0TProduction/BLAPI#readme",
+  "dependencies": {
+    "axios": "*"
+  }
 }
