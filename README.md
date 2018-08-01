@@ -6,7 +6,7 @@ It's intended to be used with discord.js, though you can also manually input sta
 `npm install axios` to install axios <br>
 `npm install blapi` to install BLAPI <br>
 <br>
-A usage example with discord.js would look like this:
+Use it with discord.js:
 
 ```js
 const Discord = require("discord.js");
@@ -15,8 +15,14 @@ const blapi = require("blapi");
 let bot = new Discord.Client({ autoReconnect: true });
 
 //post to the APIs every 60 minutes
-blapi.handle(bot, {"bots.ondiscord.xyz" : "thisIsSomeApiKey", "discordbots.org" : "thisIsSomeOtherApiKey"}, 60);
+blapi.handle(bot, {"bots.ondiscord.xyz" : "thisIsSomeApiKey", "discordbots.org" : "thisIsSomeOtherApiKey"}, 60); //you can leave out the loop time, the default is 30
 ```
+<br>
+Or just with normal node.js:
 
+```js
+//post to the APIs 
+blapi.manualPost(guildCount, botID, {"bots.ondiscord.xyz" : "thisIsSomeApiKey", "discordbots.org" : "thisIsSomeOtherApiKey"});
+```
 # Credit
 We're using [axios](https://github.com/axios/axios) for handling the POSTs and the [metalist API](https://themetalist.org/api/docs) to distribute the data to every botlist
