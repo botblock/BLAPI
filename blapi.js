@@ -14,7 +14,7 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
     if (discordClient.user) {
         apiKeys["server_count"] = discordClient.guilds.array().length;
         apiKeys["bot_id"] = discordClient.user.id;
-        axios.post('https://themetalist.org/api/count', apiKeys).catch((e) => console.log(e));
+        axios.post('https://themetalist.org/api/count', apiKeys, { headers: { "Content-type": "application/json" } }).catch((e) => console.log(e));
     } else {
         console.log("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
     }
@@ -38,6 +38,6 @@ module.exports = {
         //the actual code to post the stats
         apiKeys["server_count"] = guildCount;
         apiKeys["bot_id"] = botID;
-        axios.post('https://themetalist.org/api/count', apiKeys).catch((e) => console.log(e));
+        axios.post('https://themetalist.org/api/count', apiKeys, { headers: { "Content-type": "application/json" } }).catch((e) => console.log(e));
     }
 };
