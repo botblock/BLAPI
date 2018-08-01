@@ -1,0 +1,32 @@
+{
+  "name": "blapi",
+  "version": "0.1.0",
+  "description": "BLAPI is a package to handle posting your discord stats to botlists. It's intended to be used with discord.js, though you can also manually input stats and let them be posted.",
+  "main": "index.js",
+  "scripts": {
+    "test": "handle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/T0TProduction/BLAPI.git"
+  },
+  "keywords": [
+    "discord",
+    "js",
+    "discord.js",
+    "API",
+    "botlist",
+    "bot",
+    "list",
+    "stats",
+    "posting",
+    "automated",
+    "metalist"
+  ],
+  "author": "T0TProduction#0001",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/T0TProduction/BLAPI/issues"
+  },
+  "homepage": "https://github.com/T0TProduction/BLAPI#readme"
+}
