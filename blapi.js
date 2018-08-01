@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-async function handleInternal(discordClient, apiKeys, repeatInterval) => {
+async function handleInternal(discordClient, apiKeys, repeatInterval) {
     //handle inputs
     if (!repeatInterval || repeatInterval < 1) {
         repeatInterval = 30;
