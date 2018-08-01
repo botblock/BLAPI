@@ -13,12 +13,8 @@ module.exports = {
         //for now well just send the rest and return the errors the POST might throw
 
         //set the function to repeat
-        let d = new Date(),
-            h = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0 + repeatInterval, 0, 0),
-            e = h - d;
-        if (e > 100) { // some arbitrary time period
-            setTimeout(handle.bind(null, discordClient, apiKeys, repeatInterval), e);
-        }
+        setTimeout(handle.bind(null, discordClient, apiKeys, repeatInterval), (60000 * repeatInterval));
+
         //the actual code to post the stats
         if (discordClient.user) {
             apiKeys["server_count"] = discordClient.guilds.array().length;
