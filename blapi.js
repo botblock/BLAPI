@@ -1,28 +1,32 @@
 const axios = require('axios');
 
+async function handleInternal(discordClient, apiKeys, repeatInterval) => {
+    //handle inputs
+    if (!repeatInterval || repeatInterval < 1) {
+        repeatInterval = 30;
+    }
+    //for now well just send the rest and return the errors the POST might throw
+
+    //set the function to repeat
+    setTimeout(handleInternal.bind(null, discordClient, apiKeys, repeatInterval), (60000 * repeatInterval));
+
+    //the actual code to post the stats
+    if (discordClient.user) {
+        apiKeys["server_count"] = discordClient.guilds.array().length;
+        apiKeys["bot_id"] = discordClient.user.id;
+        axios.post('https://themetalist.org/api/count', apiKeys).catch((e) => console.log(e));
+    } else {
+        console.log("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
+    }
+}
+
 module.exports = {
     /* discordClient: the client via wich your code is connected to discord
      * apiKeys: a JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; to see the names you need to use visit https://themetalist.org/api/docs
      * repeatInterval: integer value of minutes until you want to post again
      * This function is for automated use with discord.js */
     handle: async (discordClient, apiKeys, repeatInterval) => {
-        //handle inputs
-        if (!repeatInterval || repeatInterval < 1) {
-            repeatInterval = 30;
-        }
-        //for now well just send the rest and return the errors the POST might throw
-
-        //set the function to repeat
-        setTimeout(handle.bind(null, discordClient, apiKeys, repeatInterval), (60000 * repeatInterval));
-
-        //the actual code to post the stats
-        if (discordClient.user) {
-            apiKeys["server_count"] = discordClient.guilds.array().length;
-            apiKeys["bot_id"] = discordClient.user.id;
-            axios.post('https://themetalist.org/api/count', apiKeys).catch((e) => console.log(e));
-        } else {
-            console.log("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
-        }
+        handleInternal(discordClient, apiKeys, repeatInterval);
     },
     /* guildCount: integer value of guilds your bot is serving
      * botID: snowflake of the ID the user your bot is using
