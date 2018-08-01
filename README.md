@@ -8,7 +8,15 @@ It's intended to be used with discord.js, though you can also manually input sta
 <br>
 A usage example with discord.js would look like this:
 
-//Example TODO
+```js
+const Discord = require("discord.js");
+const blapi = require("blapi");
+
+let bot = new Discord.Client({ autoReconnect: true });
+
+//post to the APIs every 60 minutes
+blapi.handle(bot, {"bots.ondiscord.xyz" : "thisIsSomeApiKey", "discordbots.org" : "thisIsSomeOtherApiKey"}, 60);
+```
 
 # credit
 We're using [axios](https://github.com/axios/axios) for handling the POSTs and the [metalist API](https://themetalist.org/api/docs) to distribute the data to every botlist
