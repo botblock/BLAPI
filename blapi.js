@@ -20,9 +20,13 @@ module.exports = {
             setTimeout(handle.bind(null, discordClient, apiKeys, repeatInterval), e);
         }
         //the actual code to post the stats
-        apiKeys["server_count"] = discordClient.guilds.array().length;
-        apiKeys["bot_id"] = discordClient.user.id;
-        axios.post('https://themetalist.org/api/count', apiKeys).catch((e) => console.log(e));
+        if (discordClient.user) {
+            apiKeys["server_count"] = discordClient.guilds.array().length;
+            apiKeys["bot_id"] = discordClient.user.id;
+            axios.post('https://themetalist.org/api/count', apiKeys).catch((e) => console.log(e));
+        } else {
+            console.log("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
+        }
     },
     /* guildCount: integer value of guilds your bot is serving
      * botID: snowflake of the ID the user your bot is using
