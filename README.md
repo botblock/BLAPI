@@ -1,4 +1,4 @@
-# BLAPI
+# BLAPI - the BotListAPI
 BLAPI is a package to handle posting your discord bot stats to botlists.<br>
 It's intended to be used with discord.js, though you can also manually post your stats.<br>
 The commands adjust to fit your needs, automatically turning off use of the metalist API if your post rate would be more than their ratelimit allows.<br>
