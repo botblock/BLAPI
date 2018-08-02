@@ -14,7 +14,7 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
             postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
         }
     } else {
-        console.log("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
+        console.error("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
     }
 }
 
@@ -50,7 +50,11 @@ let listData;
 async function postToAllLists(guildCount, botID, apiKeys) {
     //make sure we have all lists we can post to and their apis
     if (!listData) {
-        listData = await bttps.get('https://themetalist.org/api/lists/count');
+        listData = await bttps.get('https://themetalist.org/api/lists/count').catch((e) => console.log(e));
+    }
+    if (!listData) {
+        console.error("BLAPI : Something went wrong when contacting themetalist for the API structures.");
+        return;
     }
     for (let listname in listData) {
         if (apiKeys[listname]) {
