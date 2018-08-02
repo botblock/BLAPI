@@ -23,7 +23,7 @@ blapi.handle(bot, {"bots.ondiscord.xyz" : "thisIsSomeApiKey", "discordbots.org" 
 Or manually, which works without discord.js :
 
 ```js
-//noMetaList can be added as "True" if you don't want to forward you keys to foreign APIs or need to ignore their ratelimit
+//noMetaList can be added as "True" if you don't want to forward your keys to 3rd party APIs or need to ignore their ratelimit
 blapi.manualPost(guildCount, botID, {"bots.ondiscord.xyz" : "thisIsSomeApiKey", "discordbots.org" : "thisIsSomeOtherApiKey"}, noMetaList);
 ```
 
