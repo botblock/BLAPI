@@ -9,7 +9,7 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
         if (repeatInterval > 2) { //if the interval isnt below Metalists ratelimit, use their API
             apiKeys["server_count"] = discordClient.guilds.size;
             apiKeys["bot_id"] = discordClient.user.id;
-            bttps.post('https://themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
+            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
         } else {
             postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
         }
@@ -20,7 +20,7 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
 
 module.exports = {
     /* discordClient: the client via wich your code is connected to discord
-     * apiKeys: a JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; to see the names you need to use visit https://themetalist.org/api/docs
+     * apiKeys: a JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; 
      * repeatInterval: integer value of minutes until you want to post again
      * This function is for automated use with discord.js */
     handle: async (discordClient, apiKeys, repeatInterval) => {
@@ -31,14 +31,14 @@ module.exports = {
     },
     /* guildCount: integer value of guilds your bot is serving
      * botID: snowflake of the ID the user your bot is using
-     * apiKeys: a JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; to see the names you need to use visit https://themetalist.org/api/docs
+     * apiKeys: a JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; 
      * noMetaListPlis: you don't want to use MetaLists API for some reason, so you don't need to
      * This function is for when you don't use discord.js or just want to post to manual times */
     manualPost: async (guildCount, botID, apiKeys, noMetaListPlis) => {
         if (!noMetaListPlis) {
             apiKeys["server_count"] = guildCount;
             apiKeys["bot_id"] = botID;
-            bttps.post('https://themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
+            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
         } else {
             postToAllLists(guildCount, botID, apiKeys);
         }
@@ -62,7 +62,7 @@ async function postToAllLists(guildCount, botID, apiKeys) {
             let url = 'https://' + listname;
             let apiPath = list['api_post'].replace(url, '').replace(':id', botID);
             let sendObj = JSON.parse('{ ' + list['api_field'] + ': ' + guildCount + ' }');
-            bttps.post(url, apiPath, apiKeys[listname], sendObj).catch((e) => console.log(e));
+            bttps.post(listname, apiPath, apiKeys[listname], sendObj).catch((e) => console.log(e));
         }
     }
 }
