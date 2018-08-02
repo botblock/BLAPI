@@ -26,7 +26,4 @@
     "url": "https://github.com/T0TProduction/BLAPI/issues"
   },
   "homepage": "https://github.com/T0TProduction/BLAPI#readme",
-  "dependencies": {
-    "axios": "*"
-  }
 }
