@@ -51,39 +51,39 @@ function postCount(url, apiKey, guildCount) {
 
 async function postToAllLists(guildCount, botID, apiKeys) {
     //very ugly checks incoming
-    if (apiKeys.contains("botlist.space"))
+    if (apiKeys["botlist.space"])
         postCount('https://botlist.space/api/bots/' + botID, apiKeys["botlist.space"], guildCount);
 
-    if (apiKeys.contains("bots.discord.pw"))
+    if (apiKeys["bots.discord.pw"])
         postCount('https://bots.discord.pw/api/bots/' + botID + '/stats', apiKeys["bots.discord.pw"], guildCount);
 
-    if (apiKeys.contains("bots.ondiscord.xyz"))
+    if (apiKeys["bots.ondiscord.xyz"])
         postCount('https://bots.ondiscord.xyz/bot-api/bots/' + botID + '/guilds', apiKeys["bots.ondiscord.xyz"], guildCount);
-    else if (apiKeys.contains("BonD"))
+    else if (apiKeys["BonD"])
         postCount('https://bots.ondiscord.xyz/bot-api/bots/' + botID + '/guilds', apiKeys["BonD"], guildCount);
 
-    if (apiKeys.contains("botsfordiscord.com"))
+    if (apiKeys["botsfordiscord.com"])
         postCount('https://botsfordiscord.com/api/v1/bots/' + botID, apiKeys["botsfordiscord.com"], guildCount);
-    else if (apiKeys.contains("BFD"))
+    else if (apiKeys["BFD"])
         postCount('https://botsfordiscord.com/api/v1/bots/' + botID, apiKeys["BFD"], guildCount);
 
-    if (apiKeys.contains("discord.services"))
+    if (apiKeys["discord.services"])
         postCount('https://discord.services/api/bots/' + botID, apiKeys["discord.services"], guildCount);
 
-    if (apiKeys.contains("discordboats.club"))
+    if (apiKeys["discordboats.club"])
         axios.post('https://discordboats.club/api/public/stats', { "server_count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["discordboats.club"] } }).catch((e) => console.log(e));
 
-    if (apiKeys.contains("discordbot.world"))
+    if (apiKeys["discordbot.world"])
         axios.post('https://discordbot.world/api/bot/' + botID + ' /stats', { "guild_count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["discordbot.world"] } }).catch((e) => console.log(e));
 
-    if (apiKeys.contains("discordbots.group"))
+    if (apiKeys["discordbots.group"])
         axios.post('https://discordbots.group/api/bot/' + botID, { "count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["discordbots.group"] } }).catch((e) => console.log(e));
 
-    if (apiKeys.contains("discordbots.org"))
+    if (apiKeys["discordbots.org"])
         postCount('https://discordbots.org/api/bots/' + botID + '/stats', apiKeys["discordbots.org"], guildCount);
-    else if (apiKeys.contains("DBL"))
+    else if (apiKeys["DBL"])
         postCount('https://discordbots.org/api/bots/' + botID + '/stats', apiKeys["DBL"], guildCount);
 
-    if (apiKeys.contains("listcord.com"))
+    if (apiKeys["listcord.com"])
         axios.post('https://listcord.com/api/bot/' + botID + '/guilds', { "guilds": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["listcord.com"] } }).catch((e) => console.log(e));
 }
