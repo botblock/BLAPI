@@ -47,14 +47,16 @@ module.exports = {
 
 let listData;
 
+
+
 async function postToAllLists(guildCount, botID, apiKeys) {
     //make sure we have all lists we can post to and their apis
     if (!listData) {
         listData = await bttps.get('https://themetalist.org/api/lists/count').catch((e) => console.log(e));
-    }
-    if (!listData) {
-        console.error("BLAPI : Something went wrong when contacting themetalist for the API structures.");
-        return;
+        if (!listData) {
+            console.error("BLAPI : Something went wrong when contacting themetalist for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
+            listData = oldListData;
+        }
     }
     for (let listname in listData) {
         if (apiKeys[listname]) {
@@ -64,5 +66,88 @@ async function postToAllLists(guildCount, botID, apiKeys) {
             let sendObj = JSON.parse('{ ' + list['api_field'] + ': ' + guildCount + ' }');
             bttps.post(listname, apiPath, apiKeys[listname], sendObj).catch((e) => console.log(e));
         }
+    }
+}
+
+const oldListData = {
+    "botsfordiscord.com": {
+        "api_docs": "https://botsfordiscord.com/docs/v1",
+        "api_post": "https://botsfordiscord.com/api/v1/bots/:id",
+        "api_field": "server_count"
+    },
+    "botlist.space": {
+        "api_docs": "https://botlist.space/docs/api",
+        "api_post": "https://botlist.space/api/bots/:id",
+        "api_field": "server_count"
+    },
+    "bots.ondiscord.xyz": {
+        "api_docs": "https://bots.ondiscord.xyz/info/api",
+        "api_post": "https://bots.ondiscord.xyz/bot-api/bots/:id/guilds",
+        "api_field": "guildCount"
+    },
+    "carbonitex.net": {
+        "api_docs": "",
+        "api_post": null,
+        "api_field": null
+    },
+    "discordboats.club": {
+        "api_docs": "",
+        "api_post": "https://discordboats.club/api/public/bot/stats",
+        "api_field": "server_count"
+    },
+    "discordbots.org": {
+        "api_docs": "https://discordbots.org/api/docs",
+        "api_post": "https://discordbots.org/api/bots/:id/stats",
+        "api_field": "server_count"
+    },
+    "discordbot.world": {
+        "api_docs": "https://discordbot.world/docs",
+        "api_post": "https://discordbot.world/api/bot/:id/stats",
+        "api_field": "guild_count"
+    },
+    "bots.discord.pw": {
+        "api_docs": "https://bots.discord.pw/api",
+        "api_post": "https://bots.discord.pw/api/bots/:id/stats",
+        "api_field": "server_count"
+    },
+    "discordbots.group": {
+        "api_docs": "https://discordbots.group/api/docs",
+        "api_post": "https://discordbots.group/api/bot/:id",
+        "api_field": "count"
+    },
+    "discordbots.co.uk": {
+        "api_docs": "",
+        "api_post": "",
+        "api_field": ""
+    },
+    "discordmusicbots.com": {
+        "api_docs": "",
+        "api_post": null,
+        "api_field": null
+    },
+    "discord.services": {
+        "api_docs": "http://discord.services/api/",
+        "api_post": "https://discord.services/api/bots/:id",
+        "api_field": "server_count"
+    },
+    "listcord.com": {
+        "api_docs": "https://listcord.com/documentation",
+        "api_post": "https://listcord.com/api/bot/:id/guilds",
+        "api_field": "guilds"
+    },
+    "botlist.co": {
+        "api_docs": "",
+        "api_post": null,
+        "api_field": null
+    },
+    "solutions.softonic.com": {
+        "api_docs": "",
+        "api_post": null,
+        "api_field": null
+    },
+    "thereisabotforthat.com": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null
     }
 }
