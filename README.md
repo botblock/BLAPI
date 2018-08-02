@@ -9,7 +9,7 @@ You can also manually set it to not use their API in the manual post, if you des
 # Installation
 `npm i blapi` to install BLAPI <br>
 <br>
-The list of all supported bot lists and their respective names for the apiKeys object are listed [here](https://themetalist.org/api/docs)
+The list of all supported bot lists and their respective names for the apiKeys object are listed [here](https://themetalist.org/api/docs#count)
 <br><br>
 Use it with discord.js:
 
