@@ -37,4 +37,5 @@ blapi.manualPost(guildCount, botID, {"bots.ondiscord.xyz" : "thisIsSomeApiKey", 
 
 
 # Credit
-BLAPI uses [axios](https://github.com/axios/axios) and by default the [metalist API](https://themetalist.org/api/docs) to distribute the data to every botlist 
+By default BLAPI uses the [metalist API](https://themetalist.org/api/docs) to distribute the data to every botlist.<br>
+They also provide the list of botlist APIs and their respective format.
