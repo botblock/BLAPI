@@ -6,9 +6,9 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
 
     //the actual code to post the stats
     if (discordClient.user) {
-        apiKeys["server_count"] = discordClient.guilds.size;
-        apiKeys["bot_id"] = discordClient.user.id;
         if (repeatInterval > 2) { //if the interval isnt below Metalists ratelimit, use their API
+            apiKeys["server_count"] = discordClient.guilds.size;
+            apiKeys["bot_id"] = discordClient.user.id;
             bttps.post('https://themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
         } else {
             postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
@@ -44,10 +44,6 @@ module.exports = {
         }
     }
 };
-
-function postCount(url, apiKey, guildCount) {
-    axios.post(url, { "server_count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKey } }).catch((e) => console.log(e));
-}
 
 let listData;
 
