@@ -47,8 +47,6 @@ module.exports = {
 
 let listData;
 
-
-
 async function postToAllLists(guildCount, botID, apiKeys) {
     //make sure we have all lists we can post to and their apis
     if (!listData) {
