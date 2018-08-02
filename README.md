@@ -1,3 +1,11 @@
+<div align="center">
+  <a href="https://david-dm.org/T0TProduction/BLAPI">
+    <img id="badge" src="https://david-dm.org/T0TProduction/BLAPI.svg" alt="badge" class="" data-reactid="68">
+  </a>
+  <br>
+  <a href="https://nodei.co/npm/blapi/"><img src="https://nodei.co/npm/blapi.png"></a><br>
+</div>
+
 # BLAPI - the BotListAPI
 BLAPI is a package to handle posting your discord bot stats to botlists.<br>
 It's intended to be used with discord.js, though you can also manually post your stats.<br>
