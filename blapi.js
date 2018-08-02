@@ -1,4 +1,4 @@
-const axios = require('axios');
+const bttps = require(__dirname + '/bttps.js');
 
 async function handleInternal(discordClient, apiKeys, repeatInterval) {
     //set the function to repeat
@@ -9,7 +9,7 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
         apiKeys["server_count"] = discordClient.guilds.size;
         apiKeys["bot_id"] = discordClient.user.id;
         if (repeatInterval > 2) { //if the interval isnt below Metalists ratelimit, use their API
-            axios.post('https://themetalist.org/api/count', apiKeys, { headers: { "Content-type": "application/json" } }).catch((e) => console.log(e));
+            bttps.post('https://themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
         } else {
             postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
         }
@@ -38,7 +38,7 @@ module.exports = {
         if (!noMetaListPlis) {
             apiKeys["server_count"] = guildCount;
             apiKeys["bot_id"] = botID;
-            axios.post('https://themetalist.org/api/count', apiKeys, { headers: { "Content-type": "application/json" } }).catch((e) => console.log(e));
+            bttps.post('https://themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
         } else {
             postToAllLists(guildCount, botID, apiKeys);
         }
@@ -49,41 +49,20 @@ function postCount(url, apiKey, guildCount) {
     axios.post(url, { "server_count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKey } }).catch((e) => console.log(e));
 }
 
+let listData;
+
 async function postToAllLists(guildCount, botID, apiKeys) {
-    //very ugly checks incoming
-    if (apiKeys["botlist.space"])
-        postCount('https://botlist.space/api/bots/' + botID, apiKeys["botlist.space"], guildCount);
-
-    if (apiKeys["bots.discord.pw"])
-        postCount('https://bots.discord.pw/api/bots/' + botID + '/stats', apiKeys["bots.discord.pw"], guildCount);
-
-    if (apiKeys["bots.ondiscord.xyz"])
-        postCount('https://bots.ondiscord.xyz/bot-api/bots/' + botID + '/guilds', apiKeys["bots.ondiscord.xyz"], guildCount);
-    else if (apiKeys["BonD"])
-        postCount('https://bots.ondiscord.xyz/bot-api/bots/' + botID + '/guilds', apiKeys["BonD"], guildCount);
-
-    if (apiKeys["botsfordiscord.com"])
-        postCount('https://botsfordiscord.com/api/v1/bots/' + botID, apiKeys["botsfordiscord.com"], guildCount);
-    else if (apiKeys["BFD"])
-        postCount('https://botsfordiscord.com/api/v1/bots/' + botID, apiKeys["BFD"], guildCount);
-
-    if (apiKeys["discord.services"])
-        postCount('https://discord.services/api/bots/' + botID, apiKeys["discord.services"], guildCount);
-
-    if (apiKeys["discordboats.club"])
-        axios.post('https://discordboats.club/api/public/stats', { "server_count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["discordboats.club"] } }).catch((e) => console.log(e));
-
-    if (apiKeys["discordbot.world"])
-        axios.post('https://discordbot.world/api/bot/' + botID + ' /stats', { "guild_count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["discordbot.world"] } }).catch((e) => console.log(e));
-
-    if (apiKeys["discordbots.group"])
-        axios.post('https://discordbots.group/api/bot/' + botID, { "count": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["discordbots.group"] } }).catch((e) => console.log(e));
-
-    if (apiKeys["discordbots.org"])
-        postCount('https://discordbots.org/api/bots/' + botID + '/stats', apiKeys["discordbots.org"], guildCount);
-    else if (apiKeys["DBL"])
-        postCount('https://discordbots.org/api/bots/' + botID + '/stats', apiKeys["DBL"], guildCount);
-
-    if (apiKeys["listcord.com"])
-        axios.post('https://listcord.com/api/bot/' + botID + '/guilds', { "guilds": guildCount }, { headers: { "Content-type": "application/json", "Authorization": apiKeys["listcord.com"] } }).catch((e) => console.log(e));
+    //make sure we have all lists we can post to and their apis
+    if (!listData) {
+        listData = await bttps.get('https://themetalist.org/api/lists/count');
+    }
+    for (let listname in listData) {
+        if (apiKeys[listname]) {
+            let list = listData[listname];
+            let url = 'https://' + listname;
+            let apiPath = list['api_post'].replace(url, '').replace(':id', botID);
+            let sendObj = JSON.parse('{ ' + list['api_field'] + ': ' + guildCount + ' }');
+            bttps.post(url, apiPath, apiKeys[listname], sendObj).catch((e) => console.log(e));
+        }
+    }
 }
