@@ -61,9 +61,9 @@ async function postToAllLists(guildCount, botID, apiKeys) {
             let list = listData[listname];
             let url = 'https://' + listname;
             let apiPath = list['api_post'].replace(url, '').replace(':id', botID);
-            console.log('trying to post to ${list}, the api_field should be ${ list["api_field"] }, guildCount is ${guildCount}');
-            let sendObj = JSON.parse('{ "${list["api_field"]}": ${guildCount} }');
-            console.log('we made this : ${sendObj}');
+            console.log(`trying to post to ${list}, the api_field should be ${list["api_field"]}, guildCount is ${guildCount}`);
+            let sendObj = JSON.parse(`{ "${list["api_field"]}": ${guildCount} }`);
+            console.log(`we made this : ${sendObj}`);
             bttps.post(listname, apiPath, apiKeys[listname], sendObj).catch((e) => console.log(e));
         }
     }
