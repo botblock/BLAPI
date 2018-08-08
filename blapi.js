@@ -1,4 +1,5 @@
-const bttps = require(__dirname + '/bttps.js');
+const { join } = require('path');
+const bttps = require(join(__dirname, 'bttps.js'));
 
 async function handleInternal(discordClient, apiKeys, repeatInterval) {
     //set the function to repeat
@@ -9,7 +10,9 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
         if (repeatInterval > 2) { //if the interval isnt below Metalists ratelimit, use their API
             apiKeys["server_count"] = discordClient.guilds.size;
             apiKeys["bot_id"] = discordClient.user.id;
-            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
+            bttps
+            .post('themetalist.org', '/api/count', 'no key needed for this', apiKeys)
+            .catch((e) => console.log(e));
         } else {
             postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
         }
@@ -19,26 +22,30 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
 }
 
 module.exports = {
-    /* discordClient: the client via wich your code is connected to discord
-     * apiKeys: a JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; 
-     * repeatInterval: integer value of minutes until you want to post again
-     * This function is for automated use with discord.js */
+    /**
+     * This function is for automated use with discord.js
+     * @param {Client} discordCLient Client via wich your code is connected to Discord
+     * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+     * @param {integer} repeatInterval Number of minutes until you want to post again
+     */
     handle: async (discordClient, apiKeys, repeatInterval) => {
         //handle inputs
         if (!repeatInterval || repeatInterval < 1)
             repeatInterval = 30;
         handleInternal(discordClient, apiKeys, repeatInterval);
     },
-    /* guildCount: integer value of guilds your bot is serving
-     * botID: snowflake of the ID the user your bot is using
-     * apiKeys: a JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; 
-     * noMetaListPlis: you don't want to use MetaLists API for some reason, so you don't need to
-     * This function is for when you don't use discord.js or just want to post to manual times */
+    /**
+     * For when you don't use discord.js or just want to post to manual times
+     * @param {integer} guildCount Integer value of guilds your bot is serving
+     * @param {string} botID Snowflake of the ID the user your bot is using
+     * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+     * @param {boolean} noMetaListPlis You don't want to use MetaLists API for some reason, so you don't need to
+     */
     manualPost: async (guildCount, botID, apiKeys, noMetaListPlis) => {
         if (!noMetaListPlis) {
             apiKeys["server_count"] = guildCount;
             apiKeys["bot_id"] = botID;
-            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.log(e));
+            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.error(e));
         } else {
             postToAllLists(guildCount, botID, apiKeys);
         }
