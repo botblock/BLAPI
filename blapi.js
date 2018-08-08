@@ -1,4 +1,5 @@
-const bttps = require(__dirname + '/bttps.js');
+const { join } = require('path');
+const bttps = require(join(__dirname, 'bttps.js'));
 
 async function handleInternal(discordClient, apiKeys, repeatInterval) {
     //set the function to repeat
