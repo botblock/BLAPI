@@ -15,9 +15,13 @@
     "stats",
     "posting",
     "automated",
-    "metalist"
+    "metalist",
+    "Node.js"
   ],
-  "author": "T0TProduction#0001",
+  "author": {
+    "name": "Sebastian Di Luzio",
+    "email": "sebastian.di-luzio@tum.de"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/T0TProduction/BLAPI/issues"
