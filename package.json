@@ -3,10 +3,7 @@
   "version": "0.2.5",
   "description": "BLAPI is a package to handle posting your discord stats to botlists. It's intended to be used with discord.js, though you can also manually post your stats.",
   "main": "blapi.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/T0TProduction/BLAPI.git"
-  },
+  "repository": "T0TProduction/BLAPI",
   "keywords": [
     "discord",
     "js",
