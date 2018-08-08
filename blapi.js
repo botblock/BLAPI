@@ -10,9 +10,7 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
         if (repeatInterval > 2) { //if the interval isnt below Metalists ratelimit, use their API
             apiKeys["server_count"] = discordClient.guilds.size;
             apiKeys["bot_id"] = discordClient.user.id;
-            bttps
-            .post('themetalist.org', '/api/count', 'no key needed for this', apiKeys)
-            .catch((e) => console.log(e));
+            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.error(e));
         } else {
             postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
         }
