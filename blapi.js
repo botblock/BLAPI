@@ -7,13 +7,7 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
 
     //the actual code to post the stats
     if (discordClient.user) {
-        if (repeatInterval > 2) { //if the interval isnt below Metalists ratelimit, use their API
-            apiKeys["server_count"] = discordClient.guilds.size;
-            apiKeys["bot_id"] = discordClient.user.id;
-            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.error(e));
-        } else {
-            postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
-        }
+        postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
     } else {
         console.error("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
     }
@@ -37,30 +31,14 @@ module.exports = {
      * @param {integer} guildCount Integer value of guilds your bot is serving
      * @param {string} botID Snowflake of the ID the user your bot is using
      * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
-     * @param {boolean} noMetaListPlis You don't want to use MetaLists API for some reason, so you don't need to
      */
-    manualPost: async (guildCount, botID, apiKeys, noMetaListPlis) => {
-        if (!noMetaListPlis) {
-            apiKeys["server_count"] = guildCount;
-            apiKeys["bot_id"] = botID;
-            bttps.post('themetalist.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.error(e));
-        } else {
-            postToAllLists(guildCount, botID, apiKeys);
-        }
+    manualPost: async (guildCount, botID, apiKeys) => {
+        postToAllLists(guildCount, botID, apiKeys);
     }
 };
 
-let listData;
 
 async function postToAllLists(guildCount, botID, apiKeys) {
-    //make sure we have all lists we can post to and their apis
-    if (!listData) {
-        listData = await bttps.get('https://themetalist.org/api/lists/count').catch((e) => console.log(e));
-        if (!listData) {
-            console.error("BLAPI : Something went wrong when contacting themetalist for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
-            listData = oldListData;
-        }
-    }
     for (let listname in listData) {
         if (apiKeys[listname]) {
             let list = listData[listname];
@@ -72,7 +50,7 @@ async function postToAllLists(guildCount, botID, apiKeys) {
     }
 }
 
-const oldListData = {
+const listData = {
     "botsfordiscord.com": {
         "api_docs": "https://botsfordiscord.com/docs/v1",
         "api_post": "https://botsfordiscord.com/api/v1/bots/:id",
