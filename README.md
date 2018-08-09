@@ -8,7 +8,7 @@ It's intended to be used with discord.js, though you can also manually post your
 Install via npm (recommended) <br>
 ```npm i blapi``` 
 # Usage
-The list of all supported bot lists and their respective names for the apiKeys object are listed [below](https://github.com/T0TProduction/BLAPI#Lists)
+The list of all supported bot lists and their respective names for the apiKeys object are listed [below](https://github.com/T0TProduction/BLAPI#lists)
 <br><br>
 ### With discord.js:
 
