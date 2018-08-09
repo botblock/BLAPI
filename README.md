@@ -10,7 +10,8 @@ Install via npm (recommended) <br>
 # Usage
 The list of all supported bot lists and their respective names for the apiKeys object are listed [below](https://github.com/T0TProduction/BLAPI#Lists)
 <br><br>
-### Use with discord.js:
+### With discord.js:
+
 ```js
 const Discord = require("discord.js");
 const blapi = require("blapi");
@@ -20,8 +21,8 @@ let bot = new Discord.Client({ autoReconnect: true });
 //post to the APIs every 60 minutes; you can leave out the repeat delay as it defaults to 30
 blapi.handle(bot, apiKeys, 60); 
 ```
-<br>
-### Use manually, which works without any discord lib :
+### Manually, without need of discord libs:
+
 ```js
 blapi.manualPost(guildCount, botID, apiKeys );
 ```
@@ -36,8 +37,8 @@ etc.
 an example would be:
 ```js
 {
-"bots.ondiscord.xyz" : "aönvtauitnzvaltnvalztnbvaeöituvnautzcn",
-"discordbots.org" : "nzovrzunwlvuaznwtvclawnztvcaöznhtcauhntclagbt"
+"bots.ondiscord.xyz" : "aÃ¶nvtauitnzvaltnvalztnbvaeÃ¶ituvnautzcn",
+"discordbots.org" : "nzovrzunwlvuaznwtvclawnztvcaÃ¶znhtcauhntclagbt"
 }
 ```
 
