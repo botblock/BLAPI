@@ -10,9 +10,9 @@ async function handleInternal(discordClient, apiKeys, repeatInterval) {
         if (repeatInterval > 2) { //if the interval isnt below metalists ratelimit, use their API
             apiKeys["server_count"] = discordClient.guilds.size;
             apiKeys["bot_id"] = discordClient.user.id;
-            if (bot.shard) {
-                apiKeys["shard_id"] = bot.shard.id;
-                apiKeys["shard_count"] = bot.shard.count;
+            if (discordClient.shard) {
+                apiKeys["shard_id"] = discordClient.shard.id;
+                apiKeys["shard_count"] = discordClient.shard.count;
             }
             bttps.post('metalist.xyz', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.error(`BLAPI: ${e}`));
         } else {
