@@ -4,7 +4,7 @@
 # BLAPI - the BotListAPI
 BLAPI is a package to handle posting your discord bot stats to botlists.<br>
 It's intended to be used with discord.js, though you can also manually post your stats.<br><br>
-BLAPI fully supports sharding when using [metalists API](https://metalist.xyz/api/docs), but not **yet** when manually posting.<br>
+BLAPI fully supports sharding when using [metalists API](https://metalist.xyz/api/docs#count), but not **yet** when manually posting.<br>
 # Installation
 Install via npm (recommended) <br>
 ```npm i blapi``` 
@@ -61,9 +61,9 @@ This is a list of all supported discord bot lists: <br>
 - "discord.services"
 - "listcord.com"
    
-These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [metalist API](https://metalist.xyz/api/docs#lists_count)<br><br>
+These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [metalist API](https://metalist.xyz/api/docs#lists)<br><br>
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
 
 # Credit
 All the people who helped making BLAPI are listed in [AUTHORS](https://github.com/T0TProduction/BLAPI/blob/master/AUTHORS)<br>
-By default we use the [metalist API](https://metalist.xyz/api/docs) to post all the data
+By default we use the [metalist API](https://metalist.xyz/api/docs#count) to post all the data
