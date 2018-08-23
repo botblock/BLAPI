@@ -53,13 +53,11 @@ This is a list of all supported discord bot lists: <br>
 - "boatlist.ml":
 - "botlist.space":
 - "discordboats.club"
-- "discordbots.fr"
 - "discordbots.org"
 - "discordbot.world"
 - "bots.discord.pw"
 - "discordbots.group"
 - "discord.services"
-- "listcord.com"
 
 These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists)<br><br>
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.

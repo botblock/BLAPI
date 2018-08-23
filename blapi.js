@@ -125,14 +125,6 @@ const oldListData = {
         "api_shard_count": null,
         "api_shards": null
     },
-    "discordbots.fr": {
-        "api_docs": "https://discordbots.fr/docs",
-        "api_post": "https://discordbots.fr/api/v1/bot/:id",
-        "api_field": "count",
-        "api_shard_id": null,
-        "api_shard_count": "shard",
-        "api_shards": null
-    },
     "discordbots.org": {
         "api_docs": "https://discordbots.org/api/docs",
         "api_post": "https://discordbots.org/api/bots/:id/stats",
@@ -189,14 +181,6 @@ const oldListData = {
         "api_shard_count": null,
         "api_shards": null
     },
-    "listcord.com": {
-        "api_docs": "https://listcord.com/documentation",
-        "api_post": "https://listcord.com/api/bot/:id/guilds",
-        "api_field": "guilds",
-        "api_shard_id": "shard",
-        "api_shard_count": null,
-        "api_shards": null
-    },
     "botlist.co": {
         "api_docs": null,
         "api_post": null,
@@ -221,4 +205,4 @@ const oldListData = {
         "api_shard_count": null,
         "api_shards": null
     }
-}
+};
