@@ -4,10 +4,10 @@
 # BLAPI - the BotListAPI
 BLAPI is a package to handle posting your discord bot stats to botlists.<br>
 It's intended to be used with discord.js, though you can also manually post your stats.<br><br>
-BLAPI fully supports sharding when using [metalists API](https://metalist.xyz/api/docs#count), but not **yet** when manually posting.<br>
+BLAPI fully supports sharding when using the [BotBlock API](https://botblock.org/api/docs#count), but not **yet** when manually posting.<br>
 # Installation
 Install via npm (recommended) <br>
-```npm i blapi``` 
+```npm i blapi```
 # Usage
 The list of all supported bot lists and their respective names for the apiKeys object are listed [below](https://github.com/T0TProduction/BLAPI#lists)
 <br><br>
@@ -20,15 +20,15 @@ const blapi = require("blapi");
 let bot = new Discord.Client({ autoReconnect: true });
 
 //post to the APIs every 60 minutes; you can leave out the repeat delay as it defaults to 30
-//if the interval is below 3 minutes BLAPI will not use metalists API because of ratelimits
-blapi.handle(bot, apiKeys, 60); 
+//if the interval is below 3 minutes BLAPI will not use the BotBlock API because of ratelimits
+blapi.handle(bot, apiKeys, 60);
 ```
 ### Manually, without need of discord libs:
 
 ```js
-//postWithoutMetalist is a optional boolean if you don't want to use metalists API
+//postWithoutBotBlock is a optional boolean if you don't want to use the BotBlock API
 //consider adding it if you get ratelimited from bot lists
-blapi.manualPost(guildCount, botID, apiKeys, postWithoutMetalist);
+blapi.manualPost(guildCount, botID, apiKeys, postWithoutBotBlock);
 ```
 ### apiKeys
 The JSON object which includes all the API keys should look like this:
@@ -50,8 +50,8 @@ an example would be:
 This is a list of all supported discord bot lists: <br>
 - "botsfordiscord.com"
 - "bots.ondiscord.xyz"
-- "boatlist.ml": 
-- "botlist.space": 
+- "boatlist.ml":
+- "botlist.space":
 - "discordboats.club"
 - "discordbots.fr"
 - "discordbots.org"
@@ -60,10 +60,10 @@ This is a list of all supported discord bot lists: <br>
 - "discordbots.group"
 - "discord.services"
 - "listcord.com"
-   
-These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [metalist API](https://metalist.xyz/api/docs#lists)<br><br>
+
+These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists)<br><br>
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
 
 # Credit
 All the people who helped making BLAPI are listed in [AUTHORS](https://github.com/T0TProduction/BLAPI/blob/master/AUTHORS)<br>
-By default we use the [metalist API](https://metalist.xyz/api/docs#count) to post all the data
+By default we use the [BotBlock API](https://botblock.org/api/docs#count) to post all the data
