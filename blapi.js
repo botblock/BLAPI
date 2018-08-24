@@ -93,14 +93,6 @@ const oldListData = {
         "api_shard_count": null,
         "api_shards": null
     },
-    "boatlist.ml": {
-        "api_docs": null,
-        "api_post": "https://boatlist.ml/api/bots/:id/stats",
-        "api_field": "server_count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
     "botlist.space": {
         "api_docs": "https://botlist.space/docs/api",
         "api_post": "https://botlist.space/api/bots/:id",
