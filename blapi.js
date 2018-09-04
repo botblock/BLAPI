@@ -59,7 +59,7 @@ let listData;
 async function postToAllLists(guildCount, botID, apiKeys) {
     //make sure we have all lists we can post to and their apis
     if (!listData) {
-        listData = await bttps.get('https://botblock.org/api/lists/count').catch((e) => console.error(`BLAPI: ${e}`));
+        listData = await bttps.get('https://botblock.org/api/lists').catch((e) => console.error(`BLAPI: ${e}`));
         if (!listData) {
             console.error("BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
             listData = oldListData;
