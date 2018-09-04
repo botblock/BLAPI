@@ -204,5 +204,13 @@ const oldListData = {
         "api_shard_id": null,
         "api_shard_count": null,
         "api_shards": null
+    },
+    "discordbotlist.xyz": {
+        "api_docs": null,
+        "api_post": "https://discordbotlist.xyz/api/stats/:id",
+        "api_field": "count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null
     }
 };
