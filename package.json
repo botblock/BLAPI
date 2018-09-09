@@ -1,6 +1,6 @@
 {
   "name": "blapi",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "BLAPI is a package to handle posting your discord stats to botlists. It's intended to be used with discord.js, though you can also manually post your stats.",
   "main": "blapi.js",
   "repository": "T0TProduction/BLAPI",
