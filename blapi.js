@@ -1,7 +1,30 @@
 const { join } = require('path');
 const bttps = require(join(__dirname, 'bttps.js'));
+const fallbackListData = require('./fallbackListData.json');
 
-function handleInternal(discordClient, apiKeys, repeatInterval) {
+let listData;
+
+const postToAllLists = async (guildCount, botID, apiKeys) => {
+  // make sure we have all lists we can post to and their apis
+  if (!listData) {
+    listData = await bttps.get('https://botblock.org/api/lists').catch(e => console.error(`BLAPI: ${e}`));
+    if (!listData) {
+      console.error("BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
+      listData = fallbackListData;
+    }
+  }
+  for (const listname in listData) {
+    if (apiKeys[listname]) {
+      const list = listData[listname];
+      const url = `https://${listname}`;
+      const apiPath = list['api_post'].replace(url, '').replace(':id', botID);
+      const sendObj = JSON.parse(`{ "${list['api_field']}": ${guildCount} }`);
+      bttps.post(listname, apiPath, apiKeys[listname], sendObj).catch(e => console.error(`BLAPI: ${e}`));
+    }
+  }
+};
+
+const handleInternal = (discordClient, apiKeys, repeatInterval) => {
   // set the function to repeat
   setTimeout(handleInternal.bind(null, discordClient, apiKeys, repeatInterval), 60000 * repeatInterval);
 
@@ -21,7 +44,7 @@ function handleInternal(discordClient, apiKeys, repeatInterval) {
   } else {
     console.error("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
   }
-}
+};
 
 module.exports = {
   /**
@@ -52,167 +75,3 @@ module.exports = {
     }
   }
 };
-
-let listData;
-
-async function postToAllLists(guildCount, botID, apiKeys) {
-  // make sure we have all lists we can post to and their apis
-  if (!listData) {
-    listData = await bttps.get('https://botblock.org/api/lists').catch(e => console.error(`BLAPI: ${e}`));
-    if (!listData) {
-      console.error("BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
-      listData = oldListData;
-    }
-  }
-  for (const listname in listData) {
-    if (apiKeys[listname]) {
-      const list = listData[listname];
-      const url = `https://${listname}`;
-      const apiPath = list['api_post'].replace(url, '').replace(':id', botID);
-      const sendObj = JSON.parse(`{ "${list['api_field']}": ${guildCount} }`);
-      bttps.post(listname, apiPath, apiKeys[listname], sendObj).catch(e => console.error(`BLAPI: ${e}`));
-    }
-  }
-}
-
-/* eslint-disable camelcase */
-const oldListData = {
-  'botsfordiscord.com': {
-    api_docs: 'https://botsfordiscord.com/docs/v1',
-    api_post: 'https://botsfordiscord.com/api/v1/bots/:id',
-    api_field: 'server_count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'bots.ondiscord.xyz': {
-    api_docs: 'https://bots.ondiscord.xyz/info/api',
-    api_post: 'https://bots.ondiscord.xyz/bot-api/bots/:id/guilds',
-    api_field: 'guildCount',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'boatlist.ml': {
-    api_docs: null,
-    api_post: 'https://boatlist.ml/api/bots/:id/stats',
-    api_field: 'server_count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'botlist.space': {
-    api_docs: 'https://botlist.space/docs/api',
-    api_post: 'https://botlist.space/api/bots/:id',
-    api_field: 'server_count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: 'shards'
-  },
-  'carbonitex.net': {
-    api_docs: null,
-    api_post: null,
-    api_field: null,
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'discordboats.club': {
-    api_docs: null,
-    api_post: 'https://discordboats.club/api/public/bot/stats',
-    api_field: 'server_count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'discordbots.org': {
-    api_docs: 'https://discordbots.org/api/docs',
-    api_post: 'https://discordbots.org/api/bots/:id/stats',
-    api_field: 'server_count',
-    api_shard_id: 'shard_id',
-    api_shard_count: 'shard_count',
-    api_shards: 'shards'
-  },
-  'discordbot.world': {
-    api_docs: 'https://discordbot.world/docs',
-    api_post: 'https://discordbot.world/api/bot/:id/stats',
-    api_field: 'guild_count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: 'shards'
-  },
-  'bots.discord.pw': {
-    api_docs: 'https://bots.discord.pw/api',
-    api_post: 'https://bots.discord.pw/api/bots/:id/stats',
-    api_field: 'server_count',
-    api_shard_id: 'shard_id',
-    api_shard_count: 'shard_count',
-    api_shards: null
-  },
-  'discordbots.group': {
-    api_docs: 'https://discordbots.group/api/docs',
-    api_post: 'https://discordbots.group/api/bot/:id',
-    api_field: 'count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'discordbots.co.uk': {
-    api_docs: null,
-    api_post: null,
-    api_field: null,
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'discordmusicbots.com': {
-    api_docs: null,
-    api_post: null,
-    api_field: null,
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'discord.services': {
-    api_docs: 'http://discord.services/api/',
-    api_post: 'https://discord.services/api/bots/:id',
-    api_field: 'server_count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'botlist.co': {
-    api_docs: null,
-    api_post: null,
-    api_field: null,
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'solutions.softonic.com': {
-    api_docs: null,
-    api_post: null,
-    api_field: null,
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'thereisabotforthat.com': {
-    api_docs: null,
-    api_post: null,
-    api_field: null,
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  },
-  'discordbotlist.xyz': {
-    api_docs: null,
-    api_post: 'https://discordbotlist.xyz/api/stats/:id',
-    api_field: 'count',
-    api_shard_id: null,
-    api_shard_count: null,
-    api_shards: null
-  }
-};
-
-/* eslint-enable camelcase */
