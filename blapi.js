@@ -24,22 +24,27 @@ const postToAllLists = async (guildCount, botID, apiKeys) => {
   }
 };
 
-const handleInternal = (discordClient, apiKeys, repeatInterval) => {
+/**
+ * @param {Client} client Discord.js client
+ * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+ * @param {number} repeatInterval Number of minutes between each repetition
+ */
+const handleInternal = (client, apiKeys, repeatInterval) => {
   // set the function to repeat
-  setTimeout(handleInternal.bind(null, discordClient, apiKeys, repeatInterval), 60000 * repeatInterval);
+  setTimeout(handleInternal.bind(null, client, apiKeys, repeatInterval), 60000 * repeatInterval);
 
   // the actual code to post the stats
-  if (discordClient.user) {
+  if (client.user) {
     if (repeatInterval > 2) { // if the interval isnt below the BotBlock ratelimit, use their API
-      apiKeys['server_count'] = discordClient.guilds.size;
-      apiKeys['bot_id'] = discordClient.user.id;
-      if (discordClient.shard) {
-        apiKeys['shard_id'] = discordClient.shard.id;
-        apiKeys['shard_count'] = discordClient.shard.count;
+      apiKeys['server_count'] = client.guilds.size;
+      apiKeys['bot_id'] = client.user.id;
+      if (client.shard) {
+        apiKeys['shard_id'] = client.shard.id;
+        apiKeys['shard_count'] = client.shard.count;
       }
       bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch(e => console.error(`BLAPI: ${e}`));
     } else {
-      postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
+      postToAllLists(client.guilds.size, client.user.id, apiKeys);
     }
   } else {
     console.error("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
