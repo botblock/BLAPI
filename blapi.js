@@ -4,6 +4,11 @@ const fallbackListData = require('./fallbackListData.json');
 
 let listData;
 
+/**
+ * @param {integer} guildCount Total number of guilds the bot is on
+ * @param {string} botID User ID of bot to post stats for
+ * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+ */
 const postToAllLists = async (guildCount, botID, apiKeys) => {
   // make sure we have all lists we can post to and their apis
   if (!listData) {
