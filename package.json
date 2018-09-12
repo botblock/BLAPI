@@ -25,6 +25,7 @@
     "stats",
     "posting",
     "automated",
+    "auto",
     "botblock",
     "Node.js"
   ],
@@ -35,5 +36,5 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "version": "0.51.0"
+  "version": "0.4.1"
 }
