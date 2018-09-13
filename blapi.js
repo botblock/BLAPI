@@ -86,12 +86,36 @@ module.exports = {
    * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
    * @param {boolean} noBotBlockPlis If you don't want to use the BotBlock API add this as True
    */
-  manualPost: (guildCount, botID, apiKeys, noBotBlockPlis) => { // TODO add shard support
+  manualPost: (guildCount, botID, apiKeys, noBotBlockPlis) => {
     if (noBotBlockPlis) {
       postToAllLists(guildCount, botID, apiKeys);
     } else {
-      apiKeys['server_count'] = guildCount;
-      apiKeys['bot_id'] = botID;
+      apiKeys.server_count = guildCount;
+      apiKeys.bot_id = botID;
+      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch(e => console.error(`BLAPI: ${e}`));
+    }
+  },
+  /**
+   * For when you don't use discord.js or just want to post to manual times
+   * @param {integer} guildCount Integer value of guilds your bot is serving
+   * @param {string} botID Snowflake of the ID the user your bot is using
+   * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+   * @param {integer} shardID The shard ID, which will be used to identify the shards valid for posting (and for super efficient posting with BLAPIs own distributer when not using botBlock)
+   * @param {integer} shardCount The number of shards the bot has, which is posted to the lists
+   * @param {[integer]} shards An array of guild counts of each single shard (this should be a complete list, and only a single shard will post it)
+   * @param {boolean} noBotBlockPlis If you don't want to use the BotBlock API add this as True
+   */
+  manualPostSharded: (guildCount, botID, apiKeys, shardID, shardCount, shards, noBotBlockPlis) => { // TODO complete
+    if (noBotBlockPlis) {
+      postToAllLists(guildCount, botID, apiKeys); //redo function for sharded
+    } else if (shardID == 0) {
+      apiKeys.server_count = guildCount;
+      apiKeys.bot_id = botID;
+      apiKeys.server_count = guildCount;
+      apiKeys.shard_count = shardCount;
+      if (shards) {
+        apiKeys.shards = shards;
+      }
       bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch(e => console.error(`BLAPI: ${e}`));
     }
   }
