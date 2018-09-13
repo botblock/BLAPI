@@ -47,7 +47,6 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       /* eslint-disable camelcase */
       if (client.shard) {
         if (client.shard.id == 0) {
-          apiKeys.shard_id = 0;
           apiKeys.shard_count = client.shard.count;
           apiKeys.shards = await client.shard.fetchClientValues('guilds.size'); //We assume this works in d.js stable and master, have not tested it yet though
           apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
