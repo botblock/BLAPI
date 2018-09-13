@@ -43,9 +43,9 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
     if (repeatInterval > 2) { // if the interval isnt below the BotBlock ratelimit, use their API
       apiKeys['bot_id'] = client.user.id;
 
-      // Checks bot is sharded and ensures only 1 shard runs it
+      // Checks bot is sharded
       /* eslint-disable camelcase */
-      if (client.shard.id === 0) {
+      if (client.shard) {
         apiKeys.shard_id = client.shard.id;
         apiKeys.shard_count = client.shard.count;
         apiKeys.server_count = (await client.shard.broadcastEval('this.guilds.size')).reduce((prev, val) => prev + val, 0);
