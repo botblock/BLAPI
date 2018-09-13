@@ -46,9 +46,12 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       // Checks bot is sharded
       /* eslint-disable camelcase */
       if (client.shard) {
-        apiKeys.shard_id = client.shard.id;
-        apiKeys.shard_count = client.shard.count;
-        apiKeys.server_count = (await client.shard.broadcastEval('this.guilds.size')).reduce((prev, val) => prev + val, 0);
+        if (client.shard.id == 0) {
+          apiKeys.shard_id = 0;
+          apiKeys.shard_count = client.shard.count;
+          apiKeys.shards = await client.shard.fetchClientValues('guilds.size'); //We assume this works in d.js stable and master, have not tested it yet though
+          apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
+        }
       } else {
         apiKeys['server_count'] = client.guilds.size;
       }
