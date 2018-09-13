@@ -48,7 +48,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       if (client.shard.id === 0) {
         apiKeys.shard_id = client.shard.id;
         apiKeys.shard_count = client.shard.count;
-        apiKeys.server_count = (await client.broadcastEval('this.guilds.size')).reduce((prev, val) => prev + val, 0);
+        apiKeys.server_count = (await client.shard.broadcastEval('this.guilds.size')).reduce((prev, val) => prev + val, 0);
       } else {
         apiKeys['server_count'] = client.guilds.size;
       }
