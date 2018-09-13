@@ -34,20 +34,29 @@ const postToAllLists = async (guildCount, botID, apiKeys) => {
  * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
  * @param {number} repeatInterval Number of minutes between each repetition
  */
-const handleInternal = (client, apiKeys, repeatInterval) => {
+const handleInternal = async (client, apiKeys, repeatInterval) => {
   // set the function to repeat
   setTimeout(handleInternal.bind(null, client, apiKeys, repeatInterval), 60000 * repeatInterval);
 
   // the actual code to post the stats
   if (client.user) {
     if (repeatInterval > 2) { // if the interval isnt below the BotBlock ratelimit, use their API
-      apiKeys['server_count'] = client.guilds.size;
       apiKeys['bot_id'] = client.user.id;
-      if (client.shard) {
-        apiKeys['shard_id'] = client.shard.id;
-        apiKeys['shard_count'] = client.shard.count;
+
+      // Checks bot is sharded and ensures only 1 shard runs it
+      /* eslint-disable camelcase */
+      if (client.shard.id === 0) {
+        apiKeys.shard_id = client.shard.id;
+        apiKeys.shard_count = client.shard.count;
+        apiKeys.server_count = (await client.broadcastEval('this.guilds.size')).reduce((prev, val) => prev + val, 0);
+      } else {
+        apiKeys['server_count'] = client.guilds.size;
       }
-      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch(e => console.error(`BLAPI: ${e}`));
+      /* eslint-enable camelcase */
+
+      bttps
+        .post('botblock.org', '/api/count', 'no key needed for this', apiKeys)
+        .catch(error => console.error('BLAPI:', error));
     } else {
       postToAllLists(client.guilds.size, client.user.id, apiKeys);
     }
