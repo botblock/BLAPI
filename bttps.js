@@ -2,7 +2,7 @@ const https = require('https');
 
 module.exports = {
   // custom made post function
-  post: (domain, apiPath, apiKey, sendObj) => {
+  post: (domain, apiPath, apiKey, sendObj) => new Promise((resolve, reject) => {
     const postData = JSON.stringify(sendObj);
     const options = {
       hostname: domain,
@@ -18,10 +18,12 @@ module.exports = {
     const req = https.request(options, () => { });
     req.on('error', e => {
       console.error(e);
+      reject(e);
     });
     req.write(postData);
     req.end();
-  },
+    resolve();
+  }),
   // custom made get function
   get: url => new Promise((resolve, reject) => {
     https.get(url, resp => {
