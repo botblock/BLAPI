@@ -46,9 +46,9 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       // Checks bot is sharded
       /* eslint-disable camelcase */
       if (client.shard) {
-        if (client.shard.id == 0) {
+        if (client.shard.id === 0) {
           apiKeys.shard_count = client.shard.count;
-          apiKeys.shards = await client.shard.fetchClientValues('guilds.size'); //We assume this works in d.js stable and master, have not tested it yet though
+          apiKeys.shards = await client.shard.fetchClientValues('guilds.size'); // We assume this works in d.js stable and master, have not tested it yet though
           apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
         }
       } else {
@@ -90,8 +90,10 @@ module.exports = {
     if (noBotBlockPlis) {
       postToAllLists(guildCount, botID, apiKeys);
     } else {
+      /* eslint-disable camelcase */
       apiKeys.server_count = guildCount;
       apiKeys.bot_id = botID;
+      /* eslint-enable camelcase */
       bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch(e => console.error(`BLAPI: ${e}`));
     }
   },
@@ -107,12 +109,14 @@ module.exports = {
    */
   manualPostSharded: (guildCount, botID, apiKeys, shardID, shardCount, shards, noBotBlockPlis) => { // TODO complete
     if (noBotBlockPlis) {
-      postToAllLists(guildCount, botID, apiKeys); //redo function for sharded
-    } else if (shardID == 0) {
+      postToAllLists(guildCount, botID, apiKeys); // redo function for sharded
+    } else if (shardID === 0) {
+      /* eslint-disable camelcase */
       apiKeys.server_count = guildCount;
       apiKeys.bot_id = botID;
       apiKeys.server_count = guildCount;
       apiKeys.shard_count = shardCount;
+      /* eslint-enable camelcase */
       if (shards) {
         apiKeys.shards = shards;
       }
