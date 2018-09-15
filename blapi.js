@@ -48,7 +48,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       if (client.shard) {
         if (client.shard.id === 0) {
           apiKeys.shard_count = client.shard.count;
-          apiKeys.shards = await client.shard.fetchClientValues('guilds.size').catch(e => console.error(`BLAPI: ${e}`));
+          apiKeys.shards = await client.shard.broadcastEval('this.guilds.size').catch(e => console.error('BLAPI: Error while fetching shard server counts:', e));
           if (!apiKeys.shards) {
             return; // If not all shards are up yet, we skip this run of handleInternal
           }
