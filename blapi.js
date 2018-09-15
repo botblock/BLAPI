@@ -48,7 +48,10 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       if (client.shard) {
         if (client.shard.id === 0) {
           apiKeys.shard_count = client.shard.count;
-          apiKeys.shards = await client.shard.fetchClientValues('guilds.size'); // We assume this works in d.js stable and master, have not tested it yet though
+          apiKeys.shards = await client.shard.fetchClientValues('guilds.size').catch(e => console.error(`BLAPI: ${e}`));
+          if (!apiKeys.shards) {
+            return; // If not all shards are up yet, we skip this run of handleInternal
+          }
           apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
         }
       } else {
