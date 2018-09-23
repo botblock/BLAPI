@@ -49,7 +49,7 @@ blapi.handle(bot, apiKeys, 60);
 blapi.manualPost(guildCount, botID, apiKeys, postWithoutBotBlock);
 ```
 
-### 'apiKeys'
+### apiKeys
 
 The JSON object which includes all the API keys should look like this:
 
