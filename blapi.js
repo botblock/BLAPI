@@ -3,6 +3,7 @@ const bttps = require(join(__dirname, 'bttps.js'));
 const fallbackListData = require('./fallbackListData.json');
 
 let listData;
+let extendedLogging = false;
 
 /**
  * @param {integer} guildCount Total number of guilds the bot is on
@@ -24,7 +25,7 @@ const postToAllLists = async (guildCount, botID, apiKeys) => {
       const url = `https://${listname}`;
       const apiPath = list['api_post'].replace(url, '').replace(':id', botID);
       const sendObj = JSON.parse(`{ "${list['api_field']}": ${guildCount} }`);
-      bttps.post(listname, apiPath, apiKeys[listname], sendObj).catch(e => console.error(`BLAPI: ${e}`));
+      bttps.post(listname, apiPath, apiKeys[listname], sendObj, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
     }
   }
 };
@@ -102,7 +103,7 @@ module.exports = {
       apiKeys.server_count = guildCount;
       apiKeys.bot_id = botID;
       /* eslint-enable camelcase */
-      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch(e => console.error(`BLAPI: ${e}`));
+      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
     }
   },
   /**
@@ -128,7 +129,10 @@ module.exports = {
       if (shards) {
         apiKeys.shards = shards;
       }
-      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch(e => console.error(`BLAPI: ${e}`));
+      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
     }
+  },
+  setLogging: setLogging => {
+    extendedLogging = setLogging;
   }
 };

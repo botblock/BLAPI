@@ -2,7 +2,7 @@ const https = require('https');
 
 module.exports = {
   // custom made post function
-  post: (domain, apiPath, apiKey, sendObj) => new Promise((resolve, reject) => {
+  post: (domain, apiPath, apiKey, sendObj, logStuff) => new Promise((resolve, reject) => {
     const postData = JSON.stringify(sendObj);
     const options = {
       hostname: domain,
@@ -16,12 +16,14 @@ module.exports = {
       }
     };
     const req = https.request(options, () => {
-      console.log(`BLAPI: posted to ${domain}${apiPath}`);
-      console.log('statusCode:', req.statusCode);
-      console.log('headers:', req.headers);
-      req.on('data', d => {
-        console.log(d);
-      });
+      if (logStuff) {
+        console.log(`BLAPI: posted to ${domain}${apiPath}`);
+        console.log('statusCode:', req.statusCode);
+        console.log('headers:', req.headers);
+        req.on('data', d => {
+          console.log(d);
+        });
+      }
     });
     req.on('error', e => {
       console.error(e);
