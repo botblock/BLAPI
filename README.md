@@ -49,6 +49,14 @@ blapi.handle(bot, apiKeys, 60);
 blapi.manualPost(guildCount, botID, apiKeys, postWithoutBotBlock);
 ```
 
+### Turn on extended logging
+
+```js
+// Use this to get more detailed logging when using botBlock
+// Errors will always be logged
+blapi.setLogging(True);
+```
+
 ### apiKeys
 
 The JSON object which includes all the API keys should look like this:
