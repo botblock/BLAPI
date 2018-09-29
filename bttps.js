@@ -15,12 +15,12 @@ module.exports = {
         'Authorization': apiKey
       }
     };
-    const req = https.request(options, () => {
+    const req = https.request(options, res => {
       if (logStuff) {
         console.log(`BLAPI: posted to ${domain}${apiPath}`);
-        console.log('statusCode:', req.statusCode);
-        console.log('headers:', req.headers);
-        req.on('data', d => {
+        console.log('statusCode:', res.statusCode);
+        console.log('headers:', res.headers);
+        res.on('data', d => {
           console.log(d);
         });
       }
