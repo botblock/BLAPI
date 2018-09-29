@@ -53,6 +53,7 @@ blapi.manualPost(guildCount, botID, apiKeys, postWithoutBotBlock);
 
 ```js
 // Use this to get more detailed logging when using botBlock
+// Errors will always be logged
 blapi.setLogging(True);
 ```
 
