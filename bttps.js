@@ -15,10 +15,17 @@ module.exports = {
         'Authorization': apiKey
       }
     };
-    const req = https.request(options, () => { });
+    const req = https.request(options, () => {
+      console.log(`BLAPI: posted to ${domain}${apiPath}`);
+      console.log('statusCode:', req.statusCode);
+      console.log('headers:', req.headers);
+      req.on('data', d => {
+        console.log(d);
+      });
+    });
     req.on('error', e => {
       console.error(e);
-      reject(e);
+      reject(new Error(`Request to ${req.url} failed with Errorcode ${req.status}:\n${req.statusText}`));
     });
     req.write(postData);
     req.end();
@@ -36,7 +43,7 @@ module.exports = {
       });
       resp.on('error', e => {
         console.error(e);
-        reject(new Error(`Request to ${resp.url} failed with HTTP ${resp.status}`));
+        reject(new Error(`Request to ${resp.url} failed with Errorcode ${resp.status}:\n${resp.statusText}`));
       });
     });
   })
