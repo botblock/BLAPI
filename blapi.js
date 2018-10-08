@@ -1,208 +1,138 @@
 const { join } = require('path');
 const bttps = require(join(__dirname, 'bttps.js'));
-
-async function handleInternal(discordClient, apiKeys, repeatInterval) {
-    //set the function to repeat
-    setTimeout(handleInternal.bind(null, discordClient, apiKeys, repeatInterval), (60000 * repeatInterval));
-
-    //the actual code to post the stats
-    if (discordClient.user) {
-        if (repeatInterval > 2) { //if the interval isnt below the BotBlock ratelimit, use their API
-            apiKeys["server_count"] = discordClient.guilds.size;
-            apiKeys["bot_id"] = discordClient.user.id;
-            if (discordClient.shard) {
-                apiKeys["shard_id"] = discordClient.shard.id;
-                apiKeys["shard_count"] = discordClient.shard.count;
-            }
-            bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.error(`BLAPI: ${e}`));
-        } else {
-            postToAllLists(discordClient.guilds.size, discordClient.user.id, apiKeys);
-        }
-    } else {
-        console.error("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
-    }
-}
-
-module.exports = {
-    /**
-     * This function is for automated use with discord.js
-     * @param {Client} discordClient Client via wich your code is connected to Discord
-     * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
-     * @param {integer} repeatInterval Number of minutes until you want to post again, leave out to use 30
-     */
-    handle: async (discordClient, apiKeys, repeatInterval) => {
-        //handle inputs
-        if (!repeatInterval || repeatInterval < 1)
-            repeatInterval = 30;
-        handleInternal(discordClient, apiKeys, repeatInterval);
-    },
-    /**
-     * For when you don't use discord.js or just want to post to manual times
-     * @param {integer} guildCount Integer value of guilds your bot is serving
-     * @param {string} botID Snowflake of the ID the user your bot is using
-     * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
-     * @param {boolean} noBotBlockPlis If you don't want to use the BotBlock API add this as True
-     */
-    manualPost: async (guildCount, botID, apiKeys, noBotBlockPlis) => { //TODO add shard support
-        if (!noBotBlockPlis) {
-            apiKeys["server_count"] = guildCount;
-            apiKeys["bot_id"] = botID;
-            bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys).catch((e) => console.error(`BLAPI: ${e}`));
-        } else {
-            postToAllLists(guildCount, botID, apiKeys);
-        }
-    }
-};
+const fallbackListData = require('./fallbackListData.json');
 
 let listData;
+let extendedLogging = false;
 
-async function postToAllLists(guildCount, botID, apiKeys) {
-    //make sure we have all lists we can post to and their apis
+/**
+ * @param {integer} guildCount Total number of guilds the bot is on
+ * @param {string} botID User ID of bot to post stats for
+ * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+ */
+const postToAllLists = async (guildCount, botID, apiKeys) => {
+  // make sure we have all lists we can post to and their apis
+  if (!listData) {
+    listData = await bttps.get('https://botblock.org/api/lists').catch(e => console.error(`BLAPI: ${e}`));
     if (!listData) {
-        listData = await bttps.get('https://botblock.org/api/lists/count').catch((e) => console.error(`BLAPI: ${e}`));
-        if (!listData) {
-            console.error("BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
-            listData = oldListData;
-        }
+      console.error("BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
+      listData = fallbackListData;
     }
-    for (let listname in listData) {
-        if (apiKeys[listname]) {
-            let list = listData[listname];
-            let url = 'https://' + listname;
-            let apiPath = list['api_post'].replace(url, '').replace(':id', botID);
-            let sendObj = JSON.parse(`{ "${list["api_field"]}": ${guildCount} }`);
-            bttps.post(listname, apiPath, apiKeys[listname], sendObj).catch((e) => console.error(`BLAPI: ${e}`));
-        }
+  }
+  for (const listname in listData) {
+    if (apiKeys[listname]) {
+      const list = listData[listname];
+      const url = `https://${listname}`;
+      const apiPath = list['api_post'].replace(url, '').replace(':id', botID);
+      const sendObj = JSON.parse(`{ "${list['api_field']}": ${guildCount} }`);
+      bttps.post(listname, apiPath, apiKeys[listname], sendObj, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
     }
-}
+  }
+};
 
-const oldListData = {
-    "botsfordiscord.com": {
-        "api_docs": "https://botsfordiscord.com/docs/v1",
-        "api_post": "https://botsfordiscord.com/api/v1/bots/:id",
-        "api_field": "server_count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "bots.ondiscord.xyz": {
-        "api_docs": "https://bots.ondiscord.xyz/info/api",
-        "api_post": "https://bots.ondiscord.xyz/bot-api/bots/:id/guilds",
-        "api_field": "guildCount",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "boatlist.ml": {
-        "api_docs": null,
-        "api_post": "https://boatlist.ml/api/bots/:id/stats",
-        "api_field": "server_count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "botlist.space": {
-        "api_docs": "https://botlist.space/docs/api",
-        "api_post": "https://botlist.space/api/bots/:id",
-        "api_field": "server_count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": "shards"
-    },
-    "carbonitex.net": {
-        "api_docs": null,
-        "api_post": null,
-        "api_field": null,
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "discordboats.club": {
-        "api_docs": null,
-        "api_post": "https://discordboats.club/api/public/bot/stats",
-        "api_field": "server_count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "discordbots.org": {
-        "api_docs": "https://discordbots.org/api/docs",
-        "api_post": "https://discordbots.org/api/bots/:id/stats",
-        "api_field": "server_count",
-        "api_shard_id": "shard_id",
-        "api_shard_count": "shard_count",
-        "api_shards": "shards"
-    },
-    "discordbot.world": {
-        "api_docs": "https://discordbot.world/docs",
-        "api_post": "https://discordbot.world/api/bot/:id/stats",
-        "api_field": "guild_count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": "shards"
-    },
-    "bots.discord.pw": {
-        "api_docs": "https://bots.discord.pw/api",
-        "api_post": "https://bots.discord.pw/api/bots/:id/stats",
-        "api_field": "server_count",
-        "api_shard_id": "shard_id",
-        "api_shard_count": "shard_count",
-        "api_shards": null
-    },
-    "discordbots.group": {
-        "api_docs": "https://discordbots.group/api/docs",
-        "api_post": "https://discordbots.group/api/bot/:id",
-        "api_field": "count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "discordbots.co.uk": {
-        "api_docs": null,
-        "api_post": null,
-        "api_field": null,
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "discordmusicbots.com": {
-        "api_docs": null,
-        "api_post": null,
-        "api_field": null,
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "discord.services": {
-        "api_docs": "http://discord.services/api/",
-        "api_post": "https://discord.services/api/bots/:id",
-        "api_field": "server_count",
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "botlist.co": {
-        "api_docs": null,
-        "api_post": null,
-        "api_field": null,
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "solutions.softonic.com": {
-        "api_docs": null,
-        "api_post": null,
-        "api_field": null,
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
-    },
-    "thereisabotforthat.com": {
-        "api_docs": null,
-        "api_post": null,
-        "api_field": null,
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null
+/**
+ * @param {Client} client Discord.js client
+ * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+ * @param {number} repeatInterval Number of minutes between each repetition
+ */
+const handleInternal = async (client, apiKeys, repeatInterval) => {
+  // set the function to repeat
+  setTimeout(handleInternal.bind(null, client, apiKeys, repeatInterval), 60000 * repeatInterval);
+
+  // the actual code to post the stats
+  if (client.user) {
+    if (repeatInterval > 2) { // if the interval isnt below the BotBlock ratelimit, use their API
+      apiKeys['bot_id'] = client.user.id;
+
+      // Checks bot is sharded
+      /* eslint-disable camelcase */
+      if (client.shard) {
+        if (client.shard.id === 0) {
+          apiKeys.shard_count = client.shard.count;
+
+          // This will get as much info as it can, without erroring
+          const shardCounts = await client.shard.broadcastEval('this.guilds.size').catch(e => console.error('BLAPI: Error while fetching shard server counts:', e));
+          if (shardCounts.length !== client.shard.count) {
+            // If not all shards are up yet, we skip this run of handleInternal
+            return;
+          }
+
+          apiKeys.shards = shardCounts;
+          apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
+        }
+      } else {
+        apiKeys['server_count'] = client.guilds.size;
+      }
+      /* eslint-enable camelcase */
+
+      bttps
+        .post('botblock.org', '/api/count', 'no key needed for this', apiKeys)
+        .catch(error => console.error('BLAPI:', error));
+    } else {
+      postToAllLists(client.guilds.size, client.user.id, apiKeys);
     }
+  } else {
+    console.error("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
+  }
+};
+
+module.exports = {
+  /**
+   * This function is for automated use with discord.js
+   * @param {Client} discordClient Client via wich your code is connected to Discord
+   * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+   * @param {integer} repeatInterval Number of minutes until you want to post again, leave out to use 30
+   */
+  handle: (discordClient, apiKeys, repeatInterval) => {
+    // handle inputs
+    if (!repeatInterval || repeatInterval < 1) repeatInterval = 30;
+    handleInternal(discordClient, apiKeys, repeatInterval);
+  },
+  /**
+   * For when you don't use discord.js or just want to post to manual times
+   * @param {integer} guildCount Integer value of guilds your bot is serving
+   * @param {string} botID Snowflake of the ID the user your bot is using
+   * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+   * @param {boolean} noBotBlockPlis If you don't want to use the BotBlock API add this as True
+   */
+  manualPost: (guildCount, botID, apiKeys, noBotBlockPlis) => {
+    if (noBotBlockPlis) {
+      postToAllLists(guildCount, botID, apiKeys);
+    } else {
+      /* eslint-disable camelcase */
+      apiKeys.server_count = guildCount;
+      apiKeys.bot_id = botID;
+      /* eslint-enable camelcase */
+      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
+    }
+  },
+  /**
+   * For when you don't use discord.js or just want to post to manual times
+   * @param {integer} guildCount Integer value of guilds your bot is serving
+   * @param {string} botID Snowflake of the ID the user your bot is using
+   * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+   * @param {integer} shardID The shard ID, which will be used to identify the shards valid for posting (and for super efficient posting with BLAPIs own distributer when not using botBlock)
+   * @param {integer} shardCount The number of shards the bot has, which is posted to the lists
+   * @param {[integer]} shards An array of guild counts of each single shard (this should be a complete list, and only a single shard will post it)
+   * @param {boolean} noBotBlockPlis If you don't want to use the BotBlock API add this as True
+   */
+  manualPostSharded: (guildCount, botID, apiKeys, shardID, shardCount, shards, noBotBlockPlis) => { // TODO complete
+    if (noBotBlockPlis) {
+      postToAllLists(guildCount, botID, apiKeys); // redo function for sharded
+    } else if (shardID === 0) {
+      /* eslint-disable camelcase */
+      apiKeys.server_count = guildCount;
+      apiKeys.bot_id = botID;
+      apiKeys.server_count = guildCount;
+      apiKeys.shard_count = shardCount;
+      /* eslint-enable camelcase */
+      if (shards) {
+        apiKeys.shards = shards;
+      }
+      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
+    }
+  },
+  setLogging: setLogging => {
+    extendedLogging = setLogging;
+  }
 };

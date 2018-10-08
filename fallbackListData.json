@@ -1,0 +1,218 @@
+{
+    "automacord.xyz": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "boatlist.xyz": {
+        "api_docs": "https://boatlist.xyz/api/docs/",
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://boatlist.xyz/api/bot/:id"
+    },
+    "botlist.space": {
+        "api_docs": "https://botlist.space/docs/api",
+        "api_post": "https://botlist.space/api/bots/:id",
+        "api_field": "server_count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": "shards",
+        "api_get": "https://botlist.space/api/bots/:id"
+    },
+    "botsfordiscord.com": {
+        "api_docs": "https://botsfordiscord.com/docs/api",
+        "api_post": "https://botsfordiscord.com/api/bot/:id",
+        "api_field": "server_count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://botsfordiscord.com/api/bot/:id"
+    },
+    "bots.ondiscord.xyz": {
+        "api_docs": "https://bots.ondiscord.xyz/info/api",
+        "api_post": "https://bots.ondiscord.xyz/bot-api/bots/:id/guilds",
+        "api_field": "guildCount",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "carbonitex.net": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "dankbotlist.com": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "discordboats.xyz": {
+        "api_docs": "https://discordboats.xyz/api/docs",
+        "api_post": "https://discordboats.xyz/api/bot/:id",
+        "api_field": "server_count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://discordboats.xyz/api/bot/:id"
+    },
+    "discordboats.club": {
+        "api_docs": null,
+        "api_post": "https://discordboats.club/api/public/bot/stats",
+        "api_field": "server_count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "discordbots.org": {
+        "api_docs": "https://discordbots.org/api/docs",
+        "api_post": "https://discordbots.org/api/bots/:id/stats",
+        "api_field": "server_count",
+        "api_shard_id": "shard_id",
+        "api_shard_count": "shard_count",
+        "api_shards": "shards",
+        "api_get": "https://discordbots.org/api/bots/:id"
+    },
+    "discordbotlist.com": {
+        "api_docs": "https://discordbotlist.com/api-docs",
+        "api_post": "https://discordbotlist.com/api/bots/:id/stats",
+        "api_field": "guilds",
+        "api_shard_id": "shard_id",
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://discordbotlist.com/api/bots/:id"
+    },
+    "discordbot.world": {
+        "api_docs": "https://discordbot.world/docs",
+        "api_post": "https://discordbot.world/api/bot/:id/stats",
+        "api_field": "guild_count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": "shards",
+        "api_get": "https://discordbot.world/api/bot/:id/stats"
+    },
+    "bots.discord.pw": {
+        "api_docs": "https://bots.discord.pw/api",
+        "api_post": "https://bots.discord.pw/api/bots/:id/stats",
+        "api_field": "server_count",
+        "api_shard_id": "shard_id",
+        "api_shard_count": "shard_count",
+        "api_shards": null,
+        "api_get": "https://bots.discord.pw/api/bots/:id"
+    },
+    "discordbotlist.xyz": {
+        "api_docs": null,
+        "api_post": "https://discordbotlist.xyz/api/stats/:id",
+        "api_field": "count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://discordbotlist.xyz/api/bot?id=:id"
+    },
+    "discordbots.group": {
+        "api_docs": "https://discordbots.group/api/docs",
+        "api_post": "https://discordbots.group/api/bot/:id",
+        "api_field": "count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://discordbots.group/api/bot/:id"
+    },
+    "discordbots.co.uk": {
+        "api_docs": "https://discordbots.co.uk/docs/api-reference/",
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://discordbots.co.uk/api/bots/:id.json"
+    },
+    "bots.discordlist.app": {
+        "api_docs": "https://bots.discordlist.app/api",
+        "api_post": "https://bots.discordlist.app/api/bot/:id/stats",
+        "api_field": "server_count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://bots.discordlist.app/api/bot/:id/stats"
+    },
+    "discordmusicbots.com": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "discord.services": {
+        "api_docs": "http://discord.services/api/",
+        "api_post": "https://discord.services/api/bots/:id",
+        "api_field": "server_count",
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": "https://discord.services/api/bots/:id"
+    },
+    "discordsbestbots.xyz": {
+        "api_docs": null,
+        "api_post": "https://discordsbestbots.xyz/api/bots/:id",
+        "api_field": "guilds",
+        "api_shard_id": null,
+        "api_shard_count": "shards",
+        "api_shards": null,
+        "api_get": "https://discordsbestbots.xyz/api/bots/:id"
+    },
+    "divinediscordbots.com": {
+        "api_docs": "https://divinediscordbots.com/api",
+        "api_post": "https://divinediscordbots.com/bots/:id/stats",
+        "api_field": "server_count",
+        "api_shard_id": null,
+        "api_shard_count": "shards",
+        "api_shards": null,
+        "api_get": "https://divinediscordbots.com/bots/:id/stats"
+    },
+    "botlist.co": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "solutions.softonic.com": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    },
+    "thereisabotforthat.com": {
+        "api_docs": null,
+        "api_post": null,
+        "api_field": null,
+        "api_shard_id": null,
+        "api_shard_count": null,
+        "api_shards": null,
+        "api_get": null
+    }
+}
