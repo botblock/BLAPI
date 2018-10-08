@@ -20,7 +20,7 @@ const postToAllLists = async (guildCount, botID, apiKeys) => {
     }
   }
   for (const listname in listData) {
-    if (apiKeys[listname]) {
+    if (apiKeys[listname] && listData[listname]['api_post']) {
       const list = listData[listname];
       const url = `https://${listname}`;
       const apiPath = list['api_post'].replace(url, '').replace(':id', botID);
