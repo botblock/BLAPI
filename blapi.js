@@ -65,13 +65,13 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
           apiKeys.shard_count = client.ws.shards.length;
 
           // Get array of shards
-          let shards = []
+          let shardCounts = []
           client.ws.shards.forEach(shard => {
             let count = 0
             client.guilds.forEach(g => {
                 if(g.shardID===shard.id) count++ 
             })
-            shards.push(count)
+            shardCounts.push(count)
           })
           if (shardCounts.length !== client.ws.shards.length) {
             // If not all shards are up yet, we skip this run of handleInternal
