@@ -62,24 +62,24 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
         }
       // Checks bot is sharded (internal sharding)
       } else if (client.ws.shards) {
-          apiKeys.shard_count = client.ws.shards.length;
+        apiKeys.shard_count = client.ws.shards.length;
 
-          // Get array of shards
-          let shardCounts = []
-          client.ws.shards.forEach(shard => {
-            let count = 0
-            client.guilds.forEach(g => {
-                if(g.shardID===shard.id) count++ 
-            })
-            shardCounts.push(count)
-          })
-          if (shardCounts.length !== client.ws.shards.length) {
-            // If not all shards are up yet, we skip this run of handleInternal
-            return;
-          }
+        // Get array of shards
+        const shardCounts = [];
+        client.ws.shards.forEach(shard => {
+          let count = 0;
+          client.guilds.forEach(g => {
+            if (g.shardID === shard.id) count++;
+          });
+          shardCounts.push(count);
+        });
+        if (shardCounts.length !== client.ws.shards.length) {
+          // If not all shards are up yet, we skip this run of handleInternal
+          return;
+        }
 
-          apiKeys.shards = shardCounts;
-          apiKeys.server_count = client.guilds.size;
+        apiKeys.shards = shardCounts;
+        apiKeys.server_count = client.guilds.size;
       } else {
         apiKeys['server_count'] = client.guilds.size;
       }
