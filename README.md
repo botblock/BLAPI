@@ -1,5 +1,6 @@
 # BLAPI - the BotListAPI
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ebd62ee46cd84964975ae65ac9462fa1)](https://app.codacy.com/app/T0TProduction/BLAPI?utm_source=github.com&utm_medium=referral&utm_content=T0TProduction/BLAPI&utm_campaign=Badge_Grade_Dashboard)
 [![dependencies Status](https://david-dm.org/T0TProduction/BLAPI/status.svg)](https://david-dm.org/T0TProduction/BLAPI) [![install size](https://packagephobia.now.sh/badge?p=blapi)](https://packagephobia.now.sh/result?p=blapi) [![jsDelivr](https://data.jsdelivr.com/v1/package/npm/blapi/badge?style=rounded)](https://www.jsdelivr.com/package/npm/blapi)
 
 [![nodei](https://nodei.co/npm/blapi.png)](https://nodei.co/npm/blapi/)
