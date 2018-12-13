@@ -74,8 +74,8 @@ an example would be:
 
 ```json
 {
-  "bots.ondiscord.xyz" : "aönvtauitnzvaltnvalztnbvaeöituvnautzcn",
-  "discordbots.org" : "nzovrzunwlvuaznwtvclawnztvcaöznhtcauhntclagbt"
+  "bots.ondiscord.xyz": "dsag38_auth_token_fda6gs",
+  "discordbots.group": "qos56a_auth_token_gfd8g6"
 }
 ```
 
@@ -90,13 +90,14 @@ This is a list of all supported discord bot lists:
 | boatlist.ml        |
 | botlist.space      |
 | discordboats.club  |
-| discordbots.org    |
 | discordbot.world   |
 | bots.discord.pw    |
 | discordbots.group  |
 | discord.services   |
+| ~discordbots.org~ |
 
 These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists)
+
 
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
 
