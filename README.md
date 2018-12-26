@@ -9,7 +9,7 @@ BLAPI is a package to handle posting your discord bot stats to botlists.
 
 It's intended to be used with discord.js, though you can also manually post your stats.
 
-BLAPI fully supports sharding when using the [BotBlock API](https://botblock.org/api/docs#count), but not **yet** when manually posting.
+BLAPI fully supports external and discord.js internal sharding with and without the use of the [BotBlock API](https://botblock.org/api/docs#count).
 
 ## Installation
 
@@ -45,9 +45,10 @@ blapi.handle(bot, apiKeys, 60);
 ### Manually, without need of Discord libraries
 
 ```js
-// `postWithoutBotBlock` is a optional boolean if you don't want to use the BotBlock API
-// Consider adding it if you get ratelimited from bot lists
-blapi.manualPost(guildCount, botID, apiKeys, postWithoutBotBlock);
+// If you want to post sharddata you can add the optional parameters
+// shardID and shardCount should both be integers
+// shardsArray should be an integer array containing the guildcounts of the respective shards
+blapi.manualPost(guildCount, botID, apiKeys[, shardID, shardCount[, shardsArray]]);
 ```
 
 ### Turn on extended logging
@@ -56,6 +57,14 @@ blapi.manualPost(guildCount, botID, apiKeys, postWithoutBotBlock);
 // Use this to get more detailed logging when using botBlock
 // Errors will always be logged
 blapi.setLogging(True);
+```
+
+### Turn off the use of the BotBlock API
+
+```js
+// Use this to turn off BotBlock usage
+// By default it is set to true
+blapi.setBotblock(False);
 ```
 
 ### apiKeys
@@ -94,7 +103,7 @@ This is a list of all supported discord bot lists:
 | bots.discord.pw    |
 | discordbots.group  |
 | discord.services   |
-| ~discordbots.org~ |
+| discordbots.org    |
 
 These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists)
 
