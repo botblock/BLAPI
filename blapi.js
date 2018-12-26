@@ -4,6 +4,7 @@ const fallbackListData = require('./fallbackListData.json');
 
 let listData;
 let extendedLogging = false;
+let useBotblockAPI = true;
 
 /**
  * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; it also includes other metadata including sharddata
@@ -49,12 +50,7 @@ const postToAllLists = async apiKeys => {
  * @param {number} repeatInterval Number of minutes between each repetition
  */
 const handleInternal = async (client, apiKeys, repeatInterval) => {
-  // set the function to repeat
-  setTimeout(handleInternal.bind(null, client, apiKeys, repeatInterval), 60000 * repeatInterval);
-
-  // the actual code to post the stats
   if (client.user) {
-    // Checks if bot is sharded
     /* eslint-disable camelcase */
     apiKeys.bot_id = client.user.id;
     // Checks if bot is sharded
@@ -72,7 +68,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
         apiKeys.shards = shardCounts;
         apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
       }
-      // Checks bot is sharded (internal sharding)
+      // Checks if bot is sharded with internal sharding
     } else if (client.ws.shards) {
       apiKeys.shard_count = client.ws.shards.length;
 
@@ -93,10 +89,10 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       apiKeys.shards = shardCounts;
       apiKeys.server_count = client.guilds.size;
     } else {
-      apiKeys['server_count'] = client.guilds.size;
+      apiKeys.server_count = client.guilds.size;
     }
     /* eslint-enable camelcase */
-    if (repeatInterval > 2) { // if the interval isnt below the BotBlock ratelimit, use their API
+    if (repeatInterval > 2 && useBotblockAPI) { // if the interval isnt below the BotBlock ratelimit, use their API
       bttps
         .post('botblock.org', '/api/count', 'no key needed for this', apiKeys)
         .catch(error => console.error('BLAPI:', error));
@@ -118,7 +114,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       postToAllLists(apiKeys);
     }
   } else {
-    console.error("BLAPI : Discord client seems to not be connected yet, so we're skipping the post");
+    console.error(`BLAPI : Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} seconds.`);
   }
 };
 
@@ -132,57 +128,46 @@ module.exports = {
   handle: (discordClient, apiKeys, repeatInterval) => {
     // handle inputs
     if (!repeatInterval || repeatInterval < 1) repeatInterval = 30;
-    handleInternal(discordClient, apiKeys, repeatInterval);
+    // set the function to repeat
+    setInterval(handleInternal(discordClient, apiKeys, repeatInterval), 60000 * repeatInterval);
   },
   /**
    * For when you don't use discord.js or just want to post to manual times
    * @param {integer} guildCount Integer value of guilds your bot is serving
    * @param {string} botID Snowflake of the ID the user your bot is using
    * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
-   * @param {boolean} noBotBlockPlis If you don't want to use the BotBlock API add this as True
+   * @param {integer} shardID (optional) The shard ID, which will be used to identify the shards valid for posting (and for super efficient posting with BLAPIs own distributer when not using botBlock)
+   * @param {integer} shardCount (optional) The number of shards the bot has, which is posted to the lists
+   * @param {[integer]} shards (optional) An array of guild counts of each single shard (this should be a complete list, and only a single shard will post it)
    */
-  manualPost: (guildCount, botID, apiKeys, noBotBlockPlis) => {
+  manualPost: (guildCount, botID, apiKeys, shardID, shardCount, shards) => {
     /* eslint-disable camelcase */
-    apiKeys.server_count = guildCount;
     apiKeys.bot_id = botID;
-    /* eslint-enable camelcase */
-    if (noBotBlockPlis) {
-      postToAllLists(apiKeys);
-    } else {
-      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
-    }
-  },
-  /**
-   * For when you don't use discord.js or just want to post to manual times
-   * @param {integer} guildCount Integer value of guilds your bot is serving
-   * @param {string} botID Snowflake of the ID the user your bot is using
-   * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
-   * @param {integer} shardID The shard ID, which will be used to identify the shards valid for posting (and for super efficient posting with BLAPIs own distributer when not using botBlock)
-   * @param {integer} shardCount The number of shards the bot has, which is posted to the lists
-   * @param {[integer]} shards An array of guild counts of each single shard (this should be a complete list, and only a single shard will post it)
-   * @param {boolean} noBotBlockPlis If you don't want to use the BotBlock API add this as True
-   */
-  manualPostSharded: (guildCount, botID, apiKeys, shardID, shardCount, shards, noBotBlockPlis) => { // TODO complete
-    if (shardID === 0 || !shards) { // if we don't have all the shard info in one place well try to post every shard itself
-      /* eslint-disable camelcase */
-      apiKeys.bot_id = botID;
+    apiKeys.server_count = guildCount;
+    // check if we want to use sharding
+    if (shardID === 0 || (shardID && !shards)) { // if we don't have all the shard info in one place well try to post every shard itself
       apiKeys.shard_id = shardID;
       apiKeys.shard_count = shardCount;
       if (shards) {
+        if (shards.length !== shardCount) {
+          console.error(`BLAPI: Shardcount (${shardCount}) does not equal the length of the shards array (${shards.length}).`);
+          return;
+        }
         apiKeys.shards = shards;
         apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
-      } else {
-        apiKeys.server_count = guildCount;
       }
       /* eslint-enable camelcase */
-      if (noBotBlockPlis) {
-        postToAllLists(apiKeys);
-      } else {
-        bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
-      }
+    }
+    if (useBotblockAPI) {
+      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
+    } else {
+      postToAllLists(apiKeys);
     }
   },
   setLogging: setLogging => {
     extendedLogging = setLogging;
+  },
+  setBotblock: useBotblock => {
+    useBotblockAPI = useBotblock;
   }
 };
