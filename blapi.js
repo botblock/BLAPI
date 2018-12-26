@@ -114,7 +114,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       postToAllLists(apiKeys);
     }
   } else {
-    console.error(`BLAPI : Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} seconds.`);
+    console.error(`BLAPI : Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} minutes.`);
   }
 };
 
