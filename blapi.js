@@ -3,6 +3,7 @@ const bttps = require(join(__dirname, 'bttps.js'));
 const fallbackListData = require('./fallbackListData.json');
 
 let listData;
+const listAge = new Date();
 let extendedLogging = false;
 let useBotblockAPI = true;
 
@@ -11,7 +12,9 @@ let useBotblockAPI = true;
  */
 const postToAllLists = async apiKeys => {
   // make sure we have all lists we can post to and their apis
-  if (!listData) {
+  const currentDate = new Date();
+  if (!listData || listAge < currentDate) {
+    listAge.setDate(currentDate.getDate() + 1); // we try to update the listdata every day, in case new lists are added but the code is not restarted
     listData = await bttps.get('https://botblock.org/api/lists').catch(e => console.error(`BLAPI: ${e}`));
     if (!listData) {
       console.error("BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.");
@@ -25,17 +28,17 @@ const postToAllLists = async apiKeys => {
         list = fallbackListData[listname];
       }
       const url = `https://${listname}`;
-      const apiPath = list['api_post'].replace(url, '').replace(':id', apiKeys.bot_id);
+      const apiPath = list.api_post.replace(url, '').replace(':id', apiKeys.bot_id);
       // creating JSON object to send, reading out shard data
-      let sendObjString = `{ "${list['api_field']}": ${apiKeys.server_count}`;
-      if (apiKeys.shard_id && list['api_shard_id']) {
-        sendObjString += `, "${list['api_shard_id']}": ${apiKeys.shard_id}`;
+      let sendObjString = `{ "${list.api_field}": ${apiKeys.server_count}`;
+      if (apiKeys.shard_id && list.api_shard_id) {
+        sendObjString += `, "${list.api_shard_id}": ${apiKeys.shard_id}`;
       }
-      if (apiKeys.shard_count && list['api_shard_count']) {
-        sendObjString += `, "${list['api_shard_count']}": ${apiKeys.shard_count}`;
+      if (apiKeys.shard_count && list.api_shard_count) {
+        sendObjString += `, "${list.api_shard_count}": ${apiKeys.shard_count}`;
       }
-      if (apiKeys.shards && list['api_shards']) {
-        sendObjString += `, "${list['api_shards']}": ${apiKeys.shards}`;
+      if (apiKeys.shards && list.api_shards) {
+        sendObjString += `, "${list.api_shards}": ${apiKeys.shards}`;
       }
       sendObjString += ' }';
       const sendObj = JSON.parse(sendObjString);
