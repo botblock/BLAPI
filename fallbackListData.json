@@ -107,14 +107,14 @@
         "api_shards": "shards",
         "api_get": "https://discordbot.world/api/bot/:id/stats"
     },
-    "bots.discord.pw": {
-        "api_docs": "https://bots.discord.pw/api",
-        "api_post": "https://bots.discord.pw/api/bots/:id/stats",
-        "api_field": "server_count",
-        "api_shard_id": "shard_id",
-        "api_shard_count": "shard_count",
+    "discord.bots.gg": {
+        "api_docs": "https://discord.bots.gg/api/v1",
+        "api_post": "https://discord.bots.gg/api/v1/bots/:id/stats",
+        "api_field": "guildCount",
+        "api_shard_id": "shardId",
+        "api_shard_count": "shardCount",
         "api_shards": null,
-        "api_get": "https://bots.discord.pw/api/bots/:id"
+        "api_get": "https://discord.bots.gg/api/v1/bots/:id"
     },
     "discordbotlist.xyz": {
         "api_docs": null,
