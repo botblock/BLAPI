@@ -91,12 +91,12 @@
     },
     "discordbots.org": {
         "api_docs": "https://discordbots.org/api/docs",
-        "api_post": null,
-        "api_field": null,
-        "api_shard_id": null,
-        "api_shard_count": null,
-        "api_shards": null,
-        "api_get": null
+        "api_post": "https://discordbots.org/api/bots/:id/stats",
+        "api_field": "server_count",
+        "api_shard_id": "shard_id",
+        "api_shard_count": "shard_count",
+        "api_shards": "shards",
+        "api_get": "https://discordbots.org/api/bots/:id"
     },
     "discordbotlist.com": {
         "api_docs": "https://discordbotlist.com/api-docs",
