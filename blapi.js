@@ -132,7 +132,7 @@ module.exports = {
     // handle inputs
     if (!repeatInterval || repeatInterval < 1) repeatInterval = 30;
     // set the function to repeat
-    setInterval(handleInternal, 60000 * repeatInterval, discordClient, apiKeys, repeatInterval);
+    setInterval(handleInternal.bind(null, discordClient, apiKeys, repeatInterval), 60000 * repeatInterval);
   },
   /**
    * For when you don't use discord.js or just want to post to manual times
