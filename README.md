@@ -56,7 +56,7 @@ blapi.manualPost(guildCount, botID, apiKeys[, shardID, shardCount[, shardsArray]
 ```js
 // Use this to get more detailed logging when using botBlock
 // Errors will always be logged
-blapi.setLogging(True);
+blapi.setLogging(true);
 ```
 
 ### Turn off the use of the BotBlock API
@@ -64,7 +64,7 @@ blapi.setLogging(True);
 ```js
 // Use this to turn off BotBlock usage
 // By default it is set to true
-blapi.setBotblock(False);
+blapi.setBotblock(false);
 ```
 
 ### apiKeys
