@@ -18,15 +18,15 @@ module.exports = {
     const req = https.request(options, res => {
       if (logStuff) {
         console.log(`BLAPI: posted to ${domain}${apiPath}`);
-        console.log('statusCode:', res.statusCode);
-        console.log('headers:', res.headers);
+        console.log('BLAPI: statusCode:', res.statusCode);
+        console.log('BLAPI: headers:', res.headers);
         res.on('data', d => {
-          console.log(d);
+          console.log(`BLAPI: data: ${d}`);
         });
       }
     });
     req.on('error', e => {
-      console.error(e);
+      console.error(`BLAPI: ${e}`);
       reject(new Error(`Request to ${req.url} failed with Errorcode ${req.status}:\n${req.statusText}`));
     });
     req.write(postData);
@@ -44,11 +44,9 @@ module.exports = {
         resolve(JSON.parse(data));
       });
       resp.on('error', e => {
-        console.error(e);
+        console.error(`BLAPI: ${e}`);
         reject(new Error(`Request to ${resp.url} failed with Errorcode ${resp.status}:\n${resp.statusText}`));
       });
     });
   })
 };
-
-
