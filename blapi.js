@@ -73,7 +73,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
         apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
       }
       // Checks if bot is sharded with internal sharding
-    } else if (client.ws.shards) {
+    } else if (client.ws && client.ws.shards) {
       apiKeys.shard_count = client.ws.shards.length;
 
       // Get array of shards
@@ -97,9 +97,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
     }
     /* eslint-enable camelcase */
     if (repeatInterval > 2 && useBotblockAPI) { // if the interval isnt below the BotBlock ratelimit, use their API
-      bttps
-        .post('botblock.org', '/api/count', 'no key needed for this', apiKeys)
-        .catch(error => console.error('BLAPI:', error));
+      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
 
       // they blacklisted botblock, so we need to do this, posting their stats manually
       if (apiKeys['discordbots.org']) {
