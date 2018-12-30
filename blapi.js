@@ -53,6 +53,7 @@ const postToAllLists = async apiKeys => {
  * @param {number} repeatInterval Number of minutes between each repetition
  */
 const handleInternal = async (client, apiKeys, repeatInterval) => {
+  setTimeout(handleInternal.bind(null, client, apiKeys, repeatInterval), 60000 * repeatInterval); // call this function again in the next interval
   if (client.user) {
     /* eslint-disable camelcase */
     apiKeys.bot_id = client.user.id;
@@ -131,8 +132,7 @@ module.exports = {
   handle: (discordClient, apiKeys, repeatInterval) => {
     // handle inputs
     if (!repeatInterval || repeatInterval < 1) repeatInterval = 30;
-    // set the function to repeat
-    setInterval(handleInternal.bind(null, discordClient, apiKeys, repeatInterval), 60000 * repeatInterval);
+    handleInternal(discordClient, apiKeys, repeatInterval);
   },
   /**
    * For when you don't use discord.js or just want to post to manual times
