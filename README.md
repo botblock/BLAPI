@@ -54,7 +54,7 @@ blapi.manualPost(guildCount, botID, apiKeys[, shardID, shardCount[, shardsArray]
 ### Turn on extended logging
 
 ```js
-// Use this to get more detailed logging when using botBlock
+// Use this to get more detailed logging when posting
 // Errors will always be logged
 blapi.setLogging(true);
 ```
