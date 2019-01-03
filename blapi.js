@@ -73,9 +73,6 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
 
       // Checks if bot is sharded with internal sharding
     } else if (client.ws && client.ws.shards) {
-      if (extendedLogging) {
-        console.log('BLAPI: Detected internal sharding, trying to get the data.');
-      }
       apiKeys.shard_count = client.ws.shards.size;
       // Get array of shards
       const shardCounts = [];
@@ -88,9 +85,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       });
       if (shardCounts.length !== client.ws.shards.size) {
         // If not all shards are up yet, we skip this run of handleInternal
-        if (extendedLogging) {
-          console.log("BLAPI: Not all shards are up yet, so we're skipping this run.");
-        }
+        console.log("BLAPI: Not all shards are up yet, so we're skipping this run.");
         return;
       }
       apiKeys.shards = shardCounts;
