@@ -99,7 +99,7 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
 
       // they blacklisted botblock, so we need to do this, posting their stats manually
       if (apiKeys['discordbots.org']) {
-        let newApiKeys;
+        const newApiKeys = {};
         /* eslint-disable camelcase */
         newApiKeys.bot_id = apiKeys.bot_id;
         newApiKeys['discordbots.org'] = apiKeys['discordbots.org'];
