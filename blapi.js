@@ -58,24 +58,25 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
     /* eslint-disable camelcase */
     apiKeys.bot_id = client.user.id;
     // Checks if bot is sharded
-    if (client.shard) {
-      if (client.shard.id === 0) {
-        apiKeys.shard_count = client.shard.count;
+    if (client.shard && client.shard.id === 0) {
+      apiKeys.shard_count = client.shard.count;
 
-        // This will get as much info as it can, without erroring
-        const shardCounts = await client.shard.broadcastEval('this.guilds.size').catch(e => console.error('BLAPI: Error while fetching shard server counts:', e));
-        if (shardCounts.length !== client.shard.count) {
-          // If not all shards are up yet, we skip this run of handleInternal
-          return;
-        }
-
-        apiKeys.shards = shardCounts;
-        apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
+      // This will get as much info as it can, without erroring
+      const shardCounts = await client.shard.broadcastEval('this.guilds.size').catch(e => console.error('BLAPI: Error while fetching shard server counts:', e));
+      if (shardCounts.length !== client.shard.count) {
+        // If not all shards are up yet, we skip this run of handleInternal
+        return;
       }
+
+      apiKeys.shards = shardCounts;
+      apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
+
       // Checks if bot is sharded with internal sharding
     } else if (client.ws && client.ws.shards) {
+      if (extendedLogging) {
+        console.log('BLAPI: Detected internal sharding, trying to get the data.');
+      }
       apiKeys.shard_count = client.ws.shards.length;
-
       // Get array of shards
       const shardCounts = [];
       client.ws.shards.forEach(shard => {
@@ -87,11 +88,13 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       });
       if (shardCounts.length !== client.ws.shards.length) {
         // If not all shards are up yet, we skip this run of handleInternal
+        if (extendedLogging) {
+          console.log("BLAPI: Not all shards are up yet, so we're skipping this run.");
+        }
         return;
       }
-
       apiKeys.shards = shardCounts;
-      apiKeys.server_count = client.guilds.size;
+      apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
     } else {
       apiKeys.server_count = client.guilds.size;
     }
