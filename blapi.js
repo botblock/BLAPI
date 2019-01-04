@@ -103,10 +103,13 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
         /* eslint-disable camelcase */
         newApiKeys.bot_id = apiKeys.bot_id;
         newApiKeys['discordbots.org'] = apiKeys['discordbots.org'];
-        newApiKeys.shard_id = apiKeys.shard_id;
-        newApiKeys.shard_count = apiKeys.shard_count;
-        newApiKeys.shards = apiKeys.shards;
         newApiKeys.server_count = apiKeys.server_count;
+        if (apiKeys.shard_count) {
+          newApiKeys.shard_count = apiKeys.shard_count;
+        }
+        if (apiKeys.shards) {
+          newApiKeys.shards = apiKeys.shards;
+        }
         /* eslint-enable camelcase */
         postToAllLists(newApiKeys);
       }
