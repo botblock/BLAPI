@@ -27,7 +27,12 @@
     "automated",
     "auto",
     "botblock",
-    "Node.js"
+    "Node.js",
+    "discordbot",
+    "discordbots",
+    "dbl",
+    "discordbotlist",
+    "discorbotlists"
   ],
   "license": "MIT",
   "main": "blapi.js",
@@ -36,5 +41,5 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "version": "0.4.5"
+  "version": "1.0.0"
 }
