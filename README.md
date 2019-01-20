@@ -123,4 +123,4 @@ If at any time you find other bot lists have added an API to post your guildcoun
 
 All the people who helped making BLAPI are listed in [AUTHORS](https://github.com/T0TProduction/BLAPI/blob/master/AUTHORS)
 
-By default we fetch bot list information from the [BotBlock API](https://botblock.org/api/docs#count) and post all the data.
+By default we use the [BotBlock API](https://botblock.org/api/docs#count) to post all the data.
