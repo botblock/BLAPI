@@ -90,7 +90,7 @@ an example would be:
 
 ## Lists
 
-This is a list of all supported discord bot lists:
+These lists are supported by being hardcoded, but BLAPI will look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists). BLAPI will try to update its API data daily.
 
 -| Domain                 | Supports guild count| Supports sharding | Is not extremely annoying |
 |------------------------|---------------------|-------------------|---------------------------|
@@ -115,7 +115,7 @@ This is a list of all supported discord bot lists:
 | divinediscordbots.com  | ✔️                 | ✔️                | ✔️                       |
 
 
-These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists)
+Discordbots.org is still supported even though they blacklisted our API fetching service of choice, BotBlock.
 
 
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
@@ -124,4 +124,4 @@ If at any time you find other bot lists have added an API to post your guildcoun
 
 All the people who helped making BLAPI are listed in [AUTHORS](https://github.com/T0TProduction/BLAPI/blob/master/AUTHORS)
 
-By default we use the [BotBlock API](https://botblock.org/api/docs#count) to post all the data.
+By default we use the [BotBlock API](https://botblock.org/api/docs#count) to fetch and post.
