@@ -92,27 +92,26 @@ an example would be:
 
 This is a list of all supported discord bot lists:
 
-| Domain                 | Supports guild count| Supports sharding | Is not extremely annoying |
-|------------------------|---------------------|-------------------|---------------------------|
-| botlist.space          | ✔️                 | ✔️                | ✔️                       |
-| botsfordiscord.com     | ✔️                 | ❌                | ✔️                       |
-| bots.ondiscord.xyz     | ✔️                 | ❌                | ✔️                       |
-| discord.boats          | ✔️                 | ❌                | ✔️                       |
-| discordboats.club      | ✔️                 | ❌                | ✔️                       |
-| discordbotindex.com    | ✔️                 | ❌                | ✔️                       |
-| discordbots.org        | ✔️                 | ✔️                | ❌                       |
-| discordbotlist.com     | ✔️                 | ✔️                | ✔️                       |
-| discordbotlist.xyz     | ✔️                 | ❌                | ✔️                       |
-| ls.terminal.ink        | ✔️                 | ❌                | ✔️                       |
-| discordbotsreview.tk   | ✔️                 | ❌                | ✔️                       |
-| discordbot.world       | ✔️                 | ❌                | ✔️                       |
-| discord.bots.gg        | ✔️                 | ✔️                | ✔️                       |
-| discordbotslist.com    | ✔️                 | ❌                | ✔️                       |
-| discordbots.group      | ✔️                 | ❌                | ✔️                       |
-| discord.services       | ✔️                 | ❌                | ✔️                       |
-| discordsbestbots.xyz   | ✔️                 | ✔️                | ✔️                       |
-| discordsextremelist.tk | ✔️                 | ❌                | ✔️                       |
-| divinediscordbots.com  | ✔️                 | ✔️                | ✔️                       |
+| Domain                 | Supports guild count| Supports sharding |
+|------------------------|---------------------|-------------------|
+| botlist.space          | ✔️                 | ✔️                |
+| botsfordiscord.com     | ✔️                 | ❌                |
+| bots.ondiscord.xyz     | ✔️                 | ❌                |
+| discord.boats          | ✔️                 | ❌                |
+| discordboats.club      | ✔️                 | ❌                |
+| discordbotindex.com    | ✔️                 | ❌                |
+| discordbotlist.com     | ✔️                 | ✔️                |
+| discordbotlist.xyz     | ✔️                 | ❌                |
+| ls.terminal.ink        | ✔️                 | ❌                |
+| discordbotsreview.tk   | ✔️                 | ❌                |
+| discordbot.world       | ✔️                 | ✔️                |
+| discord.bots.gg        | ✔️                 | ✔️                |
+| discordbotslist.com    | ✔️                 | ❌                |
+| discordbots.group      | ✔️                 | ❌                |
+| discord.services       | ✔️                 | ❌                |
+| discordsbestbots.xyz   | ✔️                 | ✔️                |
+| discordsextremelist.tk | ✔️                 | ❌                |
+| divinediscordbots.com  | ✔️                 | ✔️                |
 
 
 These lists are supported by being hardcoded, but BLAPI will always look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists)
@@ -124,4 +123,4 @@ If at any time you find other bot lists have added an API to post your guildcoun
 
 All the people who helped making BLAPI are listed in [AUTHORS](https://github.com/T0TProduction/BLAPI/blob/master/AUTHORS)
 
-By default we use the [BotBlock API](https://botblock.org/api/docs#count) to post all the data
+By default we fetch bot list information from the [BotBlock API](https://botblock.org/api/docs#count) and post all the data.
