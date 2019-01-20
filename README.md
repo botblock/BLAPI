@@ -92,7 +92,7 @@ an example would be:
 
 These lists are supported by being hardcoded, but BLAPI will look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists). BLAPI will try to update its API data daily.
 
--| Domain                 | Supports guild count| Supports sharding | Is not extremely annoying |
+| Domain                 | Supports guild count| Supports sharding | Is not extremely annoying |
 |------------------------|---------------------|-------------------|---------------------------|
 | botlist.space          | ✔️                 | ✔️                | ✔️                       |
 | botsfordiscord.com     | ✔️                 | ❌                | ✔️                       |
