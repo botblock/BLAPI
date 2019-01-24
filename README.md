@@ -104,7 +104,7 @@ These lists are supported by being hardcoded, but BLAPI will look for new additi
 | discordbotlist.com     | ✔️                 | ✔️                | ✔️                       |
 | discordbotlist.xyz     | ✔️                 | ❌                | ✔️                       |
 | ls.terminal.ink        | ✔️                 | ❌                | ✔️                       |
-| discordbotsreview.tk   | ✔️                 | ❌                | ✔️                       |
+| discordbotreviews.xyz  | ✔️                 | ❌                | ✔️                       |
 | discordbot.world       | ✔️                 | ✔️                | ✔️                       |
 | discord.bots.gg        | ✔️                 | ✔️                | ✔️                       |
 | discordbotslist.com    | ✔️                 | ❌                | ✔️                       |
