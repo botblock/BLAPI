@@ -30,18 +30,17 @@ const postToAllLists = async apiKeys => {
       const url = `https://${listname}`;
       const apiPath = list.api_post.replace(url, '').replace(':id', apiKeys.bot_id);
       // creating JSON object to send, reading out shard data
-      let sendObjString = `{ "${list.api_field}": ${apiKeys.server_count}`;
+      let sendObj = {};
+      sendObj[list.api_field] = apiKeys.server_count;
       if (apiKeys.shard_id && list.api_shard_id) {
-        sendObjString += `, "${list.api_shard_id}": ${apiKeys.shard_id}`;
+        sendObj[list.api_shard_id] = apiKeys.shard_id;
       }
       if (apiKeys.shard_count && list.api_shard_count) {
-        sendObjString += `, "${list.api_shard_count}": ${apiKeys.shard_count}`;
+        sendObj[list.api_shard_count] = apiKeys.shard_count;
       }
       if (apiKeys.shards && list.api_shards) {
-        sendObjString += `, "${list.api_shards}": ${apiKeys.shards}`;
+        sendObj[list.api_shards] = apiKeys.shards;
       }
-      sendObjString += ' }';
-      const sendObj = JSON.parse(sendObjString);
       bttps.post(listname, apiPath, apiKeys[listname], sendObj, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
     }
   }
