@@ -53,15 +53,18 @@ const postToAllLists = async apiKeys => {
  */
 const handleInternal = async (client, apiKeys, repeatInterval) => {
   setTimeout(handleInternal.bind(null, client, apiKeys, repeatInterval), 60000 * repeatInterval); // call this function again in the next interval
+  let unchanged;
+
   if (client.user) {
     /* eslint-disable camelcase */
     apiKeys.bot_id = client.user.id;
+
     // Checks if bot is sharded
     if (client.shard && client.shard.id === 0) {
       apiKeys.shard_count = client.shard.count;
 
       // This will get as much info as it can, without erroring
-      const shardCounts = await client.shard.broadcastEval('this.guilds.size').catch(e => console.error('BLAPI: Error while fetching shard server counts:', e));
+      const _ = await client.shard.broadcastEval('this.guilds.size').catch(e => console.error('BLAPI: Error while fetching shard server counts:', e)), shardCounts = _.filter(count => count !== 0);
       if (shardCounts.length !== client.shard.count) {
         // If not all shards are up yet, we skip this run of handleInternal
         return;
@@ -89,31 +92,34 @@ const handleInternal = async (client, apiKeys, repeatInterval) => {
       }
       apiKeys.shards = shardCounts;
       apiKeys.server_count = apiKeys.shards.reduce((prev, val) => prev + val, 0);
-    } else {
+      // Check if bot is not sharded at all, but still wants to send server count (it's recommended to shard your bot, even if it's only one shard)
+    } else if (!client.shard) {
       apiKeys.server_count = client.guilds.size;
-    }
+    } else unchanged = true; // nothing has changed, therefore we don't send any data
     /* eslint-enable camelcase */
-    if (repeatInterval > 2 && useBotblockAPI) { // if the interval isnt below the BotBlock ratelimit, use their API
-      bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
+    if (!unchanged) {
+      if (repeatInterval > 2 && useBotblockAPI) { // if the interval isnt below the BotBlock ratelimit, use their API
+        bttps.post('botblock.org', '/api/count', 'no key needed for this', apiKeys, extendedLogging).catch(e => console.error(`BLAPI: ${e}`));
 
-      // they blacklisted botblock, so we need to do this, posting their stats manually
-      if (apiKeys['discordbots.org']) {
-        const newApiKeys = {};
-        /* eslint-disable camelcase */
-        newApiKeys.bot_id = apiKeys.bot_id;
-        newApiKeys['discordbots.org'] = apiKeys['discordbots.org'];
-        newApiKeys.server_count = apiKeys.server_count;
-        if (apiKeys.shard_count) {
-          newApiKeys.shard_count = apiKeys.shard_count;
+        // they blacklisted botblock, so we need to do this, posting their stats manually
+        if (apiKeys['discordbots.org']) {
+          const newApiKeys = {};
+          /* eslint-disable camelcase */
+          newApiKeys.bot_id = apiKeys.bot_id;
+          newApiKeys['discordbots.org'] = apiKeys['discordbots.org'];
+          newApiKeys.server_count = apiKeys.server_count;
+          if (apiKeys.shard_count) {
+            newApiKeys.shard_count = apiKeys.shard_count;
+          }
+          if (apiKeys.shards) {
+            newApiKeys.shards = apiKeys.shards;
+          }
+          /* eslint-enable camelcase */
+          postToAllLists(newApiKeys);
         }
-        if (apiKeys.shards) {
-          newApiKeys.shards = apiKeys.shards;
-        }
-        /* eslint-enable camelcase */
-        postToAllLists(newApiKeys);
+      } else {
+        postToAllLists(apiKeys);
       }
-    } else {
-      postToAllLists(apiKeys);
     }
   } else {
     console.error(`BLAPI : Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} minutes.`);

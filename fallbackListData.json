@@ -68,7 +68,7 @@
         "api_field": "server_count",
         "api_shard_id": "shard_id",
         "api_shard_count": "shard_count",
-        "api_shards": "shards",
+        "api_shards": null,
         "api_get": "https://discordbots.org/api/bots/:id"
     },
     "discordbotlist.com": {
