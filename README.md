@@ -99,12 +99,12 @@ These lists are supported by being hardcoded, but BLAPI will look for new additi
 | botsfordiscord.com     | ✔️                 | ❌                | ✔️                       |
 | bots.ondiscord.xyz     | ✔️                 | ❌                | ✔️                       |
 | discord.boats          | ✔️                 | ❌                | ✔️                       |
+| discordapps.dev        | ✔️                 | ❌                | ✔️                       |
 | discordboats.club      | ✔️                 | ❌                | ✔️                       |
 | discordbotindex.com    | ✔️                 | ❌                | ✔️                       |
 | discordbots.org        | ✔️                 | ✔️                | ❌                       |
 | discordbotlist.com     | ✔️                 | ✔️                | ✔️                       |
 | discordbotlist.xyz     | ✔️                 | ❌                | ✔️                       |
-| ls.terminal.ink        | ✔️                 | ❌                | ✔️                       |
 | discordbotreviews.xyz  | ✔️                 | ❌                | ✔️                       |
 | discordbot.world       | ✔️                 | ✔️                | ✔️                       |
 | discord.bots.gg        | ✔️                 | ✔️                | ✔️                       |
