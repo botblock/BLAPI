@@ -89,8 +89,8 @@
         "api_shards": null,
         "api_get": "https://discordbotlist.xyz/api/bot?id=:id"
     },
-    "ls.terminal.ink": {
-        "api_docs": "https://docs.terminal.ink/ls10/v2",
+    "discordapps.dev": {
+        "api_docs": "https://github.com/Terminal/discordapps.dev/wiki/API-Version-2",
         "api_post": "https://ls.terminal.ink/api/v2/bots/:id",
         "api_field": "bot.count",
         "api_shard_id": null,
