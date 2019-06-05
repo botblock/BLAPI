@@ -8,7 +8,7 @@ let extendedLogging = false;
 let useBotblockAPI = true;
 
 /**
- * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; it also includes other metadata including sharddata
+ * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ; it also includes other metadata including sharddata
  */
 const postToAllLists = async apiKeys => {
   // make sure we have all lists we can post to and their apis
@@ -48,7 +48,7 @@ const postToAllLists = async apiKeys => {
 
 /**
  * @param {Client} client Discord.js client
- * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+ * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
  * @param {number} repeatInterval Number of minutes between each repetition
  */
 const handleInternal = async (client, apiKeys, repeatInterval) => {
@@ -130,8 +130,8 @@ module.exports = {
   /**
    * This function is for automated use with discord.js
    * @param {Client} discordClient Client via wich your code is connected to Discord
-   * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
-   * @param {integer} repeatInterval Number of minutes until you want to post again, leave out to use 30
+   * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+   * @param {number} repeatInterval Number of minutes until you want to post again, leave out to use 30
    */
   handle: (discordClient, apiKeys, repeatInterval) => {
     // handle inputs
@@ -140,12 +140,12 @@ module.exports = {
   },
   /**
    * For when you don't use discord.js or just want to post to manual times
-   * @param {integer} guildCount Integer value of guilds your bot is serving
+   * @param {number} guildCount Integer value of guilds your bot is serving
    * @param {string} botID Snowflake of the ID the user your bot is using
-   * @param {Object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
-   * @param {integer} shardID (optional) The shard ID, which will be used to identify the shards valid for posting (and for super efficient posting with BLAPIs own distributer when not using botBlock)
-   * @param {integer} shardCount (optional) The number of shards the bot has, which is posted to the lists
-   * @param {[integer]} shards (optional) An array of guild counts of each single shard (this should be a complete list, and only a single shard will post it)
+   * @param {object} apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
+   * @param {number} shardID (optional) The shard ID, which will be used to identify the shards valid for posting (and for super efficient posting with BLAPIs own distributer when not using botBlock)
+   * @param {number} shardCount (optional) The number of shards the bot has, which is posted to the lists
+   * @param {number[]} shards (optional) An array of guild counts of each single shard (this should be a complete list, and only a single shard will post it)
    */
   manualPost: (guildCount, botID, apiKeys, shardID, shardCount, shards) => {
     /* eslint-disable camelcase */
