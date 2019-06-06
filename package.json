@@ -10,8 +10,8 @@
   ],
   "description": "BLAPI is a package to handle posting your discord stats to botlists. It's intended to be used with discord.js, though you can also manually post your stats.",
   "devDependencies": {
-    "eslint": "^5.11.1",
-    "eslint-config-aqua": "^4.4.1"
+    "eslint": "^5.16.0",
+    "eslint-config-aqua": "^6.0.0"
   },
   "homepage": "https://github.com/T0TProduction/BLAPI#readme",
   "keywords": [
