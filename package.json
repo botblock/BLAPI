@@ -1,6 +1,6 @@
 {
   "bugs": {
-    "url": "https://github.com/T0TProduction/BLAPI/issues"
+    "url": "https://github.com/botblock/BLAPI/issues"
   },
   "contributors": [
     "Sebastian Di Luzio <sebastian.di-luzio@tum.de> (https://github.com/T0TProduction)",
@@ -13,7 +13,7 @@
     "eslint": "^5.16.0",
     "eslint-config-aqua": "^6.0.0"
   },
-  "homepage": "https://github.com/T0TProduction/BLAPI#readme",
+  "homepage": "https://github.com/botblock/BLAPI#readme",
   "keywords": [
     "discord",
     "js",
@@ -37,9 +37,9 @@
   "license": "MIT",
   "main": "blapi.js",
   "name": "blapi",
-  "repository": "T0TProduction/BLAPI",
+  "repository": "botblock/BLAPI",
   "scripts": {
     "lint": "eslint ."
   },
-  "version": "1.1.0"
+  "version": "1.1.1"
 }
