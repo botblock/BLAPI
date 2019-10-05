@@ -1,0 +1,42 @@
+{
+    "files.eol": "\n",
+    "explorer.confirmDelete": false,
+    "git.enableSmartCommit": true,
+    "window.zoomLevel": 0,
+    "editor.largeFileOptimizations": false,
+    "eslint.autoFixOnSave": true,
+    "javascript.preferences.quoteStyle": "single",
+    "typescript.preferences.quoteStyle": "single",
+    "vetur.format.defaultFormatter.js": "prettier-eslint",
+    "[javascript]": {
+        "editor.defaultFormatter": "HookyQR.beautify"
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "git.ignoreLimitWarning": true,
+    "eslint.validate": [
+      {
+        "language": "typescript",
+        "autoFix": true
+      },
+      {
+        "language": "javascript",
+        "autoFix": true
+      }
+    ],
+    "editor.formatOnSave": false,
+    "prettier.singleQuote": true,
+    "prettier.endOfLine": "lf",
+    "prettier.eslintIntegration": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.tabSize": 2
+  }
+  

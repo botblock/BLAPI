@@ -11,8 +11,14 @@
   ],
   "description": "BLAPI is a package to handle posting your discord stats to botlists. It's intended to be used with discord.js, though you can also manually post your stats.",
   "devDependencies": {
+    "@types/node": "^12.7.11",
+    "@types/node-fetch": "^2.5.2",
+    "@typescript-eslint/eslint-plugin": "^2.3.2",
+    "@typescript-eslint/parser": "^2.3.2",
+    "discord.js": "^11.5.1",
     "eslint": "^5.16.0",
-    "eslint-config-aqua": "^6.0.0"
+    "eslint-config-airbnb": "^18.0.1",
+    "typescript": "^2.7.2"
   },
   "homepage": "https://github.com/botblock/BLAPI#readme",
   "keywords": [
@@ -33,16 +39,21 @@
     "discordbots",
     "dbl",
     "discordbotlist",
-    "discorbotlists"
+    "discorbotlists",
+    "typescript",
+    "typed"
   ],
+  "main": "dist/blapi.js",
+  "types": "dist/blapi.d.ts",
   "license": "MIT",
-  "main": "blapi.js",
   "name": "blapi",
   "repository": "botblock/BLAPI",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "tsc"
   },
-  "version": "1.1.2",
+  "prepublish": "tsc",
+  "version": "1.2.0",
   "dependencies": {
     "node-fetch": "^2.6.0"
   }

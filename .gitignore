@@ -75,3 +75,6 @@ typings/
 # JetBrains
 .idea
 testBot/testbot.js
+
+# Typescript
+dist 
