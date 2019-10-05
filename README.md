@@ -6,11 +6,11 @@
 
 [![nodei](https://nodei.co/npm/blapi.png)](https://nodei.co/npm/blapi/)
 
-BLAPI is a package to handle posting your discord bot stats to botlists.
+BLAPI is a package to handle posting your discord bot stats to botlists. Now typed and ready to be used in your Typescript powered bots!
 
 It's intended to be used with discord.js, though you can also manually post your stats.
 
-BLAPI fully supports external and discord.js internal sharding with and without the use of the [BotBlock API](https://botblock.org/api/docs#count).
+BLAPI fully supports external [and temporarily disabled: discord.js internal] sharding with and without the use of the [BotBlock API](https://botblock.org/api/docs#count).
 
 ## Installation
 
@@ -33,10 +33,10 @@ The list of all supported bot lists and their respective names for the apiKeys o
 ### With discord.js
 
 ```js
-const Discord = require("discord.js");
-const blapi = require("blapi");
+import Discord from "discord.js";
+import * as blapi from "blapi"; // You could also import all exported functions by themselves
 
-let bot = new Discord.Client({ autoReconnect: true });
+const bot = new Discord.Client({ autoReconnect: true });
 
 // Post to the APIs every 60 minutes; you can leave out the repeat delay as it defaults to 30
 // If the interval is below 3 minutes BLAPI will not use the BotBlock API because of ratelimits
@@ -70,7 +70,7 @@ blapi.setBotblock(false);
 
 ### apiKeys
 
-The JSON object which includes all the API keys should look like this:
+The JSON object which includes all the API keys should look like this [not typed yet]:
 
 ```json
 {

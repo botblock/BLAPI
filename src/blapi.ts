@@ -1,6 +1,6 @@
 import { get, post } from './bttps';
 import { fallbackData } from './fallbackListData';
-import discord from 'discord.js'; // only for types
+import Discord from 'discord.js'; // only for types
 let listData: any; // TODO add type
 const listAge = new Date();
 let extendedLogging = false;
@@ -70,7 +70,7 @@ async function postToAllLists(apiKeys: apiKeysObject) {
  * @param repeatInterval Number of minutes between each repetition
  */
 async function handleInternal(
-  client: discord.Client,
+  client: Discord.Client,
   apiKeys: apiKeysObject,
   repeatInterval: number
 ) {
@@ -181,7 +181,7 @@ async function handleInternal(
  * @param repeatInterval Number of minutes until you want to post again, leave out to use 30
  */
 export function handle(
-  discordClient: discord.Client,
+  discordClient: Discord.Client,
   apiKeys: apiKeysObject,
   repeatInterval: number
 ) {
