@@ -1,6 +1,8 @@
 name: Publish Package
 
-on: release
+on:
+  release:
+    types: [published]
 
 jobs:
   publish-npm:
@@ -12,7 +14,7 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm i 
-      - run: npm build
+      - run: npm run-script build
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -25,9 +27,9 @@ jobs:
         with:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
-          scope: '@botblock'
-      - run: npm i 
-      - run: npm build
+          scope: '@T0TProduction'
+      - run: npm i
+      - run: npm run-script build
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.github_package_token}}
