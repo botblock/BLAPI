@@ -30,13 +30,23 @@ yarn add blapi
 
 The list of all supported bot lists and their respective names for the apiKeys object are listed [below](https://github.com/T0TProduction/BLAPI#lists)
 
+### Import the lib via ES6 or commonJS modules
+
+```js
+// ES6
+import * as blapi from "blapi"; 
+// or 
+import { handle } from "blapi"; // Just the functions you want to use
+// or commonJS
+const blapi = require("blapi");
+```
+
 ### With discord.js
 
 ```js
 import Discord from "discord.js";
-import * as blapi from "blapi"; // You could also import all exported functions by themselves
 
-const bot = new Discord.Client({ autoReconnect: true });
+const bot = new Discord.Client();
 
 // Post to the APIs every 60 minutes; you can leave out the repeat delay as it defaults to 30
 // If the interval is below 3 minutes BLAPI will not use the BotBlock API because of ratelimits

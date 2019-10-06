@@ -106,7 +106,7 @@ async function handleInternal(
       }
       // Checks if bot is sharded with internal sharding
     } else if (!client.shard) {
-    /*
+      /*
          else if (client.ws && client.ws.shards) {
           apiKeys.shard_count = client.ws.shards.size;
           // Get array of shards

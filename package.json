@@ -50,8 +50,7 @@
   "repository": "botblock/BLAPI",
   "scripts": {
     "lint": "eslint .",
-    "build": "tsc",
-    "prepublish": "npm i && tsc"
+    "build": "tsc"
   },
   "version": "1.2.1",
   "dependencies": {
