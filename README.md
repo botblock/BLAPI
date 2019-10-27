@@ -112,7 +112,6 @@ These lists are supported by being hardcoded, but BLAPI will look for new additi
 | discordapps.dev        | ✔️                 | ❌                | ✔️                       |
 | discordboats.club      | ✔️                 | ❌                | ✔️                       |
 | discordbotindex.com    | ✔️                 | ❌                | ✔️                       |
-| discordbots.org        | ✔️                 | ✔️                | ❌                       |
 | discordbotlist.com     | ✔️                 | ✔️                | ✔️                       |
 | discordbotlist.xyz     | ✔️                 | ❌                | ✔️                       |
 | discordbotreviews.xyz  | ✔️                 | ❌                | ✔️                       |
@@ -124,9 +123,10 @@ These lists are supported by being hardcoded, but BLAPI will look for new additi
 | discordsbestbots.xyz   | ✔️                 | ✔️                | ✔️                       |
 | discordsextremelist.tk | ✔️                 | ❌                | ✔️                       |
 | divinediscordbots.com  | ✔️                 | ✔️                | ✔️                       |
+| top.gg                 | ✔️                 | ✔️                | ❌                       |
 
 
-Discordbots.org is still supported even though they blacklisted our API fetching service of choice, BotBlock.
+Top.gg is still supported even though they blacklisted our API fetching service of choice, BotBlock.
 
 
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
