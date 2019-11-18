@@ -1,6 +1,7 @@
 import { get, post } from './bttps';
 import { fallbackData } from './fallbackListData';
 import Discord from 'discord.js'; // only for types
+import { DiscordJSClientFallback } from '../types/discord.js';
 let listData: any; // TODO add type
 const listAge = new Date();
 let extendedLogging = false;
@@ -70,7 +71,7 @@ async function postToAllLists(apiKeys: apiKeysObject) {
  * @param repeatInterval Number of minutes between each repetition
  */
 async function handleInternal(
-  client: Discord.Client,
+  client: Discord.Client | DiscordJSClientFallback,
   apiKeys: apiKeysObject,
   repeatInterval: number
 ) {
@@ -91,7 +92,7 @@ async function handleInternal(
       // This will get as much info as it can, without erroring
       try {
         const _ = await client.shard.broadcastEval('this.guilds.size');
-        const shardCounts = _.filter(count => count !== 0);
+        const shardCounts = _.filter((count: number) => count !== 0);
         if (shardCounts.length !== client.shard.count) {
           // If not all shards are up yet, we skip this run of handleInternal
           return;
@@ -181,7 +182,7 @@ async function handleInternal(
  * @param repeatInterval Number of minutes until you want to post again, leave out to use 30
  */
 export function handle(
-  discordClient: Discord.Client,
+  discordClient: Discord.Client | DiscordJSClientFallback,
   apiKeys: apiKeysObject,
   repeatInterval: number
 ) {

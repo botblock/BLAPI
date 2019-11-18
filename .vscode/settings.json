@@ -35,7 +35,6 @@
     "editor.formatOnSave": false,
     "prettier.singleQuote": true,
     "prettier.endOfLine": "lf",
-    "prettier.eslintIntegration": true,
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.tabSize": 2
   }
