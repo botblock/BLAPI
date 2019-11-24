@@ -23,10 +23,8 @@ export async function post(
       console.log("BLAPI: posted to", apiPath);
       console.log("BLAPI: statusCode:", response.status, response.statusText);
       console.log("BLAPI: headers:", response.headers.raw());
+      console.log("BLAPI: data:", await response.text()); // it's text because text accepts both json and plain text, while json only supports json
     }
-
-    // it's text because text accepts both json and plain text, while json only supports json
-    return console.log("BLAPI: data:", response.text());
   } catch (e) {
     console.error("BLAPI:", e);
     throw new Error(`Request to ${apiPath} failed with ${e}`);
