@@ -1,5 +1,8 @@
 {
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
   "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
@@ -27,6 +30,8 @@
         "allowTemplateLiterals": false,
         "avoidEscape": true
       }
-    ]
+    ],
+    "no-console": 0,
+    "@typescript-eslint/camelcase":0
   }
 }
