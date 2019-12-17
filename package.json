@@ -55,7 +55,7 @@
     "lint": "eslint .",
     "build": "tsc"
   },
-  "version": "1.2.5",
+  "version": "1.2.6",
   "dependencies": {
     "node-fetch": "^2.6.0"
   }
