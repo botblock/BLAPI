@@ -1,6 +1,6 @@
 import { get, post } from './bttps';
 import { fallbackData } from './fallbackListData';
-import { DiscordJSClientFallback } from '../types/discord.js';
+import DiscordJSClientFallback  from '../types/discord.js';
 
 let listData: any; // TODO add type
 const listAge = new Date();
