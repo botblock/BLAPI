@@ -93,7 +93,7 @@ async function handleInternal(
       // This will get as much info as it can, without erroring
       try {
         const _: Array<number> = await client.shard.broadcastEval(
-          'this.guilds.size',
+          'this.guilds.size ? client.guilds.size : client.guilds.cache.size',
         );
         const shardCounts = _.filter((count: number) => count !== 0);
         if (shardCounts.length !== client.shard.count) {
@@ -140,7 +140,7 @@ async function handleInternal(
           // (it's recommended to shard your bot, even if it's only one shard)
         } */
       /* eslint-disable-next-line no-param-reassign */
-      apiKeys.server_count = client.guilds.size;
+      apiKeys.server_count = client.guilds instanceof Map ? client.guilds.size : client.guilds.cache.size;
     } else {
       unchanged = true;
     } // nothing has changed, therefore we don't send any data
