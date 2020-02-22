@@ -14,7 +14,9 @@ export default class DiscordJSClientFallback {
     [k: string]: any;
   } | null;
 
-  guilds: Map<string, any>;
+  guilds: Map<string, any> | {
+    cache: Map<string, any>
+  };
 
   [k: string]: any;
 }
