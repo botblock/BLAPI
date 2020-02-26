@@ -8,15 +8,23 @@ export default class DiscordJSClientFallback {
     [k: string]: any;
   } | null;
 
-  shard: {
-    ids: number[];
-    count: number;
-    [k: string]: any;
-  } | null;
+  shard:
+    | ({
+        count: number;
+        [k: string]: any;
+      } & (
+        | { ids: number[] }
+        | {
+            id: number;
+          }
+      ))
+    | null;
 
-  guilds: Map<string, any> | {
-    cache: Map<string, any>
-  };
+  guilds:
+    | Map<string, any>
+    | {
+        cache: Map<string, any>;
+      };
 
   [k: string]: any;
 }
