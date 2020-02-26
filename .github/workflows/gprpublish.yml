@@ -1,4 +1,4 @@
-name: Publish Package to npm
+name: Publish Package to gpr
 
 on:
   release:
