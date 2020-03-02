@@ -1,7 +1,7 @@
 import { listData, apiKeysObject } from "./../types/blapi.d";
 import { get, post } from "./bttps";
 import { fallbackData } from "./fallbackListData";
-import DiscordJSClientFallback from "../types/discord.js";
+import { DiscordJSClientFallback, Collection } from "../types/discord.js";
 
 let listData: listData;
 const listAge = new Date();
@@ -147,7 +147,7 @@ async function handleInternal(
           // (it's recommended to shard your bot, even if it's only one shard)
         } */
       server_count =
-        client.guilds instanceof Map
+        client.guilds instanceof Collection
           ? client.guilds.size
           : client.guilds.cache.size;
     } else {
@@ -203,7 +203,7 @@ async function handleInternal(
 export function handle(
   discordClient: DiscordJSClientFallback,
   apiKeys: apiKeysObject,
-  repeatInterval: number
+  repeatInterval?: number
 ): Promise<void> {
   // handle inputs
   if (!repeatInterval || repeatInterval < 1) repeatInterval = 30;
