@@ -1,4 +1,5 @@
-export const fallbackData = {
+import { listData } from "./../types/blapi.d";
+export const fallbackData: listData = {
   "botlist.space": {
     api_docs: "https://botlistspace.gitbook.io/api/",
     api_post: "https://api.botlist.space/v1/bots/:id",

@@ -1,21 +1,25 @@
-import { get, post } from './bttps';
-import { fallbackData } from './fallbackListData';
-import DiscordJSClientFallback  from '../types/discord.js';
+import { listData, apiKeysObject } from "./../types/blapi.d";
+import { get, post } from "./bttps";
+import { fallbackData } from "./fallbackListData";
+import DiscordJSClientFallback from "../types/discord.js";
 
-let listData: any; // TODO add type
+let listData: listData;
 const listAge = new Date();
 let extendedLogging = false;
 let useBotblockAPI = true;
-
-// TODO in general: remove all "any" types and replace them by real types
-// TODO type
-type apiKeysObject = any;
 
 /**
  * @param apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ;
  * it also includes other metadata including sharddata
  */
-async function postToAllLists(apiKeys: apiKeysObject): Promise<void> {
+async function postToAllLists(
+  apiKeys: apiKeysObject,
+  client_id: string,
+  server_count: number,
+  shard_id?: number,
+  shard_count?: number,
+  shards?: Array<number>
+): Promise<void> {
   // make sure we have all lists we can post to and their apis
   const currentDate = new Date();
   if (!listData || listAge < currentDate) {
@@ -23,45 +27,47 @@ async function postToAllLists(apiKeys: apiKeysObject): Promise<void> {
     // in case new lists are added but the code is not restarted
     listAge.setDate(currentDate.getDate() + 1);
     try {
-      const tmpListData = await get('https://botblock.org/api/lists');
+      const tmpListData = await get<listData>("https://botblock.org/api/lists");
       // make sure we only save it if nothing goes wrong
       if (tmpListData) {
         listData = tmpListData;
       } else {
-        throw new Error('Got empty list from botblock.');
+        throw new Error("Got empty list from botblock.");
       }
     } catch (e) {
       console.error(`BLAPI: ${e}`);
       console.error(
-        "BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.",
+        "BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this."
       );
     }
   }
   Object.entries(listData).forEach(([listname]) => {
     if (
-      apiKeys[listname]
-      && (listData[listname].api_post || listname === 'discordbots.org')
+      apiKeys[listname] &&
+      (listData[listname].api_post || listname === "discordbots.org")
     ) {
       // we even need to check this extra because botblock gives us nulls back
       let list = listData[listname];
-      if (listname === 'discordbots.org') {
+      if (listname === "discordbots.org") {
         list = fallbackData[listname];
       }
-      const apiPath = list.api_post.replace(':id', apiKeys.bot_id);
+      const apiPath = list.api_post.replace(":id", client_id);
       // creating JSON object to send, reading out shard data
-      const sendObj: any = {}; // TODO type
-      sendObj[list.api_field] = apiKeys.server_count;
-      if (apiKeys.shard_id && list.api_shard_id) {
-        sendObj[list.api_shard_id] = apiKeys.shard_id;
+      const sendObj: { [key: string]: any } = {}; // TODO type
+      sendObj[list.api_field] = server_count;
+      if (shard_id && list.api_shard_id) {
+        sendObj[list.api_shard_id] = shard_id;
       }
-      if (apiKeys.shard_count && list.api_shard_count) {
-        sendObj[list.api_shard_count] = apiKeys.shard_count;
+      if (shard_count && list.api_shard_count) {
+        sendObj[list.api_shard_count] = shard_count;
       }
-      if (apiKeys.shards && list.api_shards) {
-        sendObj[list.api_shards] = apiKeys.shards;
+      if (shards && list.api_shards) {
+        sendObj[list.api_shards] = shards;
       }
 
-      post(apiPath, apiKeys[listname], sendObj, extendedLogging).catch((e) => console.error(`BLAPI: ${e}`));
+      post(apiPath, apiKeys[listname], sendObj, extendedLogging).catch(e =>
+        console.error(`BLAPI: ${e}`)
+      );
     }
   });
 }
@@ -74,41 +80,42 @@ async function postToAllLists(apiKeys: apiKeysObject): Promise<void> {
 async function handleInternal(
   client: DiscordJSClientFallback,
   apiKeys: apiKeysObject,
-  repeatInterval: number,
+  repeatInterval: number
 ): Promise<void> {
-  setTimeout(/* eslint-disable-next-line @typescript-eslint/no-misused-promises */
+  setTimeout(
+    /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
     handleInternal.bind(null, client, apiKeys, repeatInterval),
-    60000 * repeatInterval,
+    60000 * repeatInterval
   ); // call this function again in the next interval
-  let unchanged;
-  /* eslint-disable no-param-reassign */
   if (client.user) {
-    /* eslint-disable camelcase */
-    apiKeys.bot_id = client.user.id;
-
+    const client_id = client.user.id;
+    let unchanged;
+    let shard_count: number | undefined;
+    let shards: Array<number> | undefined;
+    let server_count: number = 0;
+    let shard_id: number | undefined;
     // Checks if bot is sharded
     if (client.shard && client.shard.id === 0) {
-      apiKeys.shard_count = client.shard.count;
+      shard_count = client.shard.count;
+      shard_id = client.shard.id;
 
       // This will get as much info as it can, without erroring
       try {
         const _: Array<number> = await client.shard.broadcastEval(
-          'this.guilds.size ? client.guilds.size : client.guilds.cache.size',
+          "this.guilds.size ? client.guilds.size : client.guilds.cache.size"
         );
         const shardCounts = _.filter((count: number) => count !== 0);
         if (shardCounts.length !== client.shard.count) {
           // If not all shards are up yet, we skip this run of handleInternal
           return;
         }
-        apiKeys.shards = shardCounts;
-        apiKeys.server_count = apiKeys.shards.reduce(
+        shards = shardCounts;
+        server_count = shards.reduce(
           (prev: number, val: number) => prev + val,
-          0,
+          0
         );
-
-        /* eslint-enable no-param-reassign */
       } catch (e) {
-        console.error('BLAPI: Error while fetching shard server counts:', e);
+        console.error("BLAPI: Error while fetching shard server counts:", e);
       }
       // Checks if bot is sharded with internal sharding
     } else if (!client.shard) {
@@ -139,8 +146,10 @@ async function handleInternal(
           // Check if bot is not sharded at all, but still wants to send server count
           // (it's recommended to shard your bot, even if it's only one shard)
         } */
-      /* eslint-disable-next-line no-param-reassign */
-      apiKeys.server_count = client.guilds instanceof Map ? client.guilds.size : client.guilds.cache.size;
+      server_count =
+        client.guilds instanceof Map
+          ? client.guilds.size
+          : client.guilds.cache.size;
     } else {
       unchanged = true;
     } // nothing has changed, therefore we don't send any data
@@ -148,33 +157,39 @@ async function handleInternal(
       if (repeatInterval > 2 && useBotblockAPI) {
         // if the interval isnt below the BotBlock ratelimit, use their API
         post(
-          'https://botblock.org/api/count',
-          'no key needed for this',
+          "https://botblock.org/api/count",
+          "no key needed for this",
           apiKeys,
-          extendedLogging,
-        ).catch((e) => console.error(`BLAPI: ${e}`));
+          extendedLogging
+        ).catch(e => console.error(`BLAPI: ${e}`));
 
         // they blacklisted botblock, so we need to do this, posting their stats manually
-        if (apiKeys['discordbots.org']) {
+        if (apiKeys["discordbots.org"]) {
           const newApiKeys: apiKeysObject = {};
-          newApiKeys.bot_id = apiKeys.bot_id;
-          newApiKeys['discordbots.org'] = apiKeys['discordbots.org'];
-          newApiKeys.server_count = apiKeys.server_count;
-          if (apiKeys.shard_count) {
-            newApiKeys.shard_count = apiKeys.shard_count;
-          }
-          if (apiKeys.shards) {
-            newApiKeys.shards = apiKeys.shards;
-          }
-          postToAllLists(newApiKeys);
+          newApiKeys["discordbots.org"] = apiKeys["discordbots.org"];
+          postToAllLists(
+            newApiKeys,
+            client_id,
+            server_count,
+            shard_id,
+            shard_count,
+            shards
+          );
         }
       } else {
-        postToAllLists(apiKeys);
+        postToAllLists(
+          apiKeys,
+          client_id,
+          server_count,
+          shard_id,
+          shard_count,
+          shards
+        );
       }
     }
   } else {
     console.error(
-      `BLAPI : Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} minutes.`,
+      `BLAPI : Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} minutes.`
     );
   }
 }
@@ -188,10 +203,9 @@ async function handleInternal(
 export function handle(
   discordClient: DiscordJSClientFallback,
   apiKeys: apiKeysObject,
-  repeatInterval: number,
+  repeatInterval: number
 ): Promise<void> {
   // handle inputs
-  /* eslint-disable-next-line no-param-reassign */
   if (!repeatInterval || repeatInterval < 1) repeatInterval = 30;
   return handleInternal(discordClient, apiKeys, repeatInterval);
 }
@@ -212,43 +226,44 @@ export function manualPost(
   guildCount: number,
   botID: string,
   apiKeys: apiKeysObject,
-  shardID: number,
-  shardCount: number,
-  shards: Array<number>,
+  shard_id: number,
+  shard_count: number,
+  shards: Array<number>
 ): void {
-  /* eslint-disable no-param-reassign */
-  apiKeys.bot_id = botID;
-  apiKeys.server_count = guildCount;
+  const client_id = botID;
+  let server_count = guildCount;
   // check if we want to use sharding
-  if (shardID === 0 || (shardID && !shards)) {
+  if (shard_id === 0 || (shard_id && !shards)) {
     // if we don't have all the shard info in one place well try to post every shard itself
-    apiKeys.shard_id = shardID;
-    apiKeys.shard_count = shardCount;
     if (shards) {
-      if (shards.length !== shardCount) {
+      if (shards.length !== shard_count) {
         console.error(
-          `BLAPI: Shardcount (${shardCount}) does not equal the length of the shards array (${shards.length}).`,
+          `BLAPI: Shardcount (${shard_count}) does not equal the length of the shards array (${shards.length}).`
         );
         return;
       }
-      apiKeys.shards = shards;
-      apiKeys.server_count = apiKeys.shards.reduce(
+      server_count = shards.reduce(
         (prev: number, val: number) => prev + val,
-        0,
+        0
       );
     }
-    /* eslint-enable camelcase */
   }
-  /* eslint-enable no-param-reassign */
   if (useBotblockAPI) {
     post(
-      'https://botblock.org/api/count',
-      'no key needed for this',
+      "https://botblock.org/api/count",
+      "no key needed for this",
       apiKeys,
-      extendedLogging,
-    ).catch((e) => console.error(`BLAPI: ${e}`));
+      extendedLogging
+    ).catch(e => console.error(`BLAPI: ${e}`));
   } else {
-    postToAllLists(apiKeys);
+    postToAllLists(
+      apiKeys,
+      client_id,
+      server_count,
+      shard_id,
+      shard_count,
+      shards
+    );
   }
 }
 
