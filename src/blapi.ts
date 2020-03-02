@@ -102,7 +102,7 @@ async function handleInternal(
       // This will get as much info as it can, without erroring
       try {
         const _: Array<number> = await client.shard.broadcastEval(
-          "this.guilds.size ? client.guilds.size : client.guilds.cache.size"
+          "this.guilds.size ? this.guilds.size : this.guilds.cache.size"
         );
         const shardCounts = _.filter((count: number) => count !== 0);
         if (shardCounts.length !== client.shard.count) {
