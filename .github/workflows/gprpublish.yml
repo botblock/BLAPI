@@ -16,7 +16,7 @@ jobs:
           scope: '@T0TProduction'
       - run: npm i
       - run: npm run-script build
-      - run: npm config set registry https://npm.pkg.github.com/@T0TProduction
+      - run: npm config set registry https://npm.pkg.github.com/
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.github_package_token}}
