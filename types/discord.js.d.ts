@@ -2,7 +2,15 @@
  * This is a fallback type
  * to make BLAPI compatible with typescript code that does not use discord.js
  */
-export default class DiscordJSClientFallback {
+export class Collection<K, T> extends Map<K, T> {
+  [key: string]: any;
+}
+
+/**
+ * This is a fallback type
+ * to make BLAPI compatible with typescript code that does not use discord.js
+ */
+export class DiscordJSClientFallback {
   user: {
     id: string;
     [k: string]: any;
@@ -21,9 +29,9 @@ export default class DiscordJSClientFallback {
     | null;
 
   guilds:
-    | Map<string, any>
+    | Collection<string, any>
     | {
-        cache: Map<string, any>;
+      cache: Collection<string, any>;
       };
 
   [k: string]: any;
