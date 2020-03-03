@@ -1,9 +1,9 @@
-import { listData, apiKeysObject } from '../types/blapi.d';
+import { listDataType, apiKeysObject } from '../types/blapi.d';
 import { get, post } from './bttps';
 import fallbackData from './fallbackListData';
 import { DiscordJSClientFallback, Collection } from '../types/discord.js';
 
-let listData: listData;
+let listData: listDataType;
 const listAge = new Date();
 let extendedLogging = false;
 let useBotblockAPI = true;
@@ -27,7 +27,7 @@ async function postToAllLists(
     // in case new lists are added but the code is not restarted
     listAge.setDate(currentDate.getDate() + 1);
     try {
-      const tmpListData = await get<listData>('https://botblock.org/api/lists');
+      const tmpListData = await get<listDataType>('https://botblock.org/api/lists');
       // make sure we only save it if nothing goes wrong
       if (tmpListData) {
         listData = tmpListData;
@@ -202,9 +202,9 @@ export function handle(
   apiKeys: apiKeysObject,
   repeatInterval?: number,
 ): Promise<void> {
-  // handle inputs
-  if (!repeatInterval || repeatInterval < 1) repeatInterval = 30;
-  return handleInternal(discordClient, apiKeys, repeatInterval);
+  return handleInternal(
+    discordClient, apiKeys, (!repeatInterval || repeatInterval < 1) ? 30 : repeatInterval,
+  );
 }
 
 /**

@@ -1,4 +1,4 @@
-export type listData = {
+export type listDataType = {
   [listname: string]: {
     api_docs: string | null;
     api_post: string;

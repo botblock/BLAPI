@@ -1,4 +1,4 @@
-import { listData } from '../types/blapi.d';
+import { listDataType } from '../types/blapi.d';
 
 export default {
   'botlist.space': {
@@ -163,4 +163,4 @@ export default {
     api_shards: null,
     api_get: 'https://api.wonderbotlist.com/v1/bot/:id',
   },
-} as listData;
+} as listDataType;

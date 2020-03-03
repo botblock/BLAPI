@@ -10,7 +10,7 @@ export class Collection<K, T> extends Map<K, T> {
  * This is a fallback type
  * to make BLAPI compatible with typescript code that does not use discord.js
  */
-export class DiscordJSClientFallback {
+export type DiscordJSClientFallback = {
   user: {
     id: string;
     [k: string]: any;
