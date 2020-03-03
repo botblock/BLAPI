@@ -79,7 +79,7 @@ blapi.setBotblock(false);
 
 ### apiKeys
 
-The JSON object which includes all the API keys should look like this [not typed yet]:
+The JSON object which includes all the API keys should look like this:
 
 ```json
 {
