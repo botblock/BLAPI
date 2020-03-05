@@ -73,15 +73,8 @@ async function postToAllLists(
     }
   }
   Object.entries(listData).forEach(([listname]) => {
-    if (
-      apiKeys[listname]
-      && (listData[listname].api_post || listname === 'top.gg')
-    ) {
-      // we even need to check this extra because botblock gives us nulls back
-      let list = listData[listname];
-      if (listname === 'top.gg') {
-        list = fallbackData[listname];
-      }
+    if (apiKeys[listname] && listData[listname].api_post) {
+      const list = listData[listname];
       const apiPath = list.api_post.replace(':id', client_id);
       // creating JSON object to send, reading out shard data
       const sendObj: { [key: string]: any } = {}; // TODO type
