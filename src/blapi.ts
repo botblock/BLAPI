@@ -96,7 +96,7 @@ async function postToAllLists(
         sendObj[list.api_shards] = shards;
       }
 
-      post(apiPath, apiKeys[listname], sendObj, extendedLogging).catch((e) => console.error(`BLAPI: ${e}`));
+      post(apiPath, apiKeys[listname], sendObj, extendedLogging);
     }
   });
 }
@@ -189,7 +189,7 @@ async function handleInternal(
           'no key needed for this',
           apiKeys,
           extendedLogging,
-        ).catch((e) => console.error(`BLAPI: ${e}`));
+        );
 
         // they blacklisted botblock, so we need to do this, posting their stats manually
         if (apiKeys['top.gg']) {
@@ -283,7 +283,7 @@ export function manualPost(
       'no key needed for this',
       updatedApiKeys,
       extendedLogging,
-    ).catch((e) => console.error(`BLAPI: ${e}`));
+    );
   } else {
     postToAllLists(
       updatedApiKeys,

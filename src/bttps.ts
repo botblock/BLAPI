@@ -24,11 +24,10 @@ export async function post(
       console.log('BLAPI: statusCode:', response.status, response.statusText);
       console.log('BLAPI: headers:', response.headers.raw());
       // it's text because text accepts both json and plain text, while json only supports json
-      console.log('BLAPI: data:', response.text());
+      console.log('BLAPI: data:', await response.text());
     }
   } catch (e) {
     console.error('BLAPI:', e);
-    throw new Error(`Request to ${apiPath} failed with ${e}`);
   }
 }
 /** Custom get function based on node-fetch */
