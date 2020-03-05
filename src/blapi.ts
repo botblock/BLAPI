@@ -1,10 +1,23 @@
 import { get, post } from './bttps';
 import fallbackData from './fallbackListData';
+import legacyIdsFallbackData from './legacyIdsFallbackData';
 
-let listData: listDataType;
+let listData = fallbackData;
+let legacyIds = legacyIdsFallbackData;
 const listAge = new Date();
 let extendedLogging = false;
 let useBotblockAPI = true;
+
+function convertLegacyIds(apiKeys: apiKeysObject) {
+  const newApiKeys: apiKeysObject = { ...apiKeys };
+  Object.entries(legacyIds).forEach(([list, newlist]) => {
+    if (newApiKeys[list]) {
+      newApiKeys[newlist] = newApiKeys[list];
+      delete newApiKeys[list];
+    }
+  });
+  return newApiKeys;
+}
 
 /**
  * @param apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ;
@@ -25,12 +38,15 @@ async function postToAllLists(
     // in case new lists are added but the code is not restarted
     listAge.setDate(currentDate.getDate() + 1);
     try {
-      const tmpListData = await get<listDataType>('https://botblock.org/api/lists');
+      const tmpListData = await get<listDataType>(
+        'https://botblock.org/api/lists',
+      );
       // make sure we only save it if nothing goes wrong
       if (tmpListData) {
         listData = tmpListData;
+        console.info('BLAPI : Updated list endpoints.');
       } else {
-        throw new Error('Got empty list from botblock.');
+        console.error('BLAPI : Got empty list of endpoints from botblock.');
       }
     } catch (e) {
       console.error(`BLAPI: ${e}`);
@@ -38,15 +54,32 @@ async function postToAllLists(
         "BLAPI : Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.",
       );
     }
+    try {
+      const tmpLegacyIdsData = await get<legacyIdDataType>(
+        'https://botblock.org/api/legacy-ids',
+      );
+      // make sure we only save it if nothing goes wrong
+      if (tmpLegacyIdsData) {
+        legacyIds = tmpLegacyIdsData;
+        console.info('BLAPI : Updated legacy Ids.');
+      } else {
+        console.error('BLAPI : Got empty list of legacy Ids from botblock.');
+      }
+    } catch (e) {
+      console.error(`BLAPI: ${e}`);
+      console.error(
+        "BLAPI : Something went wrong when contacting BotBlock for legacy Ids, so we're using an older preset. Some lists might not be available because of this.",
+      );
+    }
   }
   Object.entries(listData).forEach(([listname]) => {
     if (
       apiKeys[listname]
-      && (listData[listname].api_post || listname === 'discordbots.org')
+      && (listData[listname].api_post || listname === 'top.gg')
     ) {
       // we even need to check this extra because botblock gives us nulls back
       let list = listData[listname];
-      if (listname === 'discordbots.org') {
+      if (listname === 'top.gg') {
         list = fallbackData[listname];
       }
       const apiPath = list.api_post.replace(':id', client_id);
@@ -159,11 +192,9 @@ async function handleInternal(
         ).catch((e) => console.error(`BLAPI: ${e}`));
 
         // they blacklisted botblock, so we need to do this, posting their stats manually
-        if (apiKeys['discordbots.org']) {
-          const newApiKeys: apiKeysObject = {};
-          newApiKeys['discordbots.org'] = apiKeys['discordbots.org'];
+        if (apiKeys['top.gg']) {
           postToAllLists(
-            newApiKeys,
+            { 'top.gg': apiKeys['top.gg'] },
             client_id,
             server_count,
             shard_id,
@@ -201,7 +232,9 @@ export function handle(
   repeatInterval?: number,
 ): Promise<void> {
   return handleInternal(
-    discordClient, apiKeys, (!repeatInterval || repeatInterval < 1) ? 30 : repeatInterval,
+    discordClient,
+    convertLegacyIds(apiKeys),
+    !repeatInterval || repeatInterval < 1 ? 30 : repeatInterval,
   );
 }
 
@@ -225,6 +258,7 @@ export function manualPost(
   shard_count: number,
   shards: Array<number>,
 ): void {
+  const updatedApiKeys = convertLegacyIds(apiKeys);
   const client_id = botID;
   let server_count = guildCount;
   // check if we want to use sharding
@@ -247,12 +281,12 @@ export function manualPost(
     post(
       'https://botblock.org/api/count',
       'no key needed for this',
-      apiKeys,
+      updatedApiKeys,
       extendedLogging,
     ).catch((e) => console.error(`BLAPI: ${e}`));
   } else {
     postToAllLists(
-      apiKeys,
+      updatedApiKeys,
       client_id,
       server_count,
       shard_id,

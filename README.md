@@ -85,7 +85,6 @@ The JSON object which includes all the API keys should look like this:
 {
   "bot list domain": "API key for that bot list",
   "bot list domain": "API key for that bot list",
-  "bot list domain": "API key for that bot list"
 }
 ```
 
@@ -100,33 +99,11 @@ an example would be:
 
 ## Lists
 
-These lists are supported by being hardcoded, but BLAPI will look for new additions on startup via the [BotBlock API](https://botblock.org/api/docs#lists). BLAPI will try to update its API data daily.
+A list of supported bot lists can be found [here](https://github.com/botblock/BLAPI/blob/master/src/fallbackListData.ts). 
+Supported legacy Ids can be found [here](https://github.com/botblock/BLAPI/blob/master/src/legacyIdsFallbackData.ts).
 
-| Domain                 | Supports guild count| Supports sharding | Is not extremely annoying |
-|------------------------|---------------------|-------------------|---------------------------|
-| botlist.space          | ✔️                 | ✔️                | ✔️                       |
-| botsfordiscord.com     | ✔️                 | ❌                | ✔️                       |
-| bots.ondiscord.xyz     | ✔️                 | ❌                | ✔️                       |
-| discord.boats          | ✔️                 | ❌                | ✔️                       |
-| discordapps.dev        | ✔️                 | ❌                | ✔️                       |
-| discordboats.club      | ✔️                 | ❌                | ✔️                       |
-| discordbotindex.com    | ✔️                 | ❌                | ✔️                       |
-| discordbots.org        | ✔️                 | ✔️                | ❌                       |
-| discordbotlist.com     | ✔️                 | ✔️                | ✔️                       |
-| discordbotlist.xyz     | ✔️                 | ❌                | ✔️                       |
-| discordbotreviews.xyz  | ✔️                 | ❌                | ✔️                       |
-| discordbot.world       | ✔️                 | ✔️                | ✔️                       |
-| discord.bots.gg        | ✔️                 | ✔️                | ✔️                       |
-| discordbotslist.com    | ✔️                 | ❌                | ✔️                       |
-| discordbots.group      | ✔️                 | ❌                | ✔️                       |
-| discord.services       | ✔️                 | ❌                | ✔️                       |
-| discordsbestbots.xyz   | ✔️                 | ✔️                | ✔️                       |
-| discordsextremelist.tk | ✔️                 | ❌                | ✔️                       |
-| divinediscordbots.com  | ✔️                 | ✔️                | ✔️                       |
-
-
-Discordbots.org is still supported even though they blacklisted our API fetching service of choice, BotBlock.
-
+BLAPI will look for new additions on startup via the [BotBlock API](https://botblock.org/).
+This data is being updated internally on a daily basis.
 
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
 

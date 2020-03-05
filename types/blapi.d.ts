@@ -10,6 +10,9 @@ declare global {
       api_get: string | null;
     };
   };
+  type legacyIdDataType = {
+    [listname: string]: string;
+  };
   type apiKeysObject = { [listname: string]: string };
 }
 
