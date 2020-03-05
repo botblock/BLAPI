@@ -19,6 +19,24 @@ function convertLegacyIds(apiKeys: apiKeysObject) {
   return newApiKeys;
 }
 
+function buildBotblockData(
+  apiKeys: apiKeysObject,
+  bot_id: string,
+  server_count: number,
+  shard_id?: number,
+  shard_count?: number,
+  shards?: Array<number>,
+) {
+  return {
+    ...apiKeys,
+    bot_id,
+    server_count,
+    shard_id,
+    shard_count,
+    shards,
+  };
+}
+
 /**
  * @param apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.} ;
  * it also includes other metadata including sharddata
@@ -178,7 +196,14 @@ async function handleInternal(
         post(
           'https://botblock.org/api/count',
           'no key needed for this',
-          apiKeys,
+          buildBotblockData(
+            apiKeys,
+            client_id,
+            server_count,
+            shard_id,
+            shard_count,
+            shards,
+          ),
           extendedLogging,
         );
 
@@ -272,7 +297,14 @@ export function manualPost(
     post(
       'https://botblock.org/api/count',
       'no key needed for this',
-      updatedApiKeys,
+      buildBotblockData(
+        updatedApiKeys,
+        client_id,
+        server_count,
+        shard_id,
+        shard_count,
+        shards,
+      ),
       extendedLogging,
     );
   } else {
