@@ -39,7 +39,7 @@ async function postToAllLists(
     listAge.setDate(currentDate.getDate() + 1);
     try {
       const tmpListData = await get<listDataType>(
-        'https://botblock.org/api/lists',
+        'https://botblock.org/api/lists?filter=true',
       );
       // make sure we only save it if nothing goes wrong
       if (tmpListData) {
