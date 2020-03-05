@@ -1,7 +1,5 @@
-import { listDataType, apiKeysObject } from '../types/blapi.d';
 import { get, post } from './bttps';
 import fallbackData from './fallbackListData';
-import { DiscordJSClientFallback, Collection } from '../types/discordjs';
 
 let listData: listDataType;
 const listAge = new Date();
@@ -144,7 +142,7 @@ async function handleInternal(
           // Check if bot is not sharded at all, but still wants to send server count
           // (it's recommended to shard your bot, even if it's only one shard)
         } */
-      server_count = client.guilds instanceof Collection
+      server_count = client.guilds instanceof Map
         ? client.guilds.size
         : client.guilds.cache.size;
     } else {

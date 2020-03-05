@@ -1,5 +1,3 @@
-import { listDataType } from '../types/blapi.d';
-
 export default {
   'botlist.space': {
     api_docs: 'https://botlistspace.gitbook.io/api/',
