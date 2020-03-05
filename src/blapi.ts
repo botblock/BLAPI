@@ -76,8 +76,7 @@ async function postToAllLists(
     if (apiKeys[listname] && listData[listname].api_post) {
       const list = listData[listname];
       const apiPath = list.api_post.replace(':id', client_id);
-      // creating JSON object to send, reading out shard data
-      const sendObj: { [key: string]: any } = {}; // TODO type
+      const sendObj: { [key: string]: any } = {};
       sendObj[list.api_field] = server_count;
       if (shard_id && list.api_shard_id) {
         sendObj[list.api_shard_id] = shard_id;
@@ -123,16 +122,15 @@ async function handleInternal(
 
       // This will get as much info as it can, without erroring
       try {
-        const _: Array<number> = await client.shard.broadcastEval(
+        const guildSizes: Array<number> = await client.shard.broadcastEval(
           'this.guilds.size ? this.guilds.size : this.guilds.cache.size',
         );
-        const shardCounts = _.filter((count: number) => count !== 0);
+        const shardCounts = guildSizes.filter((count: number) => count !== 0);
         if (shardCounts.length !== client.shard.count) {
           // If not all shards are up yet, we skip this run of handleInternal
           return;
         }
-        shards = shardCounts;
-        server_count = shards.reduce(
+        server_count = shardCounts.reduce(
           (prev: number, val: number) => prev + val,
           0,
         );
