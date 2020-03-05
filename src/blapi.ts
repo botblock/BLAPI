@@ -1,7 +1,7 @@
 import { listDataType, apiKeysObject } from '../types/blapi.d';
 import { get, post } from './bttps';
 import fallbackData from './fallbackListData';
-import { DiscordJSClientFallback, Collection } from '../types/discord.js';
+import { DiscordJSClientFallback, Collection } from '../types/discordjs';
 
 let listData: listDataType;
 const listAge = new Date();
