@@ -2,8 +2,64 @@ import { get, post } from './bttps';
 import fallbackData from './fallbackListData';
 import legacyIdsFallbackData from './legacyIdsFallbackData';
 
-let listData = fallbackData;
-let legacyIds = legacyIdsFallbackData;
+/* We moved types here to support both TS and JS bots
+Importing would make JS fail for modules it can't use
+Declaring global fails exporting some types, so TS will fail in that case */
+type listDataType = {
+  [listname: string]: {
+    api_docs: string | null;
+    api_post: string;
+    api_field: string;
+    api_shard_id: string | null;
+    api_shard_count: string | null;
+    api_shards: string | null;
+    api_get: string | null;
+  };
+};
+type legacyIdDataType = {
+  [listname: string]: string;
+};
+type apiKeysObject = { [listname: string]: string };
+
+/**
+ * This is a fallback type
+ * to make BLAPI compatible with typescript code that does not use discord.js
+ */
+class Collection<K, T> extends Map<K, T> {
+  [key: string]: any;
+}
+
+/**
+ * This is a fallback type
+ * to make BLAPI compatible with typescript code that does not use discord.js
+ */
+type DiscordJSClientFallback = {
+  user: {
+    id: string;
+    [k: string]: any;
+  } | null;
+  shard:
+    | ({
+        count: number;
+        [k: string]: any;
+      } & (
+        | { ids: number[] }
+        | {
+            id: number;
+          }
+      ))
+    | null;
+  guilds:
+    | Collection<string, any>
+    | {
+        cache: Collection<string, any>;
+      };
+
+  [k: string]: any;
+};
+
+let listData = fallbackData as listDataType;
+let legacyIds = legacyIdsFallbackData as legacyIdDataType;
 const listAge = new Date();
 let extendedLogging = false;
 let useBotblockAPI = true;

@@ -220,4 +220,4 @@ export default {
     api_get: 'https://discordbotreviews.xyz/api/bot/:id',
     api_all: null,
   },
-} as listDataType;
+};
