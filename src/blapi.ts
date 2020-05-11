@@ -363,6 +363,16 @@ export function manualPost(
       ),
       extendedLogging,
     );
+    if (updatedApiKeys['top.gg']) {
+      postToAllLists(
+        { 'top.gg': updatedApiKeys['top.gg'] },
+        client_id,
+        server_count,
+        shard_id,
+        shard_count,
+        shards,
+      );
+    }
   } else {
     postToAllLists(
       updatedApiKeys,
