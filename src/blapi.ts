@@ -326,9 +326,9 @@ export function manualPost(
   guildCount: number,
   botID: string,
   apiKeys: apiKeysObject,
-  shard_id: number,
-  shard_count: number,
-  shards: Array<number>,
+  shard_id?: number,
+  shard_count?: number,
+  shards?: Array<number>,
 ): void {
   const updatedApiKeys = convertLegacyIds(apiKeys);
   const client_id = botID;
