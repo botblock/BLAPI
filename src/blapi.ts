@@ -332,9 +332,9 @@ export async function manualPost(
   guildCount: number,
   botID: string,
   apiKeys: apiKeysObject,
-  shard_id: number,
-  shard_count: number,
-  shards: Array<number>,
+  shard_id?: number,
+  shard_count?: number,
+  shards?: Array<number>,
 ): Promise<Array<Response | { error: any }>> {
   const updatedApiKeys = convertLegacyIds(apiKeys);
   const client_id = botID;
