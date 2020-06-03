@@ -49,16 +49,10 @@ type DiscordJSClientFallback = {
           }
       ))
     | null;
-  guilds:
-    | (Collection<string, { shardID: number; [k: string]: any }> & {
-        cache: undefined; // needed to easily distinguish types in code
-      })
-    | {
-        cache: Collection<string, { shardID: number; [k: string]: any }>;
-      };
+  guilds: {
+    cache: Collection<string, { shardID: number; [k: string]: any }>;
+  };
   ws: {
-    // seems to always be defined? wasnt before v12?
-    // TODO check v11 and v12 differecnes as well as behaviour without sharding
     shards: Collection<number, { id: number; [k: string]: any }>;
     [k: string]: any;
   };
@@ -204,7 +198,7 @@ async function handleInternal(
       // This will get as much info as it can, without erroring
       try {
         const guildSizes: Array<number> = await client.shard.broadcastEval(
-          'this.guilds.size ? this.guilds.size : this.guilds.cache.size',
+          'this.guilds.cache.size',
         );
         const shardCounts = guildSizes.filter((count: number) => count !== 0);
         if (shardCounts.length !== client.shard.count) {
@@ -227,8 +221,7 @@ async function handleInternal(
       const shardCounts: Array<number> = [];
       client.ws.shards.forEach((shard) => {
         let count = 0;
-        const guilds = client.guilds.cache || client.guilds;
-        guilds.forEach((g) => {
+        client.guilds.cache.forEach((g) => {
           if (g.shardID === shard.id) count++;
         });
         shardCounts.push(count);
@@ -248,9 +241,7 @@ async function handleInternal(
       // Check if bot is not sharded at all, but still wants to send server count
       // (it's recommended to shard your bot, even if it's only one shard)
     } else if (!client.shard) {
-      server_count = client.guilds instanceof Map
-        ? client.guilds.size
-        : client.guilds.cache.size;
+      server_count = client.guilds.cache.size;
     } else {
       unchanged = true;
     } // nothing has changed, therefore we don't send any data
