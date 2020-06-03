@@ -26,7 +26,7 @@ type apiKeysObject = { [listname: string]: string };
  * to make BLAPI compatible with typescript code that does not use discord.js
  */
 class Collection<K, T> extends Map<K, T> {
-  [key: string]: any;
+  /* [key: string]: any; */
 }
 
 /**
@@ -50,11 +50,18 @@ type DiscordJSClientFallback = {
       ))
     | null;
   guilds:
-    | Collection<string, any>
+    | (Collection<string, { shardID: number; [k: string]: any }> & {
+        cache: undefined; // needed to easily distinguish types in code
+      })
     | {
-        cache: Collection<string, any>;
+        cache: Collection<string, { shardID: number; [k: string]: any }>;
       };
-
+  ws: {
+    // seems to always be defined? wasnt before v12?
+    // TODO check v11 and v12 differecnes as well as behaviour without sharding
+    shards: Collection<number, { id: number; [k: string]: any }>;
+    [k: string]: any;
+  };
   [k: string]: any;
 };
 
@@ -212,34 +219,33 @@ async function handleInternal(
         console.error('BLAPI: Error while fetching shard server counts:', e);
       }
       // Checks if bot is sharded with internal sharding
+    } else if (client.ws && client.ws.shards && client.ws.shards.size > 0) {
+      shard_count = client.ws.shards.size;
+      // Get array of shards
+      const shardCounts: Array<number> = [];
+      client.ws.shards.forEach((shard) => {
+        let count = 0;
+        const guilds = client.guilds.cache || client.guilds;
+        guilds.forEach((g) => {
+          if (g.shardID === shard.id) count++;
+        });
+        shardCounts.push(count);
+      });
+      if (shardCounts.length !== client.ws.shards.size) {
+        // If not all shards are up yet, we skip this run of handleInternal
+        console.log(
+          "BLAPI: Not all shards are up yet, so we're skipping this run.",
+        );
+        return;
+      }
+      shards = shardCounts;
+      server_count = shards.reduce(
+        (prev: number, val: number) => prev + val,
+        0,
+      );
+      // Check if bot is not sharded at all, but still wants to send server count
+      // (it's recommended to shard your bot, even if it's only one shard)
     } else if (!client.shard) {
-      /*
-         else if (client.ws && client.ws.shards) {
-          apiKeys.shard_count = client.ws.shards.size;
-          // Get array of shards
-          const shardCounts:Array<number> = [];
-          client.ws.shards.forEach(shard => {
-            let count = 0;
-            client.guilds.forEach(g => {
-              if (g.shardID === shard.id) count++;
-            });
-            shardCounts.push(count);
-          });
-          if (shardCounts.length !== client.ws.shards.size) {
-            // If not all shards are up yet, we skip this run of handleInternal
-            console.log(
-              "BLAPI: Not all shards are up yet, so we're skipping this run."
-            );
-            return;
-          }
-          apiKeys.shards = shardCounts;
-          apiKeys.server_count = apiKeys.shards.reduce(
-            (prev:number, val:number) => prev + val,
-            0
-          );
-          // Check if bot is not sharded at all, but still wants to send server count
-          // (it's recommended to shard your bot, even if it's only one shard)
-        } */
       server_count = client.guilds instanceof Map
         ? client.guilds.size
         : client.guilds.cache.size;
