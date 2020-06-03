@@ -6,7 +6,7 @@ export async function post(
   apiKey: string,
   sendObj: object,
   logStuff: boolean,
-): Promise<void> {
+) {
   const postData = JSON.stringify(sendObj);
   try {
     const response = await fetch(apiPath, {
@@ -26,8 +26,11 @@ export async function post(
       // it's text because text accepts both json and plain text, while json only supports json
       console.log('BLAPI: data:', await response.text());
     }
+
+    return response;
   } catch (e) {
     console.error('BLAPI:', e);
+    return { error: e };
   }
 }
 /** Custom get function based on node-fetch */

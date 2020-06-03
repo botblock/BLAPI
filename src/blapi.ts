@@ -1,3 +1,4 @@
+import { Response } from 'node-fetch';
 import { get, post } from './bttps';
 import fallbackData from './fallbackListData';
 import legacyIdsFallbackData from './legacyIdsFallbackData';
@@ -105,7 +106,7 @@ async function postToAllLists(
   shard_id?: number,
   shard_count?: number,
   shards?: Array<number>,
-): Promise<void> {
+): Promise<Array<Response | { error: any }>> {
   // make sure we have all lists we can post to and their apis
   const currentDate = new Date();
   if (!listData || listAge < currentDate) {
@@ -147,6 +148,9 @@ async function postToAllLists(
       );
     }
   }
+
+  const posts: Array<Promise<Response | { error: any }>> = [];
+
   Object.entries(listData).forEach(([listname]) => {
     if (apiKeys[listname] && listData[listname].api_post) {
       const list = listData[listname];
@@ -163,9 +167,11 @@ async function postToAllLists(
         sendObj[list.api_shards] = shards;
       }
 
-      post(apiPath, apiKeys[listname], sendObj, extendedLogging);
+      posts.push(post(apiPath, apiKeys[listname], sendObj, extendedLogging));
     }
   });
+
+  return Promise.all(posts);
 }
 
 /**
@@ -244,7 +250,7 @@ async function handleInternal(
     if (!unchanged) {
       if (repeatInterval > 2 && useBotblockAPI) {
         // if the interval isnt below the BotBlock ratelimit, use their API
-        post(
+        await post(
           'https://botblock.org/api/count',
           'no key needed for this',
           buildBotblockData(
@@ -260,7 +266,7 @@ async function handleInternal(
 
         // they blacklisted botblock, so we need to do this, posting their stats manually
         if (apiKeys['top.gg']) {
-          postToAllLists(
+          await postToAllLists(
             { 'top.gg': apiKeys['top.gg'] },
             client_id,
             server_count,
@@ -270,7 +276,7 @@ async function handleInternal(
           );
         }
       } else {
-        postToAllLists(
+        await postToAllLists(
           apiKeys,
           client_id,
           server_count,
@@ -317,14 +323,14 @@ export function handle(
  * @param shards (optional) An array of guild counts of each single shard
  *  (this should be a complete list, and only a single shard will post it)
  */
-export function manualPost(
+export async function manualPost(
   guildCount: number,
   botID: string,
   apiKeys: apiKeysObject,
   shard_id?: number,
   shard_count?: number,
   shards?: Array<number>,
-): void {
+): Promise<Array<Response | { error: any }>> {
   const updatedApiKeys = convertLegacyIds(apiKeys);
   const client_id = botID;
   let server_count = guildCount;
@@ -333,10 +339,9 @@ export function manualPost(
     // if we don't have all the shard info in one place well try to post every shard itself
     if (shards) {
       if (shards.length !== shard_count) {
-        console.error(
+        throw new Error(
           `BLAPI: Shardcount (${shard_count}) does not equal the length of the shards array (${shards.length}).`,
         );
-        return;
       }
       server_count = shards.reduce(
         (prev: number, val: number) => prev + val,
@@ -344,11 +349,39 @@ export function manualPost(
       );
     }
   }
+  const responses: Array<Response | { error: any }> = [];
+
   if (useBotblockAPI) {
-    post(
-      'https://botblock.org/api/count',
-      'no key needed for this',
-      buildBotblockData(
+    responses.push(
+      await post(
+        'https://botblock.org/api/count',
+        'no key needed for this',
+        buildBotblockData(
+          updatedApiKeys,
+          client_id,
+          server_count,
+          shard_id,
+          shard_count,
+          shards,
+        ),
+        extendedLogging,
+      ),
+    );
+    if (updatedApiKeys['top.gg']) {
+      responses.concat(
+        await postToAllLists(
+          { 'top.gg': updatedApiKeys['top.gg'] },
+          client_id,
+          server_count,
+          shard_id,
+          shard_count,
+          shards,
+        ),
+      );
+    }
+  } else {
+    responses.concat(
+      await postToAllLists(
         updatedApiKeys,
         client_id,
         server_count,
@@ -356,28 +389,9 @@ export function manualPost(
         shard_count,
         shards,
       ),
-      extendedLogging,
-    );
-    if (updatedApiKeys['top.gg']) {
-      postToAllLists(
-        { 'top.gg': updatedApiKeys['top.gg'] },
-        client_id,
-        server_count,
-        shard_id,
-        shard_count,
-        shards,
-      );
-    }
-  } else {
-    postToAllLists(
-      updatedApiKeys,
-      client_id,
-      server_count,
-      shard_id,
-      shard_count,
-      shards,
     );
   }
+  return responses;
 }
 
 export function setLogging(setLog: boolean): void {
