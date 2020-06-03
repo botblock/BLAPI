@@ -1,15 +1,15 @@
 # BLAPI - the BotListAPI
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/aebcf7d4333d483cb1b66d3d79ffff5f)](https://www.codacy.com/manual/T0TProduction/BLAPI?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=T0TProduction/BLAPI&amp;utm_campaign=Badge_Grade) [![npm downloads](https://img.shields.io/npm/dt/blapi.svg)](https://nodei.co/npm/blapi/) [![install size](https://packagephobia.now.sh/badge?p=blapi)](https://packagephobia.now.sh/result?p=blapi) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/aebcf7d4333d483cb1b66d3d79ffff5f)](https://www.codacy.com/manual/T0TProduction/BLAPI?utm_source=github.com&utm_medium=referral&utm_content=T0TProduction/BLAPI&utm_campaign=Badge_Grade) [![npm downloads](https://img.shields.io/npm/dt/blapi.svg)](https://nodei.co/npm/blapi/) [![install size](https://packagephobia.now.sh/badge?p=blapi)](https://packagephobia.now.sh/result?p=blapi)
 [![dependencies Status](https://david-dm.org/T0TProduction/BLAPI/status.svg)](https://david-dm.org/T0TProduction/BLAPI) [![jsDelivr](https://data.jsdelivr.com/v1/package/npm/blapi/badge?style=rounded)](https://www.jsdelivr.com/package/npm/blapi)
 
 [![nodei](https://nodei.co/npm/blapi.png)](https://nodei.co/npm/blapi/)
 
 BLAPI is a package to handle posting your discord bot stats to botlists. Now typed and ready to be used in your Typescript powered bots!
 
-It's intended to be used with discord.js, though you can also manually post your stats.
+It's intended to be used with discord.js v12, though you can also manually post your stats.
 
-BLAPI fully supports external [and temporarily disabled: discord.js internal] sharding with and without the use of the [BotBlock API](https://botblock.org/api/docs#count).
+BLAPI fully supports external and discord.js internal sharding with and without the use of the [BotBlock API](https://botblock.org/api/docs#count).
 
 ## Installation
 
@@ -33,8 +33,8 @@ The list of all supported bot lists and their respective names for the apiKeys o
 
 ```js
 // ES6
-import * as blapi from "blapi"; 
-// or 
+import * as blapi from "blapi";
+// or
 import { handle } from "blapi"; // Just the functions you want to use
 // or commonJS
 const blapi = require("blapi");
@@ -84,7 +84,7 @@ The JSON object which includes all the API keys should look like this:
 ```json
 {
   "bot list domain": "API key for that bot list",
-  "bot list domain": "API key for that bot list",
+  "bot list domain": "API key for that bot list"
 }
 ```
 
@@ -99,7 +99,7 @@ an example would be:
 
 ## Lists
 
-A list of supported bot lists can be found [here](https://github.com/botblock/BLAPI/blob/master/src/fallbackListData.ts). 
+A list of supported bot lists can be found [here](https://github.com/botblock/BLAPI/blob/master/src/fallbackListData.ts).
 Supported legacy Ids can be found [here](https://github.com/botblock/BLAPI/blob/master/src/legacyIdsFallbackData.ts).
 
 BLAPI will look for new additions on startup via the [BotBlock API](https://botblock.org/).
