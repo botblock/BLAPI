@@ -219,7 +219,9 @@ async function handleInternal(
         console.error('BLAPI: Error while fetching shard server counts:', e);
       }
       // Checks if bot is sharded with internal sharding
-    } else if (client.ws && client.ws.shards && client.ws.shards.size > 0) {
+    } else if (
+      /* client.ws && client.ws.shards && */ client.ws.shards.size > 1
+    ) {
       shard_count = client.ws.shards.size;
       // Get array of shards
       const shardCounts: Array<number> = [];
