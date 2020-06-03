@@ -26,7 +26,7 @@ type apiKeysObject = { [listname: string]: string };
  * to make BLAPI compatible with typescript code that does not use discord.js
  */
 class Collection<K, T> extends Map<K, T> {
-  /* [key: string]: any; */
+  [key: string]: any;
 }
 
 /**
@@ -217,23 +217,19 @@ async function handleInternal(
       /* client.ws && client.ws.shards && */ client.ws.shards.size > 1
     ) {
       shard_count = client.ws.shards.size;
-      // Get array of shards
-      const shardCounts: Array<number> = [];
-      client.ws.shards.forEach((shard) => {
-        let count = 0;
-        client.guilds.cache.forEach((g) => {
-          if (g.shardID === shard.id) count++;
-        });
-        shardCounts.push(count);
-      });
-      if (shardCounts.length !== client.ws.shards.size) {
+      // Get array of shards, loosing collection typings make this somewhat ugly
+      shards = client.ws.shards.map(
+        (s: { id: number }) => client.guilds.cache.filter(
+          (g: { shardID: number }) => g.shardID === s.id,
+        ).size,
+      ) as Array<number>;
+      if (shards.length !== client.ws.shards.size) {
         // If not all shards are up yet, we skip this run of handleInternal
         console.log(
           "BLAPI: Not all shards are up yet, so we're skipping this run.",
         );
         return;
       }
-      shards = shardCounts;
       server_count = shards.reduce(
         (prev: number, val: number) => prev + val,
         0,
