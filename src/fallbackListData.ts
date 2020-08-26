@@ -220,4 +220,14 @@ export default {
     api_get: 'https://discordbotreviews.xyz/api/bot/:id',
     api_all: null,
   },
+  'bots.discordlabs.org': {
+    api_docs: 'https://docs.discordlabs.org/docs/api/api/',
+    api_post: 'https://bots.discordlabs.org/v2/bot/:id/stats',
+    api_field: 'server_count',
+    api_shard_id: null,
+    api_shard_count: 'shard_count',
+    api_shards: null,
+    api_get: 'https://bots.discordlabs.org/v2/bot/:id',
+    api_all: null,
+  },
 };
