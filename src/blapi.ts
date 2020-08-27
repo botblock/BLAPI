@@ -9,8 +9,8 @@ Declaring global fails exporting some types, so TS will fail in that case */
 type listDataType = {
   [listname: string]: {
     api_docs: string | null;
-    api_post: string;
-    api_field: string;
+    api_post: string | null;
+    api_field: string | null;
     api_shard_id: string | null;
     api_shard_count: string | null;
     api_shards: string | null;
@@ -154,6 +154,9 @@ async function postToAllLists(
   Object.entries(listData).forEach(([listname]) => {
     if (apiKeys[listname] && listData[listname].api_post) {
       const list = listData[listname];
+      if (!list.api_post || !list.api_field) {
+        return;
+      }
       const apiPath = list.api_post.replace(':id', client_id);
       const sendObj: { [key: string]: any } = {};
       sendObj[list.api_field] = server_count;

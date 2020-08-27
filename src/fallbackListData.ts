@@ -67,7 +67,8 @@ export default {
     api_shard_count: 'shardCount',
     api_shards: null,
     api_get: 'https://discord.bots.gg/api/v1/bots/:id',
-    api_all: 'https://discord.bots.gg/api/v1/bots?limit=100&sort=guildcount&order=desc',
+    api_all:
+      'https://discord.bots.gg/api/v1/bots?limit=100&sort=guildcount&order=desc',
   },
   'discordapps.dev': {
     api_docs: 'https://discordapps.dev/en-GB/posts/docs/api-v2/',
