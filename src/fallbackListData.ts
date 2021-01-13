@@ -269,5 +269,15 @@ export default {
     api_shards: null,
     api_get: null,
     api_all: null,
+  },  
+  'infinitybotlist.com': {
+    api_docs: 'https://infinitybotlist.com/docs',
+    api_post: 'https://infinitybotlist.com/api/bots/:id',
+    api_field: 'servers',
+    api_shard_id: null,
+    api_shard_count: 'shards',
+    api_shards: null,
+    api_get: 'https://infinitybotlist.com/api/bots/:id/info',
+    api_all: null,
   },
 };
