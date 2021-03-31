@@ -17,16 +17,6 @@ export async function post(
     };
     const response = await request.body(postData).send();
 
-    // const response = await fetch(apiPath, {
-    //   method: 'POST',
-    //   body: postData,
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Content-Length': String(postData.length),
-    //     Authorization: apiKey,
-    //   },
-    // });
-
     if (logStuff) {
       console.log('BLAPI: posted to', apiPath);
       console.log('BLAPI: statusCode:', response.statusCode);
