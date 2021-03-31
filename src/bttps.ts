@@ -31,7 +31,7 @@ export async function post(
     return { error: e };
   }
 }
-/** Custom get function based on node-fetch */
+/** Custom get function based on centra */
 export async function get<T>(url: string): Promise<T> {
   try {
     const response = await c(url, 'GET').send();
