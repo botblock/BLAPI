@@ -1,4 +1,4 @@
-import { Response } from 'node-fetch';
+import { Response } from 'centra';
 import { get, post } from './bttps';
 import fallbackData from './fallbackListData';
 import legacyIdsFallbackData from './legacyIdsFallbackData';
