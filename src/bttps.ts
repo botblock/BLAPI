@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
+import c from 'centra';
 
-/** Custom post function based on node-fetch */
+/** Custom post function based on centra */
 export async function post(
   apiPath: string,
   apiKey: string,
@@ -9,20 +9,18 @@ export async function post(
 ) {
   const postData = JSON.stringify(sendObj);
   try {
-    const response = await fetch(apiPath, {
-      method: 'POST',
-      body: postData,
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': String(postData.length),
-        Authorization: apiKey,
-      },
-    });
+    const request = c(apiPath, 'POST');
+    request.reqHeaders = {
+      'Content-Type': 'application/json',
+      'Content-Length': String(postData.length),
+      Authorization: apiKey,
+    };
+    const response = await request.body(postData).send();
 
     if (logStuff) {
       console.log('BLAPI: posted to', apiPath);
-      console.log('BLAPI: statusCode:', response.status, response.statusText);
-      console.log('BLAPI: headers:', response.headers.raw());
+      console.log('BLAPI: statusCode:', response.statusCode);
+      console.log('BLAPI: headers:', response.headers);
       // it's text because text accepts both json and plain text, while json only supports json
       console.log('BLAPI: data:', await response.text());
     }
@@ -33,10 +31,10 @@ export async function post(
     return { error: e };
   }
 }
-/** Custom get function based on node-fetch */
+/** Custom get function based on centra */
 export async function get<T>(url: string): Promise<T> {
   try {
-    const response = await fetch(url);
+    const response = await c(url, 'GET').send();
     return response.json();
   } catch (e) {
     console.error('BLAPI:', e);
