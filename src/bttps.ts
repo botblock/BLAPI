@@ -6,6 +6,7 @@ export async function post(
   apiKey: string,
   sendObj: object,
   logStuff: boolean,
+  logger: any,
 ) {
   const postData = JSON.stringify(sendObj);
   try {
@@ -18,11 +19,11 @@ export async function post(
     const response = await request.body(postData).send();
 
     if (logStuff) {
-      console.log('BLAPI: posted to', apiPath);
-      console.log('BLAPI: statusCode:', response.statusCode);
-      console.log('BLAPI: headers:', response.headers);
+      logger.info(' posted to', apiPath);
+      logger.info(' statusCode:', response.statusCode);
+      logger.info(' headers:', response.headers);
       // it's text because text accepts both json and plain text, while json only supports json
-      console.log('BLAPI: data:', await response.text());
+      logger.info(' data:', await response.text());
     }
 
     return response;
