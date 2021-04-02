@@ -7,7 +7,8 @@
     "advaith1 <advaithj1@gmail.com> (https://advaith.fun/)",
     "Jonah Snider <me@jonahsnider.ninja> (https://jonahsnider.ninja/)",
     "Matt Cowley <me@mattcowley.co.uk> (https://mattcowley.co.uk/)",
-    "Promise <me@promise.solutions> (https://promise.solutions/)"
+    "Promise <me@promise.solutions> (https://promise.solutions/)",
+    "MeerBiene <meerbiene@protonmail.ch> (https://github.com/MeerBiene)"
   ],
   "description": "BLAPI is a package to handle posting your discord stats to botlists. It's intended to be used with discord.js, though you can also manually post your stats.",
   "devDependencies": {
@@ -65,7 +66,7 @@
   "files": [
     "dist/"
   ],
-  "version": "2.0.1",
+  "version": "2.1.0",
   "dependencies": {
     "centra": "^2.4.2"
   }
