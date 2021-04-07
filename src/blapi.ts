@@ -81,12 +81,12 @@ let useBotblockAPI = true;
  *  logger supplied by the user if they supplied any
  */
 // eslint-disable-next-line max-len
-let userLogger: UserLogger;
+let userLogger: UserLogger | undefined;
 
 const log = {
-  info: (msg: string) => (userLogger ? userLogger.info(msg) : console.info(`[INFO] BLAPI: ${msg}`)),
-  warn: (msg: string) => (userLogger ? userLogger.warn(msg) : console.warn(`[WARN] BLAPI: ${msg}`)),
-  error: (err: any) => (userLogger ? userLogger.error(err) : console.error(`[ERROR] BLAPI ${err}`)),
+  info: (msg: string) => (userLogger ? userLogger.info(`BLAPI: ${msg}`) : console.info(`[INFO] BLAPI: ${msg}`)),
+  warn: (msg: string) => (userLogger ? userLogger.warn(`BLAPI: ${msg}`) : console.warn(`[WARN] BLAPI: ${msg}`)),
+  error: (err: any) => (userLogger ? userLogger.error(`BLAPI: ${err}`) : console.error(`[ERROR] BLAPI ${err}`)),
 };
 
 
@@ -196,7 +196,7 @@ async function postToAllLists(
         sendObj[list.api_shards] = shards;
       }
 
-      posts.push(post(apiPath, apiKeys[listname], sendObj, extendedLogging, userLogger));
+      posts.push(post(apiPath, apiKeys[listname], sendObj, extendedLogging, log));
     }
   });
 

@@ -61,28 +61,37 @@ blapi.handle(bot, apiKeys, 60);
 blapi.manualPost(guildCount, botID, apiKeys[, shardID, shardCount[, shardsArray]]);
 ```
 
-### Turn on extended logging
 
+### Logging Options
 ```js
 // Use this to get more detailed logging when posting
 // Errors will always be logged
-blapi.setLogging(true);
+blapi.setLogging({
+  extended: true
+});
 ```
 
-### More Log Options
 ```js
-// Lets say you have your own custom logger that you want to use (the variable "log" in this example)
+// If you have your own logger that you want to use pass it to BLAPI like so (the variable "log" in this example)
 // !Important: The logger needs to export the following methods: log.info(), log.warn() and log.error()
 blapi.setLogging({
   extended: true,
   logger: log
 })
 ```
-If you want to pass in only your custom logger but dont want extended logging to be enabled you would do:
 ```js
+// If you want to pass in only your custom logger but dont want extended logging to be enabled you would do:
 blapi.setLogging({
   logger: log
 })
+```
+### Turn on extended logging
+![](https://img.shields.io/badge/deprecated-Do%20not%20use%20this%20anymore-orange)
+
+```js
+// Use this to get more detailed logging when posting
+// Errors will always be logged
+blapi.setLogging(true);
 ```
 
 ### Turn off the use of the BotBlock API

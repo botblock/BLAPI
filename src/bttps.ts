@@ -41,12 +41,12 @@ export async function post(
   }
 }
 /** Custom get function based on centra */
-export async function get<T>(url: string, log: UserLogger): Promise<T> {
+export async function get<T>(url: string, logger: UserLogger): Promise<T> {
   try {
     const response = await c(url, 'GET').send();
     return response.json();
   } catch (e) {
-    log.error(e);
+    logger.error(e);
     throw new Error(`Request to ${url} failed with Errorcode ${e}`);
   }
 }
