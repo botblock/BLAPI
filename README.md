@@ -69,6 +69,22 @@ blapi.manualPost(guildCount, botID, apiKeys[, shardID, shardCount[, shardsArray]
 blapi.setLogging(true);
 ```
 
+### More Log Options
+```js
+// Lets say you have your own custom logger that you want to use (the variable "log" in this example)
+// !Important: The logger needs to export the following methods: log.info(), log.warn() and log.error()
+blapi.setLogging({
+  extended: true,
+  logger: log
+})
+```
+If you want to pass in only your custom logger but dont want extended logging to be enabled you would do:
+```js
+blapi.setLogging({
+  logger: log
+})
+```
+
 ### Turn off the use of the BotBlock API
 
 ```js
