@@ -60,17 +60,28 @@ type DiscordJSClientFallback = {
   [k: string]: any;
 };
 
+type UserLogger = {
+  info: (msg: string) => void,
+  warn: (msg: string) => void,
+  error: (msg: string) => void,
+}
+
+type LogOptions = boolean | { extended?: boolean, logger?: UserLogger }
+
+
 let listData = fallbackData as listDataType;
 let legacyIds = legacyIdsFallbackData as legacyIdDataType;
 const listAge = new Date();
 let extendedLogging = false;
 let useBotblockAPI = true;
+
+
 /**
- * this will later be defined with the logger supplied
- * by the user if they supplied any
+ * the userLogger variable will later be defined with the
+ *  logger supplied by the user if they supplied any
  */
 // eslint-disable-next-line max-len
-let userLogger: { info: (arg0: string) => void; warn: (arg0: string) => void; error: (arg0: any) => void; };
+let userLogger: UserLogger;
 
 const log = {
   info: (msg: string) => (userLogger ? userLogger.info(msg) : console.info(`[INFO] BLAPI: ${msg}`)),
@@ -129,6 +140,7 @@ async function postToAllLists(
     try {
       const tmpListData = await get<listDataType>(
         'https://botblock.org/api/lists?filter=true',
+        log,
       );
       // make sure we only save it if nothing goes wrong
       if (tmpListData) {
@@ -146,6 +158,7 @@ async function postToAllLists(
     try {
       const tmpLegacyIdsData = await get<legacyIdDataType>(
         'https://botblock.org/api/legacy-ids',
+        log,
       );
       // make sure we only save it if nothing goes wrong
       if (tmpLegacyIdsData) {
@@ -411,10 +424,11 @@ export async function manualPost(
   return responses;
 }
 
-export function setLogging(logOptions: boolean | { extended?: boolean, logger?: any }): void {
-  extendedLogging = false;
-  if (typeof logOptions === 'boolean' && logOptions === true) extendedLogging = true;
-  if (typeof logOptions === 'object' && Object.prototype.hasOwnProperty.call(logOptions, 'extended') && logOptions.extended === true) extendedLogging = true;
+export function setLogging(logOptions: LogOptions): void {
+  // we are setting extendedLogging to the passed in logOptions
+  // so users can disable extended logging later on
+  if (typeof logOptions === 'boolean') extendedLogging = logOptions;
+  if (typeof logOptions === 'object' && Object.prototype.hasOwnProperty.call(logOptions, 'extended') && typeof logOptions.extended === 'boolean') extendedLogging = logOptions.extended;
   // no logger supplied by user
   if (!Object.prototype.hasOwnProperty.call(logOptions, 'logger')) return;
   // making sure the logger supplied by the user has our required log levels (info, warn, error)
