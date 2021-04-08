@@ -1,5 +1,5 @@
 import { Response } from 'centra';
-import { get, post } from './bttps';
+import { get, post, UserLogger } from './bttps';
 import fallbackData from './fallbackListData';
 import legacyIdsFallbackData from './legacyIdsFallbackData';
 
@@ -60,11 +60,6 @@ type DiscordJSClientFallback = {
   [k: string]: any;
 };
 
-type UserLogger = {
-  info: (msg: string) => void,
-  warn: (msg: string) => void,
-  error: (msg: string) => void,
-}
 
 type LogOptions = boolean | { extended?: boolean, logger?: UserLogger }
 

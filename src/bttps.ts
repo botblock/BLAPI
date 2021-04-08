@@ -2,7 +2,7 @@ import c from 'centra';
 
 // defining the userlogger type there again
 // so we dont have to import it from ./blapi
-type UserLogger = {
+export type UserLogger = {
   info: (msg: string) => void,
   warn: (msg: string) => void,
   error: (msg: string) => void,
