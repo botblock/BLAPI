@@ -72,25 +72,25 @@ blapi.setLogging({
 ```
 
 ```js
-// If you have your own logger that you want to use pass it to BLAPI like so (the variable "log" in this example)
-// !Important: The logger needs to export the following methods: log.info(), log.warn() and log.error()
+// If you have your own logger that you want to use pass it to BLAPI like this:
+// Important: The logger needs to include the following methods: log.info(), log.warn() and log.error()
 blapi.setLogging({
   extended: true,
-  logger: log
+  logger: yourCustomLogger
 })
 ```
 ```js
-// If you want to pass in only your custom logger but dont want extended logging to be enabled you would do:
+// If you only want to pass your custom logger but dont want extended logging to be enabled:
 blapi.setLogging({
-  logger: log
+  logger: yourCustomLogger
 })
 ```
 ### Turn on extended logging
 ![](https://img.shields.io/badge/deprecated-Do%20not%20use%20this%20anymore-orange)
 
 ```js
-// Use this to get more detailed logging when posting
-// Errors will always be logged
+// Following method to activate extended logging still works, but is deprecated.
+// Switch to using above syntax, as this will be removed at some point.
 blapi.setLogging(true);
 ```
 
@@ -131,6 +131,14 @@ BLAPI will look for new additions on startup via the [BotBlock API](https://botb
 This data is being updated internally on a daily basis.
 
 If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
+
+## Development
+
+To work on BLAPI, install the node version specified in [.nvmrc](https://github.com/botblock/BLAPI/blob/master/.nvmrc).
+If you are using nvm on a unix based system, this can be done quickly by using `nvm use` and if the version is not installed, `nvm install`.
+Install all the dependencies following the package-lock via `npm ci`.
+
+This repo enforces eslint rules which are included in the installation.
 
 ## Credit
 
