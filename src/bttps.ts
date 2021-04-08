@@ -1,11 +1,20 @@
 import c from 'centra';
 
+// defining the userlogger type there again
+// so we dont have to import it from ./blapi
+export type UserLogger = {
+  info: (msg: string) => void,
+  warn: (msg: string) => void,
+  error: (msg: string) => void,
+}
+
 /** Custom post function based on centra */
 export async function post(
   apiPath: string,
   apiKey: string,
   sendObj: object,
   logStuff: boolean,
+  logger: UserLogger,
 ) {
   const postData = JSON.stringify(sendObj);
   try {
@@ -18,26 +27,26 @@ export async function post(
     const response = await request.body(postData).send();
 
     if (logStuff) {
-      console.log('BLAPI: posted to', apiPath);
-      console.log('BLAPI: statusCode:', response.statusCode);
-      console.log('BLAPI: headers:', response.headers);
+      logger.info(` posted to ${apiPath}`);
+      logger.info(` statusCode: ${response.statusCode}`);
+      logger.info(` headers: ${response.headers}`);
       // it's text because text accepts both json and plain text, while json only supports json
-      console.log('BLAPI: data:', await response.text());
+      logger.info(` data: ${await response.text()}`);
     }
 
     return response;
   } catch (e) {
-    console.error('BLAPI:', e);
+    logger.error(e);
     return { error: e };
   }
 }
 /** Custom get function based on centra */
-export async function get<T>(url: string): Promise<T> {
+export async function get<T>(url: string, logger: UserLogger): Promise<T> {
   try {
     const response = await c(url, 'GET').send();
     return response.json();
   } catch (e) {
-    console.error('BLAPI:', e);
+    logger.error(e);
     throw new Error(`Request to ${url} failed with Errorcode ${e}`);
   }
 }
