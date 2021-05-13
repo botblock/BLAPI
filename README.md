@@ -40,7 +40,7 @@ import { handle } from "blapi"; // Just the functions you want to use
 const blapi = require("blapi");
 ```
 
-### With discord.js
+### With discord.js (version 12.x)
 
 ```js
 import Discord from "discord.js";
