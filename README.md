@@ -124,13 +124,11 @@ an example would be:
 
 ## Lists
 
-A list of supported bot lists can be found [here](https://github.com/botblock/BLAPI/blob/master/src/fallbackListData.ts).
-Supported legacy Ids can be found [here](https://github.com/botblock/BLAPI/blob/master/src/legacyIdsFallbackData.ts).
+BLAPI automatically supports posting to all lists that are [listed on botblock](https://botblock.org/api/docs#lists). For the rare case that their API is down, BLAPI has an [integrated fallback list](https://github.com/botblock/BLAPI/blob/master/src/fallbackListData.ts). This list is kept somewhat up to date inside the repository, but once BLAPI is running in your bot, it will update the internal fallback on a daily basis.
 
-BLAPI will look for new additions on startup via the [BotBlock API](https://botblock.org/).
-This data is being updated internally on a daily basis.
+Supported legacy Ids are supported in a similar fashion. BLAPI supports all [legacy IDs listed on botblock](https://botblock.org/api/docs#legacy-ids). The fallback legacy IDs can be found [here](https://github.com/botblock/BLAPI/blob/master/src/legacyIdsFallbackData.ts), and they are also internally updated on a daily basis once you have BLAPI up and running.
 
-If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord.
+If at any time you find other bot lists have added an API to post your guildcount, let us know on this repo or by contacting T0TProduction#0001 on Discord. In general, if a list is not listed on BotBlock, the best way to get it added is to directly [join the BotBlock Discord server](https://botblock.org/discord) and request it there.
 
 ## Development
 
