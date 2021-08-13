@@ -1,5 +1,5 @@
 import { Response } from 'centra';
-import { get, post, UserLogger } from './bttps';
+import { get, post, UserLogger } from './requests';
 import fallbackData from './fallbackListData';
 import legacyIdsFallbackData from './legacyIdsFallbackData';
 
@@ -51,7 +51,13 @@ type DiscordJSClientFallback = {
       ))
     | null;
   guilds: {
-    cache: Collection<string, { shardID: number; [k: string]: any }>;
+    cache: Collection<
+      string,
+      (
+        | { shardID: number; shardId: undefined }
+        | { shardId: number; shardID: undefined }
+      ) & { [k: string]: any }
+    >;
   };
   ws: {
     shards: Collection<number, { id: number; [k: string]: any }>;
@@ -60,16 +66,13 @@ type DiscordJSClientFallback = {
   [k: string]: any;
 };
 
-
-type LogOptions = boolean | { extended?: boolean, logger?: UserLogger }
-
+type LogOptions = boolean | { extended?: boolean; logger?: UserLogger };
 
 let listData = fallbackData as listDataType;
 let legacyIds = legacyIdsFallbackData as legacyIdDataType;
 const listAge = new Date();
 let extendedLogging = false;
 let useBotblockAPI = true;
-
 
 /**
  * the userLogger variable will later be defined with the
@@ -79,11 +82,16 @@ let useBotblockAPI = true;
 let userLogger: UserLogger | undefined;
 
 const log = {
-  info: (msg: string) => (userLogger ? userLogger.info(`BLAPI: ${msg}`) : console.info(`[INFO] BLAPI: ${msg}`)),
-  warn: (msg: string) => (userLogger ? userLogger.warn(`BLAPI: ${msg}`) : console.warn(`[WARN] BLAPI: ${msg}`)),
-  error: (err: any) => (userLogger ? userLogger.error(`BLAPI: ${err}`) : console.error(`[ERROR] BLAPI ${err}`)),
+  info: (msg: string) => (userLogger
+    ? userLogger.info(`BLAPI: ${msg}`)
+    : console.info(`[INFO] BLAPI: ${msg}`)),
+  warn: (msg: string) => (userLogger
+    ? userLogger.warn(`BLAPI: ${msg}`)
+    : console.warn(`[WARN] BLAPI: ${msg}`)),
+  error: (err: any) => (userLogger
+    ? userLogger.error(`BLAPI: ${err}`)
+    : console.error(`[ERROR] BLAPI ${err}`)),
 };
-
 
 function convertLegacyIds(apiKeys: apiKeysObject) {
   const newApiKeys: apiKeysObject = { ...apiKeys };
@@ -191,7 +199,9 @@ async function postToAllLists(
         sendObj[list.api_shards] = shards;
       }
 
-      posts.push(post(apiPath, apiKeys[listname], sendObj, extendedLogging, log));
+      posts.push(
+        post(apiPath, apiKeys[listname], sendObj, extendedLogging, log),
+      );
     }
   });
 
@@ -249,14 +259,16 @@ async function handleInternal(
       // Get array of shards, loosing collection typings make this somewhat ugly
       shards = client.ws.shards.map(
         (s: { id: number }) => client.guilds.cache.filter(
-          (g: { shardID: number }) => g.shardID === s.id,
+          (
+            g:
+                | { shardID: number; shardId: undefined }
+                | { shardId: number; shardID: undefined },
+          ) => g.shardID === s.id || g.shardId === s.id,
         ).size,
       ) as Array<number>;
       if (shards.length !== client.ws.shards.size) {
         // If not all shards are up yet, we skip this run of handleInternal
-        log.info(
-          "Not all shards are up yet, so we're skipping this run.",
-        );
+        log.info("Not all shards are up yet, so we're skipping this run.");
         return;
       }
       server_count = shards.reduce(
@@ -338,9 +350,9 @@ export function handle(
 /**
  * For when you don't use discord.js or just want to post to manual times
  * @param guildCount Integer value of guilds your bot is serving
- * @param botID Snowflake of the ID the user your bot is using
+ * @param botId Snowflake of the ID the user your bot is using
  * @param apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
- * @param shardID (optional) The shard ID, which will be used to identify the
+ * @param shardId (optional) The shard ID, which will be used to identify the
  * shards valid for posting
  * (and for super efficient posting with BLAPIs own distributer when not using botBlock)
  * @param shardCount (optional) The number of shards the bot has, which is posted to the lists
@@ -423,12 +435,26 @@ export function setLogging(logOptions: LogOptions): void {
   // we are setting extendedLogging to the passed in logOptions
   // so users can disable extended logging later on
   if (typeof logOptions === 'boolean') extendedLogging = logOptions;
-  if (typeof logOptions === 'object' && Object.prototype.hasOwnProperty.call(logOptions, 'extended') && typeof logOptions.extended === 'boolean') extendedLogging = logOptions.extended;
+  if (
+    typeof logOptions === 'object'
+    && Object.prototype.hasOwnProperty.call(logOptions, 'extended')
+    && typeof logOptions.extended === 'boolean'
+  ) {
+    extendedLogging = logOptions.extended;
+  }
   // no logger supplied by user
   if (!Object.prototype.hasOwnProperty.call(logOptions, 'logger')) return;
   // making sure the logger supplied by the user has our required log levels (info, warn, error)
   // @ts-ignore
-  if ((typeof logOptions.logger.info !== 'function') || (typeof logOptions.logger.warn !== 'function') || (typeof logOptions.logger.error !== 'function')) throw new Error('Your supplied logger does not seem to expose the log levels BLAPI needs to work. Make sure your logger offers the following methods: info() warn() error()');
+  if (
+    typeof logOptions.logger.info !== 'function'
+    || typeof logOptions.logger.warn !== 'function'
+    || typeof logOptions.logger.error !== 'function'
+  ) {
+    throw new Error(
+      'Your supplied logger does not seem to expose the log levels BLAPI needs to work. Make sure your logger offers the following methods: info() warn() error()',
+    );
+  }
   // @ts-ignore
   userLogger = logOptions.logger;
 }
