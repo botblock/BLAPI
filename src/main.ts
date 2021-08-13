@@ -434,7 +434,9 @@ export async function manualPost(
 export function setLogging(logOptions: LogOptions): void {
   // we are setting extendedLogging to the passed in logOptions
   // so users can disable extended logging later on
-  if (typeof logOptions === 'boolean') extendedLogging = logOptions;
+  if (typeof logOptions === 'boolean') {
+    extendedLogging = logOptions;
+  }
   if (
     typeof logOptions === 'object'
     && Object.prototype.hasOwnProperty.call(logOptions, 'extended')
@@ -443,13 +445,15 @@ export function setLogging(logOptions: LogOptions): void {
     extendedLogging = logOptions.extended;
   }
   // no logger supplied by user
-  if (!Object.prototype.hasOwnProperty.call(logOptions, 'logger')) return;
+  if (!Object.prototype.hasOwnProperty.call(logOptions, 'logger')) {
+    return;
+  }
+  const { logger } = logOptions as any; // we checked that it exists beforehand
   // making sure the logger supplied by the user has our required log levels (info, warn, error)
-  // @ts-ignore
   if (
-    typeof logOptions.logger.info !== 'function'
-    || typeof logOptions.logger.warn !== 'function'
-    || typeof logOptions.logger.error !== 'function'
+    typeof logger.info !== 'function'
+    || typeof logger.warn !== 'function'
+    || typeof logger.error !== 'function'
   ) {
     throw new Error(
       'Your supplied logger does not seem to expose the log levels BLAPI needs to work. Make sure your logger offers the following methods: info() warn() error()',
