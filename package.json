@@ -28,7 +28,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "eslint-plugin-standard": "^4.0.1",
-    "prettier": "^2.0.5",
+    "prettier": "^2.3.2",
     "typescript": "^3.8.3"
   },
   "homepage": "https://github.com/botblock/BLAPI#readme",
@@ -68,6 +68,6 @@
   ],
   "version": "2.2.0",
   "dependencies": {
-    "centra": "^2.4.2"
+    "centra": "^2.5.0"
   }
 }
