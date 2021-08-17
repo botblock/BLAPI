@@ -53,10 +53,7 @@ type DiscordJSClientFallback = {
   guilds: {
     cache: Collection<
       string,
-      (
-        | { shardID: number; shardId: undefined }
-        | { shardId: number; shardID: undefined }
-      ) & { [k: string]: any }
+      ({ shardID: number } | { shardId: number }) & { [k: string]: any }
     >;
   };
   ws: {
