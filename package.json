@@ -41,8 +41,8 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint \"**/*.{ts,js}\"",
+    "lint:fix": "eslint \"**/*.{ts,js}\" --fix",
     "build": "tsc"
   },
   "files": [

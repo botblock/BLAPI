@@ -1,10 +1,10 @@
 import c from 'centra';
 
 export type UserLogger = {
-  info: (msg: string) => void,
-  warn: (msg: string) => void,
-  error: (msg: string) => void,
-}
+  info: (msg: string) => void;
+  warn: (msg: string) => void;
+  error: (msg: string) => void;
+};
 
 /** Custom post function based on centra */
 export async function post(
@@ -34,8 +34,9 @@ export async function post(
 
     return response;
   } catch (e) {
-    logger.error(e);
-    return { error: e };
+    const error = e as Error;
+    logger.error(error.message);
+    return { error };
   }
 }
 /** Custom get function based on centra */
@@ -44,7 +45,8 @@ export async function get<T>(url: string, logger: UserLogger): Promise<T> {
     const response = await c(url, 'GET').send();
     return response.json();
   } catch (e) {
-    logger.error(e);
-    throw new Error(`Request to ${url} failed with Errorcode ${e}`);
+    const error = e as Error;
+    logger.error(error.message);
+    throw new Error(`Request to ${url} failed with Errorcode ${error.name}`);
   }
 }
