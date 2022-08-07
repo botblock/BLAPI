@@ -9,7 +9,7 @@
     "typescript.preferences.quoteStyle": "single",
     "vetur.format.defaultFormatter.js": "prettier-eslint",
     "[javascript]": {
-        "editor.defaultFormatter": "HookyQR.beautify"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "javascript.updateImportsOnFileMove.enabled": "always",
     "[json]": {
