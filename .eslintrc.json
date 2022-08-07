@@ -1,4 +1,3 @@
-
 {
   "root": true,
   "plugins": ["@typescript-eslint", "import"],
@@ -23,8 +22,7 @@
         "avoidEscape": true
       }
     ],
-    "camelcase": 0, //'warn',
-    "no-console": 1,
+    "camelcase": 0,
     "no-debugger": 1,
     "no-plusplus": 0,
     "no-useless-constructor": "off", // TS has some issues with this, so we use their check
