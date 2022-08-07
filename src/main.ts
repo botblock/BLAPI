@@ -27,6 +27,7 @@ type apiKeysObject = { [listname: string]: string };
  * to make BLAPI compatible with typescript code that does not use discord.js
  */
 class Collection<K, T> extends Map<K, T> {
+  // eslint-disable-next-line no-undef
   [key: string]: any;
 }
 
