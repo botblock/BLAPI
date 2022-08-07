@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   plugins: ['@typescript-eslint', 'import'],
-  extends: ['eslint:recommended', 'airbnb'],
+  extends: ['eslint:recommended', 'airbnb-base'],
   rules: {
     'import/prefer-default-export': 0,
     '@typescript-eslint/no-unused-vars': 2,
@@ -34,5 +34,5 @@ module.exports = {
       typescript: {},
     },
   },
-  /*  ignorePatterns: ["dist/"], */
+  ignorePatterns: ['dist'],
 };
