@@ -68,7 +68,7 @@ type LogOptions = boolean | { extended?: boolean; logger?: UserLogger };
 
 let listData = fallbackData as listDataType;
 let legacyIds = legacyIdsFallbackData as legacyIdDataType;
-const listAge = new Date();
+const lastUpdatedListAt = new Date(1999); // some date that's definitely past
 let extendedLogging = false;
 let useBotblockAPI = true;
 
@@ -111,7 +111,7 @@ function buildBotblockData(
   shards?: Array<number>,
 ) {
   return {
-    ...apiKeys,
+    ...convertLegacyIds(apiKeys),
     bot_id,
     server_count,
     shard_id,
@@ -134,10 +134,10 @@ async function postToAllLists(
 ): Promise<Array<Response | { error: any }>> {
   // make sure we have all lists we can post to and their apis
   const currentDate = new Date();
-  if (!listData || listAge < currentDate) {
+  if (!listData || lastUpdatedListAt < currentDate) {
     // we try to update the listdata every day
     // in case new lists are added but the code is not restarted
-    listAge.setDate(currentDate.getDate() + 1);
+    lastUpdatedListAt.setDate(currentDate.getDate() + 1);
     try {
       const tmpListData = await get<listDataType>(
         'https://botblock.org/api/lists?filter=true',
@@ -178,8 +178,10 @@ async function postToAllLists(
 
   const posts: Array<Promise<Response | { error: any }>> = [];
 
+  const updatedApiKeys = convertLegacyIds(apiKeys);
+
   Object.entries(listData).forEach(([listname]) => {
-    if (apiKeys[listname] && listData[listname].api_post) {
+    if (updatedApiKeys[listname] && listData[listname].api_post) {
       const list = listData[listname];
       if (!list.api_post || !list.api_field) {
         return;
@@ -198,7 +200,7 @@ async function postToAllLists(
       }
 
       posts.push(
-        post(apiPath, apiKeys[listname], sendObj, extendedLogging, log),
+        post(apiPath, updatedApiKeys[listname], sendObj, extendedLogging, log),
       );
     }
   });
@@ -340,7 +342,7 @@ export function handle(
 ): Promise<void> {
   return handleInternal(
     discordClient,
-    convertLegacyIds(apiKeys),
+    apiKeys,
     !repeatInterval || repeatInterval < 1 ? 30 : repeatInterval,
   );
 }
