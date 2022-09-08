@@ -1,6 +1,6 @@
 # BLAPI - the BotListAPI
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![npm downloads](https://img.shields.io/npm/dt/blapi.svg)](https://nodei.co/npm/blapi/) [![install size](https://packagephobia.now.sh/badge?p=blapi)](https://packagephobia.now.sh/result?p=blapi)
@@ -153,6 +153,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center"><a href="http://diluz.io"><img src="https://avatars.githubusercontent.com/u/18548570?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sebastian Di Luzio</b></sub></a><br /><a href="https://github.com/botblock/BLAPI/commits?author=T0TProduction" title="Code">💻</a> <a href="#maintenance-T0TProduction" title="Maintenance">🚧</a> <a href="https://github.com/botblock/BLAPI/commits?author=T0TProduction" title="Documentation">📖</a></td>
       <td align="center"><a href="https://advaith.io"><img src="https://avatars.githubusercontent.com/u/11778454?v=4?s=100" width="100px;" alt=""/><br /><sub><b>advaith</b></sub></a><br /><a href="https://github.com/botblock/BLAPI/commits?author=advaith1" title="Documentation">📖</a> <a href="https://github.com/botblock/BLAPI/issues?q=author%3Aadvaith1" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://mattcowley.co.uk/"><img src="https://avatars.githubusercontent.com/u/12371363?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matt Cowley</b></sub></a><br /><a href="https://github.com/botblock/BLAPI/commits?author=MattIPv4" title="Documentation">📖</a> <a href="https://github.com/botblock/BLAPI/commits?author=MattIPv4" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
