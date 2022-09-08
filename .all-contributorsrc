@@ -35,6 +35,16 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "promise",
+      "name": "Glenn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10573728?v=4",
+      "profile": "http://not-tech.support",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
