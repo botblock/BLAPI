@@ -157,7 +157,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="http://diluz.io"><img src="https://avatars.githubusercontent.com/u/18548570?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sebastian Di Luzio</b></sub></a><br /><a href="https://github.com/botblock/BLAPI/commits?author=T0TProduction" title="Code">💻</a></td>
+      <td align="center"><a href="http://diluz.io"><img src="https://avatars.githubusercontent.com/u/18548570?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sebastian Di Luzio</b></sub></a><br /><a href="https://github.com/botblock/BLAPI/commits?author=T0TProduction" title="Code">💻</a> <a href="#maintenance-T0TProduction" title="Maintenance">🚧</a></td>
     </tr>
   </tbody>
 </table>
