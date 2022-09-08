@@ -12,7 +12,8 @@
       "profile": "http://diluz.io",
       "contributions": [
         "code",
-        "maintenance"
+        "maintenance",
+        "doc"
       ]
     }
   ],
