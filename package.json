@@ -6,13 +6,8 @@
   "bugs": {
     "url": "https://github.com/botblock/BLAPI/issues"
   },
-  "contributors": [
-    "Sebastian Di Luzio <sebastian.di-luzio@tum.de> (https://github.com/T0TProduction)",
-    "advaith1 <advaithj1@gmail.com> (https://advaith.fun/)",
-    "Jonah Snider <me@jonahsnider.ninja> (https://jonahsnider.ninja/)",
-    "Matt Cowley <me@mattcowley.co.uk> (https://mattcowley.co.uk/)",
-    "Promise <me@promise.solutions> (https://promise.solutions/)",
-    "MeerBiene <meerbiene@protonmail.ch> (https://github.com/MeerBiene)"
+  "maintainers": [
+    "Sebastian Di Luzio <sebastian@diluz.io> (https://github.com/T0TProduction)"
   ],
   "description": "BLAPI is a package to handle posting your discord stats to botlists. It's intended to be used with discord.js, though you can also manually post your stats.",
   "homepage": "https://github.com/botblock/BLAPI#readme",
