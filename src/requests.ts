@@ -27,7 +27,8 @@ export async function post(
     if (logStuff) {
       logger.info(` posted to ${apiPath}`);
       logger.info(` statusCode: ${response.statusCode}`);
-      logger.info(` headers: ${response.headers}`);
+      // stringify it since it's an object, doesn't need to be pretty
+      logger.info(` headers: ${JSON.stringify(response.headers)}`);
       // it's text because text accepts both json and plain text, while json only supports json
       logger.info(` data: ${await response.text()}`);
     }
