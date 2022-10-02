@@ -8,9 +8,9 @@
 
 [![nodei](https://nodei.co/npm/blapi.png)](https://nodei.co/npm/blapi/)
 
-BLAPI is a package to handle posting your discord bot stats to botlists. Now typed and ready to be used in your Typescript powered bots!
+BLAPI is a fully typed package to handle posting your discord bot stats to botlists.
 
-It's intended to be used with discord.js v12 or v13, though you can also manually post your stats.
+It's intended to be used with discord.js v13 or v14, though you can also manually post your stats.
 
 BLAPI fully supports external and discord.js internal sharding with and without the use of the [BotBlock API](https://botblock.org/api/docs#count).
 
@@ -43,7 +43,7 @@ import { handle } from "blapi"; // Just the functions you want to use
 const blapi = require("blapi");
 ```
 
-### With discord.js (version 12.x or 13.x)
+### With discord.js (version 13.x or 14.x)
 
 ```js
 import Discord from "discord.js";
