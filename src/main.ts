@@ -190,9 +190,10 @@ async function handleInternal(
     let server_count = 0;
     let shard_id: number | undefined;
     // Checks if bot is sharded
+    // Only run posting from shard 0
     if (client.shard?.ids.includes(0)) {
       shard_count = client.shard.count;
-      shard_id = client.shard.ids.at(0);
+      shard_id = client.shard.ids.at(0); // this should always only be a single number
 
       // This will get as much info as it can, without erroring
       try {
