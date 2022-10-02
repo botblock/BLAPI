@@ -88,14 +88,7 @@ blapi.setLogging({
   logger: yourCustomLogger
 })
 ```
-### Turn on extended logging
-![](https://img.shields.io/badge/deprecated-Do%20not%20use%20this%20anymore-orange)
 
-```js
-// Following method to activate extended logging still works, but is deprecated.
-// Switch to using above syntax, as this will be removed at some point.
-blapi.setLogging(true);
-```
 
 ### Turn off the use of the BotBlock API
 
