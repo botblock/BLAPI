@@ -1,4 +1,5 @@
 import { Response } from 'centra';
+import type { Client } from 'discord.js';
 import { get, post, UserLogger } from './requests';
 import fallbackData from './fallbackListData';
 import legacyIdsFallbackData from './legacyIdsFallbackData';
@@ -21,48 +22,6 @@ type legacyIdDataType = {
   [listname: string]: string;
 };
 type apiKeysObject = { [listname: string]: string };
-
-/**
- * This is a fallback type
- * to make BLAPI compatible with typescript code that does not use discord.js
- */
-class Collection<K, T> extends Map<K, T> {
-  // eslint-disable-next-line no-undef
-  [key: string]: any;
-}
-
-/**
- * This is a fallback type
- * to make BLAPI compatible with typescript code that does not use discord.js
- */
-type DiscordJSClientFallback = {
-  user: {
-    id: string;
-    [k: string]: any;
-  } | null;
-  shard:
-    | ({
-        count: number;
-        [k: string]: any;
-      } & (
-        | { ids: number[] }
-        | {
-            id: number;
-          }
-      ))
-    | null;
-  guilds: {
-    cache: Collection<
-      string,
-      ({ shardID: number } | { shardId: number }) & { [k: string]: any }
-    >;
-  };
-  ws: {
-    shards: Collection<number, { id: number; [k: string]: any }>;
-    [k: string]: any;
-  };
-  [k: string]: any;
-};
 
 type LogOptions = { extended?: boolean; logger?: UserLogger };
 
@@ -214,7 +173,7 @@ async function postToAllLists(
  * @param repeatInterval Number of minutes between each repetition
  */
 async function handleInternal(
-  client: DiscordJSClientFallback,
+  client: Client,
   apiKeys: apiKeysObject,
   repeatInterval: number,
 ): Promise<void> {
@@ -231,14 +190,14 @@ async function handleInternal(
     let server_count = 0;
     let shard_id: number | undefined;
     // Checks if bot is sharded
-    if (client.shard && client.shard.id === 0) {
+    if (client.shard && client.shard.ids.includes(0)) {
       shard_count = client.shard.count;
-      shard_id = client.shard.id;
+      shard_id = client.shard.ids.at(0);
 
       // This will get as much info as it can, without erroring
       try {
         const guildSizes: Array<number> = await client.shard.broadcastEval(
-          'this.guilds.cache.size',
+          (broadcastedClient) => broadcastedClient.guilds.cache.size,
         );
         const shardCounts = guildSizes.filter((count: number) => count !== 0);
         if (shardCounts.length !== client.shard.count) {
@@ -256,16 +215,11 @@ async function handleInternal(
       // Checks if bot is sharded with internal sharding
     } else if (client.ws.shards.size > 1) {
       shard_count = client.ws.shards.size;
-      // Get array of shards, loosing collection typings make this somewhat ugly
+      // Get array of shards
       shards = client.ws.shards.map(
-        (s: { id: number }) => client.guilds.cache.filter(
-          (
-            g:
-                | { shardID: number; shardId: undefined }
-                | { shardId: number; shardID: undefined },
-          ) => g.shardID === s.id || g.shardId === s.id,
-        ).size,
-      ) as Array<number>;
+        (shard) => client.guilds.cache.filter((guild) => guild.shardId === shard.id).size,
+      );
+
       if (shards.length !== client.ws.shards.size) {
         // If not all shards are up yet, we skip this run of handleInternal
         log.info("Not all shards are up yet, so we're skipping this run.");
@@ -336,7 +290,7 @@ async function handleInternal(
  * @param repeatInterval Number of minutes until you want to post again, leave out to use 30
  */
 export function handle(
-  discordClient: DiscordJSClientFallback,
+  discordClient: Client,
   apiKeys: apiKeysObject,
   repeatInterval?: number,
 ): Promise<void> {
