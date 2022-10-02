@@ -190,7 +190,7 @@ async function handleInternal(
     let server_count = 0;
     let shard_id: number | undefined;
     // Checks if bot is sharded
-    if (client.shard && client.shard.ids.includes(0)) {
+    if (client.shard?.ids.includes(0)) {
       shard_count = client.shard.count;
       shard_id = client.shard.ids.at(0);
 
