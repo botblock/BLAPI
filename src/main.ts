@@ -64,7 +64,7 @@ type DiscordJSClientFallback = {
   [k: string]: any;
 };
 
-type LogOptions = boolean | { extended?: boolean; logger?: UserLogger };
+type LogOptions = { extended?: boolean; logger?: UserLogger };
 
 let listData = fallbackData as listDataType;
 let legacyIds = legacyIdsFallbackData as legacyIdDataType;
@@ -432,14 +432,8 @@ export async function manualPost(
 }
 
 export function setLogging(logOptions: LogOptions): void {
-  // we are setting extendedLogging to the passed in logOptions
-  // so users can disable extended logging later on
-  if (typeof logOptions === 'boolean') {
-    extendedLogging = logOptions;
-  }
   if (
-    typeof logOptions === 'object'
-    && Object.prototype.hasOwnProperty.call(logOptions, 'extended')
+    Object.prototype.hasOwnProperty.call(logOptions, 'extended')
     && typeof logOptions.extended === 'boolean'
   ) {
     extendedLogging = logOptions.extended;
@@ -448,7 +442,7 @@ export function setLogging(logOptions: LogOptions): void {
   if (!Object.prototype.hasOwnProperty.call(logOptions, 'logger')) {
     return;
   }
-  const { logger } = logOptions as any; // we checked that it exists beforehand
+  const logger = logOptions.logger!; // we checked that it exists beforehand
   // making sure the logger supplied by the user has our required log levels (info, warn, error)
   if (
     typeof logger.info !== 'function'
@@ -459,7 +453,6 @@ export function setLogging(logOptions: LogOptions): void {
       'Your supplied logger does not seem to expose the log levels BLAPI needs to work. Make sure your logger offers the following methods: info() warn() error()',
     );
   }
-  // @ts-ignore
   userLogger = logOptions.logger;
 }
 
