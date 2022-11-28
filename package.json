@@ -44,7 +44,7 @@
     "dist/"
   ],
   "dependencies": {
-    "centra": "2.5.0"
+    "centra": "2.6.0"
   },
   "peerDependencies": {
     "discord.js": "13 - 14"
