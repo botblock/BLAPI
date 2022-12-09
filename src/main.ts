@@ -23,13 +23,27 @@ type legacyIdDataType = {
 };
 type apiKeysObject = { [listname: string]: string };
 
-type LogOptions = { extended?: boolean; logger?: UserLogger };
+// eslint doesnt like enums
+// eslint-disable-next-line no-shadow
+export enum LogLevel {
+  None = 0x0000,
+  ErrorOnly = 0x0010,
+  WarnAndErrorOnly = 0x0020,
+  All = 0x0030,
+}
+
+type LogOptions = {
+  extended?: boolean;
+  logLevel?: LogLevel;
+  logger?: UserLogger;
+};
 
 let listData = fallbackData as listDataType;
 let legacyIds = legacyIdsFallbackData as legacyIdDataType;
 const lastUpdatedListAt = new Date(1999); // some date that's definitely past
-let extendedLogging = false;
 let useBotblockAPI = true;
+
+let logLevel = LogLevel.WarnAndErrorOnly;
 
 /**
  * the userLogger variable will later be defined with the
@@ -38,16 +52,41 @@ let useBotblockAPI = true;
 // eslint-disable-next-line max-len
 let userLogger: UserLogger | undefined;
 
-const log = {
-  info: (msg: string) => (userLogger
-    ? userLogger.info(`BLAPI: ${msg}`)
-    : console.info(`[INFO] BLAPI: ${msg}`)),
-  warn: (msg: string) => (userLogger
-    ? userLogger.warn(`BLAPI: ${msg}`)
-    : console.warn(`[WARN] BLAPI: ${msg}`)),
-  error: (err: any) => (userLogger
-    ? userLogger.error(`BLAPI: ${err}`)
-    : console.error(`[ERROR] BLAPI ${err}`)),
+function createBlapiMessage(message: string) {
+  return `BLAPI: ${message}`;
+}
+
+const logger = {
+  info: (msg: string) => {
+    if (logLevel < LogLevel.All) {
+      return;
+    }
+    if (userLogger) {
+      userLogger.info(createBlapiMessage(msg));
+    } else {
+      console.info(createBlapiMessage(msg));
+    }
+  },
+  warn: (msg: string) => {
+    if (logLevel < LogLevel.WarnAndErrorOnly) {
+      return;
+    }
+    if (userLogger) {
+      userLogger.warn(createBlapiMessage(msg));
+    } else {
+      console.warn(createBlapiMessage(msg));
+    }
+  },
+  error: (msg: string) => {
+    if (logLevel < LogLevel.ErrorOnly) {
+      return;
+    }
+    if (userLogger) {
+      userLogger.error(createBlapiMessage(msg));
+    } else {
+      console.error(createBlapiMessage(msg));
+    }
+  },
 };
 
 function convertLegacyIds(apiKeys: apiKeysObject) {
@@ -100,36 +139,36 @@ async function postToAllLists(
     try {
       const tmpListData = await get<listDataType>(
         'https://botblock.org/api/lists?filter=true',
-        log,
+        logger,
       );
       // make sure we only save it if nothing goes wrong
       if (tmpListData) {
         listData = tmpListData;
-        log.info('Updated list endpoints.');
+        logger.info('Updated list endpoints.');
       } else {
-        log.error('Got empty list of endpoints from botblock.');
+        logger.error('Got empty list of endpoints from botblock.');
       }
     } catch (e) {
-      log.error(e);
-      log.error(
+      logger.error(String(e));
+      logger.error(
         "Something went wrong when contacting BotBlock for the API of the lists, so we're using an older preset. Some lists might not be available because of this.",
       );
     }
     try {
       const tmpLegacyIdsData = await get<legacyIdDataType>(
         'https://botblock.org/api/legacy-ids',
-        log,
+        logger,
       );
       // make sure we only save it if nothing goes wrong
       if (tmpLegacyIdsData) {
         legacyIds = tmpLegacyIdsData;
-        log.info('Updated legacy Ids.');
+        logger.info('Updated legacy Ids.');
       } else {
-        log.error('Got empty list of legacy Ids from botblock.');
+        logger.error('Got empty list of legacy Ids from botblock.');
       }
     } catch (e) {
-      log.error(e);
-      log.error(
+      logger.error(String(e));
+      logger.error(
         "Something went wrong when contacting BotBlock for legacy Ids, so we're using an older preset. Some lists might not be available because of this.",
       );
     }
@@ -158,9 +197,7 @@ async function postToAllLists(
         sendObj[list.api_shards] = shards;
       }
 
-      posts.push(
-        post(apiPath, updatedApiKeys[listname], sendObj, extendedLogging, log),
-      );
+      posts.push(post(apiPath, updatedApiKeys[listname], sendObj, logger));
     }
   });
 
@@ -210,8 +247,8 @@ async function handleInternal(
           0,
         );
       } catch (e) {
-        log.error(e);
-        log.error('Error while fetching shard server counts:');
+        logger.error(String(e));
+        logger.error('Error while fetching shard server counts:');
       }
       // Checks if bot is sharded with internal sharding
     } else if (client.ws.shards.size > 1) {
@@ -223,7 +260,7 @@ async function handleInternal(
 
       if (shards.length !== client.ws.shards.size) {
         // If not all shards are up yet, we skip this run of handleInternal
-        log.info("Not all shards are up yet, so we're skipping this run.");
+        logger.info("Not all shards are up yet, so we're skipping this run.");
         return;
       }
       server_count = shards.reduce(
@@ -251,8 +288,7 @@ async function handleInternal(
             shard_count,
             shards,
           ),
-          extendedLogging,
-          log,
+          logger,
         );
 
         // they blacklisted botblock, so we need to do this, posting their stats manually
@@ -278,7 +314,7 @@ async function handleInternal(
       }
     }
   } else {
-    log.error(
+    logger.error(
       `Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} minutes.`,
     );
   }
@@ -355,8 +391,7 @@ export async function manualPost(
           shard_count,
           shards,
         ),
-        extendedLogging,
-        log,
+        logger,
       ),
     );
     if (updatedApiKeys['top.gg']) {
@@ -388,27 +423,31 @@ export async function manualPost(
 
 export function setLogging(logOptions: LogOptions): void {
   if (
-    Object.prototype.hasOwnProperty.call(logOptions, 'extended')
-    && typeof logOptions.extended === 'boolean'
+    typeof logOptions.logLevel === 'number'
   ) {
-    extendedLogging = logOptions.extended;
+    logLevel = logOptions.logLevel;
+  } else if (
+    // backwards compatibility
+    typeof logOptions.extended === 'boolean'
+  ) {
+    logLevel = logOptions.extended ? LogLevel.All : LogLevel.WarnAndErrorOnly;
   }
   // no logger supplied by user
   if (!Object.prototype.hasOwnProperty.call(logOptions, 'logger')) {
     return;
   }
-  const logger = logOptions.logger!; // we checked that it exists beforehand
+  const passedLogger = logOptions.logger!; // we checked that it exists beforehand
   // making sure the logger supplied by the user has our required log levels (info, warn, error)
   if (
-    typeof logger.info !== 'function'
-    || typeof logger.warn !== 'function'
-    || typeof logger.error !== 'function'
+    typeof passedLogger.info !== 'function'
+    || typeof passedLogger.warn !== 'function'
+    || typeof passedLogger.error !== 'function'
   ) {
     throw new Error(
       'Your supplied logger does not seem to expose the log levels BLAPI needs to work. Make sure your logger offers the following methods: info() warn() error()',
     );
   }
-  userLogger = logOptions.logger;
+  userLogger = passedLogger;
 }
 
 export function setBotblock(useBotblock: boolean): void {
