@@ -11,7 +11,6 @@ export async function post(
   apiPath: string,
   apiKey: string,
   sendObj: object,
-  logStuff: boolean,
   logger: UserLogger,
 ) {
   const postData = JSON.stringify(sendObj);
@@ -24,13 +23,11 @@ export async function post(
     };
     const response = await request.body(postData).send();
 
-    if (logStuff) {
-      logger.info(` posted to ${apiPath}`);
-      logger.info(` statusCode: ${response.statusCode}`);
-      logger.info(` headers: ${JSON.stringify(response.headers)}`);
-      // it's text because text accepts both json and plain text, while json only supports json
-      logger.info(` data: ${await response.text()}`);
-    }
+    logger.info(` posted to ${apiPath}`);
+    logger.info(` statusCode: ${response.statusCode}`);
+    logger.info(` headers: ${JSON.stringify(response.headers)}`);
+    // it's text because text accepts both json and plain text, while json only supports json
+    logger.info(` data: ${await response.text()}`);
 
     return response;
   } catch (e) {
