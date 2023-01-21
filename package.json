@@ -47,7 +47,7 @@
     "centra": "2.6.0"
   },
   "peerDependencies": {
-    "discord.js": "13 - 14"
+    "discord.js": "14"
   },
   "devDependencies": {
     "@types/centra": "2.2.0",
