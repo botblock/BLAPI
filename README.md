@@ -67,10 +67,10 @@ blapi.manualPost(guildCount, botID, apiKeys[, shardID, shardCount[, shardsArray]
 
 ### Logging Options
 ```js
-// Use this to get more detailed logging when posting
-// Errors will always be logged
+// Use this to set the level of logs you're interested in
+// By default, warnings and errors will be logged
 blapi.setLogging({
-  extended: true
+  logLevel: LogLevel.All
 });
 ```
 
@@ -78,17 +78,9 @@ blapi.setLogging({
 // If you have your own logger that you want to use pass it to BLAPI like this:
 // Important: The logger needs to include the following methods: log.info(), log.warn() and log.error()
 blapi.setLogging({
-  extended: true,
   logger: yourCustomLogger
 })
 ```
-```js
-// If you only want to pass your custom logger but dont want extended logging to be enabled:
-blapi.setLogging({
-  logger: yourCustomLogger
-})
-```
-
 
 ### Turn off the use of the BotBlock API
 
