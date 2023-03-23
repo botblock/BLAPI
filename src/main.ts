@@ -33,8 +33,22 @@ export enum LogLevel {
 }
 
 type LogOptions = {
+  /**
+   * @deprecated Use logLevel instead.
+   *
+   * If you want an equivalent to `extended: true`, use `logLevel: LogLevel.All`
+   */
   extended?: boolean;
+
+  /**
+   * The log level to use
+   * @default LogLevel.WarnAndErrorOnly
+   */
   logLevel?: LogLevel;
+
+  /**
+   * Your custom logger to be used instead of the default console logger
+   */
   logger?: UserLogger;
 };
 
@@ -64,6 +78,7 @@ const logger = {
     if (userLogger) {
       userLogger.info(createBlapiMessage(msg));
     } else {
+      // eslint-disable-next-line no-console
       console.info(createBlapiMessage(msg));
     }
   },
@@ -74,6 +89,7 @@ const logger = {
     if (userLogger) {
       userLogger.warn(createBlapiMessage(msg));
     } else {
+      // eslint-disable-next-line no-console
       console.warn(createBlapiMessage(msg));
     }
   },
@@ -84,6 +100,7 @@ const logger = {
     if (userLogger) {
       userLogger.error(createBlapiMessage(msg));
     } else {
+      // eslint-disable-next-line no-console
       console.error(createBlapiMessage(msg));
     }
   },
@@ -204,6 +221,19 @@ async function postToAllLists(
   return Promise.all(posts);
 }
 
+async function runHandleInternalInSeconds(
+  client: Client,
+  apiKeys: apiKeysObject,
+  repeatInterval: number,
+  seconds: number,
+): Promise<void> {
+  setTimeout(
+    /* eslint-disable-next-line no-use-before-define */
+    () => handleInternal(client, apiKeys, repeatInterval),
+    1000 * seconds,
+  );
+}
+
 /**
  * @param client Discord.js client
  * @param apiKeys A JSON object formatted like: {"botlist name":"API Keys for that list", etc.}
@@ -213,12 +243,11 @@ async function handleInternal(
   client: Client,
   apiKeys: apiKeysObject,
   repeatInterval: number,
+  isFirstRun = false,
 ): Promise<void> {
-  setTimeout(
-    /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
-    handleInternal.bind(null, client, apiKeys, repeatInterval),
-    60000 * repeatInterval,
-  ); // call this function again in the next interval
+  // call this function again in the next interval
+  runHandleInternalInSeconds(client, apiKeys, repeatInterval, 60 * repeatInterval);
+
   if (client.user) {
     const client_id = client.user.id;
     let unchanged;
@@ -259,8 +288,14 @@ async function handleInternal(
       );
 
       if (shards.length !== client.ws.shards.size) {
-        // If not all shards are up yet, we skip this run of handleInternal
-        logger.info("Not all shards are up yet, so we're skipping this run.");
+        // If not all shards are up yet, we skip this run of handleInternal and try again later
+        if (isFirstRun) {
+          const secondsToWait = 10;
+          logger.info(`Not all shards are up yet, so we're trying again in ${secondsToWait} seconds.`);
+          runHandleInternalInSeconds(client, apiKeys, repeatInterval, secondsToWait);
+          return;
+        }
+        logger.error('Not all shards are up yet, but this is not the first time we\'re trying so we will wait for the entire interval.');
         return;
       }
       server_count = shards.reduce(
@@ -314,9 +349,13 @@ async function handleInternal(
       }
     }
   } else {
-    logger.error(
-      `Discord client seems to not be connected yet, so we're skipping this run of the post. We will try again in ${repeatInterval} minutes.`,
-    );
+    if (isFirstRun) {
+      const secondsToWait = 10;
+      logger.info(`Discord client seems to not be connected yet, so we're trying again in ${secondsToWait} seconds.`);
+      runHandleInternalInSeconds(client, apiKeys, repeatInterval, secondsToWait);
+      return;
+    }
+    logger.error('Discord client seems to not be connected yet, but this is not the first time we\'re trying so we will wait for the entire interval.');
   }
 }
 
@@ -335,6 +374,7 @@ export function handle(
     discordClient,
     apiKeys,
     !repeatInterval || repeatInterval < 1 ? 30 : repeatInterval,
+    true,
   );
 }
 
