@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@types/centra": "2.2.3",
-    "@types/node": "20.11.14",
+    "@types/node": "20.11.15",
     "@typescript-eslint/eslint-plugin": "6.20.0",
     "@typescript-eslint/parser": "6.20.0",
     "eslint-config-airbnb-base": "15.0.0",
