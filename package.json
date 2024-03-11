@@ -1,6 +1,6 @@
 {
   "name": "blapi",
-  "version": "3.1.12",
+  "version": "3.1.13",
   "license": "MIT",
   "repository": "botblock/BLAPI",
   "bugs": {
@@ -52,8 +52,8 @@
   "devDependencies": {
     "@types/centra": "2.2.3",
     "@types/node": "20.11.25",
-    "@typescript-eslint/eslint-plugin": "7.1.1",
-    "@typescript-eslint/parser": "7.1.1",
+    "@typescript-eslint/eslint-plugin": "7.2.0",
+    "@typescript-eslint/parser": "7.2.0",
     "eslint-config-airbnb-base": "15.0.0",
     "prettier": "3.2.5",
     "rimraf": "5.0.5",
