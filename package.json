@@ -1,6 +1,6 @@
 {
   "name": "blapi",
-  "version": "3.1.29",
+  "version": "3.1.30",
   "license": "MIT",
   "repository": "botblock/BLAPI",
   "bugs": {
@@ -44,7 +44,7 @@
     "dist/"
   ],
   "dependencies": {
-    "centra": "2.6.0"
+    "centra": "2.7.0"
   },
   "peerDependencies": {
     "discord.js": "13 - 14"
