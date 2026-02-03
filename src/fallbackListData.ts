@@ -108,7 +108,7 @@ export default {
     api_shards: null,
     api_get: 'https://discord.bots.gg/api/v1/bots/:id',
     api_all:
-      'https://discord.bots.gg/api/v1/bots?limit=100&sort=guildcount&order=desc',
+      'https://discord.bots.gg/api/v1/bots?limit=100&sort=guildCount&order=desc',
   },
   'discordbotlist.com': {
     api_docs: 'https://docs.discordbotlist.com',
